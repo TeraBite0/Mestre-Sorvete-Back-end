@@ -83,9 +83,12 @@ public class VendaService {
     }
 
     public void deletarVenda(Integer id){
-        if(!vendaRepository.existsById(id)){
+        Venda venda = vendaRepository.findById(id).orElse(null);
+
+        if(venda == null){
             throw new ResponseStatusException(HttpStatusCode.valueOf(404));
         }
+        vendaProdutoRepository.deleteByVendaId(id);
         vendaRepository.deleteById(id);
     }
 }

@@ -83,7 +83,7 @@ public class VendaController {
             @ApiResponse(responseCode = "401", description = "Erro de requisição, Não autorizado"),
             @ApiResponse(responseCode = "404", description = "Nenhum produto encontrado"),
     })
-    public ResponseEntity<Venda> deletarVenda(@PathVariable Integer id) {
+    public ResponseEntity<Void> deletarVenda(@PathVariable Integer id) {
         service.deletarVenda(id);
         return ResponseEntity.noContent().build();
     }

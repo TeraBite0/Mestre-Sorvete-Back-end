@@ -12,10 +12,11 @@ import java.time.ZoneOffset;
 
 @Service
 public class AzureService {
-    public static void main(String[] args) {
+
+    public String gerarTokenSAS(){
+        String accountKey = System.getenv("AZURE_ACCOUNT_KEY");
 
         String accountName = "terabite";
-        String accountKey = "";
         String containerName = "terabite-container";
 
         StorageSharedKeyCredential credential = new StorageSharedKeyCredential(accountName, accountKey);
@@ -35,9 +36,11 @@ public class AzureService {
                 .credential(credential)
                 .buildClient();
 
-        String sasToken = blobServiceClient.getBlobContainerClient(containerName)
+        return blobServiceClient.getBlobContainerClient(containerName)
                 .generateSas(values);
-
-        System.out.println("SAS Token: " + sasToken);
+    }
+    public static void main(String[] args) {
+        //RODAR PARA TESTE EU GERAMENTO MANUAL DO TOKEN SAS
+        System.out.println(new AzureService().gerarTokenSAS());
     }
 }

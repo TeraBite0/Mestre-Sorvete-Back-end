@@ -9,7 +9,6 @@ import lombok.Data;
 @Builder
 public class VendaProdutoResponseDTO {
 
-    private Integer id;
-    private Venda venda;
-    private Produto produto;
+    private ProdutoResponseDTO produto;
+    private Integer qtdVendida;
 }

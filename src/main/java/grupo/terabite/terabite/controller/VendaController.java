@@ -1,6 +1,10 @@
 package grupo.terabite.terabite.controller;
 
+import grupo.terabite.terabite.dto.create.VendaCreateDTO;
+import grupo.terabite.terabite.dto.mapper.VendaMapper;
+import grupo.terabite.terabite.dto.response.VendaResponseDTO;
 import grupo.terabite.terabite.entity.Venda;
+import grupo.terabite.terabite.service.ProdutoService;
 import grupo.terabite.terabite.service.VendaService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -9,7 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 
 @RestController
 @RequestMapping("/vendas")
@@ -18,6 +25,9 @@ public class VendaController {
     @Autowired
     private VendaService service;
 
+    @Autowired
+    private ProdutoService produtoService;
+
     @Operation(summary = "Lista todas as vendas feitas", description = "Retorna uma lista de vendas")
     @GetMapping
     @ApiResponses(value = {
@@ -25,8 +35,12 @@ public class VendaController {
             @ApiResponse(responseCode = "204", description = "Operação bem-sucedida, sem vendas"),
             @ApiResponse(responseCode = "401", description = "Erro de requisição, Não autorizado")
     })
-    public ResponseEntity<List<Venda>> listarVenda() {
-        return ResponseEntity.ok(service.listarVenda());
+    public ResponseEntity<List<VendaResponseDTO>> listarVenda() {
+        List<VendaResponseDTO> vendas = new ArrayList<>();
+        for(Venda v :service.listarVenda()){
+            vendas.add(VendaMapper.toResponseDTO(v, service));
+        }
+        return ResponseEntity.ok(vendas);
     }
 
     @Operation(summary = "Busca uma venda pelo ID", description = "Retorna uma venda com base no seu ID")
@@ -36,8 +50,8 @@ public class VendaController {
             @ApiResponse(responseCode = "401", description = "Erro de requisição, Não autorizado"),
             @ApiResponse(responseCode = "404", description = "Nenhuma venda encontrada")
     })
-    public ResponseEntity<Venda> buscarPorId(@PathVariable Integer id) {
-        return ResponseEntity.ok(service.buscarVendaPorId(id));
+    public ResponseEntity<VendaResponseDTO> buscarPorId(@PathVariable Integer id) {
+        return ResponseEntity.ok(VendaMapper.toResponseDTO(service.buscarVendaPorId(id), service));
     }
 
     @Operation(summary = "Registra uma venda", description = "Retorna a venda registrada")
@@ -47,8 +61,8 @@ public class VendaController {
             @ApiResponse(responseCode = "400", description = "Erro de requisição, Parâmetros inválidos"),
             @ApiResponse(responseCode = "401", description = "Erro de requisição, Não autorizado")
     })
-    public ResponseEntity<Venda> criarVenda(@RequestBody Venda novoVenda) {
-        return ResponseEntity.status(201).body(service.criarVenda(novoVenda));
+    public ResponseEntity<VendaResponseDTO> criarVenda(@RequestBody VendaCreateDTO novaVenda) {
+        return ResponseEntity.status(201).body(VendaMapper.toResponseDTO(service.criarVenda(VendaMapper.toEntity(novaVenda, produtoService)), service));
     }
 
     @Operation(summary = "Atualiza uma venda pelo ID", description = "Retorna a venda atualizada")

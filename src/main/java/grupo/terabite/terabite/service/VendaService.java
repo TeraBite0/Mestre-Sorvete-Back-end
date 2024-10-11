@@ -59,14 +59,27 @@ public class VendaService {
 
 
     public List<VendaProduto> buscarProdutosPorVenda(Integer vendaId){
-        return vendaProdutoRepository.findByVenda(vendaId);
+        return vendaProdutoRepository.findByVendaId(vendaId);
     }
-    public Venda atualizarVenda(Integer id, Venda atualizarVenda){
-        if(!vendaRepository.existsById(id)){
-            throw new ResponseStatusException(HttpStatusCode.valueOf(404));
+
+    public Venda atualizarVenda(Integer id, List<VendaProduto> vendaProdutos){
+        Venda venda =  vendaRepository.findById(id).orElse(null);
+        if(venda == null){
+             throw new ResponseStatusException(HttpStatusCode.valueOf(404));
+        };
+
+        vendaProdutoRepository.deleteByVendaId(id);
+
+        for(VendaProduto vp: vendaProdutos){
+            vp.setVenda(venda);
+
+            if(vp.getQtdProdutosVendido() < 0 || !vp.getProduto().getIsAtivo()){ // Validação da venda (falta validar se o protudo existe em estoque)
+                vendaRepository.deleteById(venda.getId());
+                throw new ResponseStatusException(HttpStatusCode.valueOf(400));
+            }
         }
-        atualizarVenda.setId(null);
-        return vendaRepository.save(atualizarVenda);
+
+        return venda;
     }
 
     public void deletarVenda(Integer id){

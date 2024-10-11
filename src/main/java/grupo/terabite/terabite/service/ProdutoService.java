@@ -20,8 +20,7 @@ public class ProdutoService {
     private final TipoService tipoRepository;
 
     public List<Produto> listarProduto() {
-        List<Produto> produtos = produtoRepository.findByIsAtivoTrue();
-        // fazer lógica que caso seja passado um token de autentificação, será retornado todos produtos, mesmo inativos
+        List<Produto> produtos = produtoRepository.findAll();
         return produtos;
     }
 

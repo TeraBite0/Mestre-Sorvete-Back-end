@@ -16,8 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
-
 @RestController
 @RequestMapping("/vendas")
 public class VendaController {
@@ -66,15 +64,16 @@ public class VendaController {
     }
 
     @Operation(summary = "Atualiza uma venda pelo ID", description = "Retorna a venda atualizada")
-    @PatchMapping("/{id}")
+    @PutMapping("/{id}")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Operação bem-sucedida, venda atualizada"),
             @ApiResponse(responseCode = "400", description = "Erro de requisição, Parâmetros inválidos"),
             @ApiResponse(responseCode = "401", description = "Erro de requisição, Não autorizado"),
             @ApiResponse(responseCode = "404", description = "Nenhum produto encontrado")
     })
-    public ResponseEntity<Venda> atualizarVenda(@PathVariable Integer id, @RequestBody Venda atualizarVenda) {
-        return ResponseEntity.ok(service.atualizarVenda(id, atualizarVenda));
+    public ResponseEntity<VendaResponseDTO> atualizarVenda(@PathVariable Integer id, @RequestBody VendaCreateDTO atualizarVenda) {
+        Venda vendaAtualizada = service.atualizarVenda(id, VendaMapper.toEntity(atualizarVenda, produtoService));
+        return ResponseEntity.ok(VendaMapper.toResponseDTO(vendaAtualizada, service));
     }
 
     @Operation(summary = "Deleta uma venda pelo ID", description = "Retorna sucesso para a exclusão")

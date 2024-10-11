@@ -52,7 +52,8 @@ public class ProdutoController {
     }
 
     @GetMapping("/nome-produto")
-    @Operation(summary = "Busca produtos, com um filtro opcional", description = "Retorna todos os produtos, ou retorna produtos conforme nome e/ou marca passados. Parâmetros: nomeProduto (Opcional), nomeMarca (Opcional)")
+    @Operation(summary = "Busca produtos, com um filtro opcional",
+            description = "Retorna todos os produtos, ou retorna produtos conforme nome e/ou marca passados. Parâmetros: nomeProduto (Opcional), nomeMarca (Opcional)")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Operação bem-sucedida, produtos retornados"),
             @ApiResponse(responseCode = "204", description = "Operação bem-sucedida, sem produtos"),

@@ -10,5 +10,7 @@ import java.util.List;
 @Repository
 public interface VendaProdutoRepository extends JpaRepository<VendaProduto, Integer> {
 
-    List<VendaProduto> findByVenda(Integer vendaId);
+    List<VendaProduto> findByVendaId(Integer vendaId);
+
+    void deleteByVendaId(Integer vendaId);
 }

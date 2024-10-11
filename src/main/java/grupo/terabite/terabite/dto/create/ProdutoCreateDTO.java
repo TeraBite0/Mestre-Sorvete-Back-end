@@ -13,7 +13,7 @@ public class ProdutoCreateDTO {
     private String nome;
 
     @NotBlank
-    private String nomeTipo;
+    private String nomeSubtipo;
 
     @NotBlank
     private String nomeMarca;

@@ -54,7 +54,7 @@ public class LoteController {
     }
 
     @Operation(summary = "Atualiza um lote apartir de um id", description = "Retorna o lote atualizado com base no seu ID")
-    @PatchMapping("/{id}")
+    @PutMapping("/{id}")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Lote atualizado com sucesso"),
             @ApiResponse(responseCode = "400", description = "Erro de requisição, parâmetros inválidos"),
@@ -72,7 +72,7 @@ public class LoteController {
             @ApiResponse(responseCode = "401", description = "Erro de requisição, Não autorizado"),
             @ApiResponse(responseCode = "404", description = "Lote não encontrado")
     })
-    public ResponseEntity<Lote> deletarLote(@PathVariable Integer id) {
+    public ResponseEntity<Void> deletarLote(@PathVariable Integer id) {
         service.deletarLote(id);
         return ResponseEntity.noContent().build();
     }

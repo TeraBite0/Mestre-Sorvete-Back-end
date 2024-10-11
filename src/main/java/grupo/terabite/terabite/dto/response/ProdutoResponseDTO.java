@@ -23,7 +23,7 @@ public class ProdutoResponseDTO {
     private Boolean isAtivo = true;
 
     @NotBlank
-    private TipoResponseDTO tipo;
+    private SubtipoResponseDTO subtipo;
 
     @NotBlank
     private MarcaResponseDTO marca;

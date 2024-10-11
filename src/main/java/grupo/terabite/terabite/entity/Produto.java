@@ -33,4 +33,7 @@ public class Produto {
 
     @Column(name = "IS_ATIVO_PROD")
     private Boolean isAtivo = true;
+
+    @Column(name = "EM_ESTOQUE_PROD")
+    private Boolean emEstoque;
 }

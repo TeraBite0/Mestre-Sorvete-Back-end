@@ -1,14 +1,12 @@
 package grupo.terabite.terabite.service;
 
 import grupo.terabite.terabite.entity.Produto;
-import grupo.terabite.terabite.entity.Recomendacao;
 import grupo.terabite.terabite.repository.ProdutoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -18,6 +16,7 @@ public class ProdutoService {
     private final ProdutoRepository produtoRepository;
     private final MarcaService marcaService;
     private final TipoService tipoRepository;
+    private final SubtipoService subtipoService;
 
     public List<Produto> listarProduto() {
         List<Produto> produtos = produtoRepository.findAll();
@@ -38,9 +37,10 @@ public class ProdutoService {
         return produtoRepository.findByNomeIgnoreCase(nomeProduto);
     }
 
-    public Produto criarProduto(Produto produto, String nomeMarca, String nomeTipo) {
+    public Produto criarProduto(Produto produto, String nomeMarca, String nomeSubtipo) {
         produto.setMarca(marcaService.buscarPorNomeMarca(nomeMarca));
-        // produto.setSubtipo((tipoRepository.buscarPorNomeTipo(nomeTipo))); CONSERTAR
+        produto.setEmEstoque(false);
+        produto.setSubtipo((subtipoService.buscarPorNomeSubtipo(nomeSubtipo)));
         return produtoRepository.save(produto);
     }
 

@@ -10,5 +10,5 @@ public class SubtipoResponseDTO {
 
     private Integer id;
     private Tipo tipoPai;
-    private Tipo tipoFilho;
+    private String nome;
 }

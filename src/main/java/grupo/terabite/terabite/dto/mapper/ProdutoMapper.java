@@ -3,7 +3,7 @@ package grupo.terabite.terabite.dto.mapper;
 import grupo.terabite.terabite.dto.create.ProdutoCreateDTO;
 import grupo.terabite.terabite.dto.response.MarcaResponseDTO;
 import grupo.terabite.terabite.dto.response.ProdutoResponseDTO;
-import grupo.terabite.terabite.dto.response.TipoResponseDTO;
+import grupo.terabite.terabite.dto.response.SubtipoResponseDTO;
 import grupo.terabite.terabite.dto.update.ProdutoUpdateDTO;
 import grupo.terabite.terabite.entity.Marca;
 import grupo.terabite.terabite.entity.Produto;
@@ -26,7 +26,7 @@ public class ProdutoMapper {
                         .id(marca.getId())
                         .nome(marca.getNome())
                         .build())
-                .tipo(TipoResponseDTO.builder()
+                .subtipo(SubtipoResponseDTO.builder()
                         .id(subtipo.getId())
                         .nome(subtipo.getNome())
                         .build())

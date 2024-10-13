@@ -1,13 +1,16 @@
 package grupo.terabite.terabite.service;
 
 import grupo.terabite.terabite.entity.Produto;
+import grupo.terabite.terabite.entity.VendaProduto;
 import grupo.terabite.terabite.repository.ProdutoRepository;
+import grupo.terabite.terabite.repository.VendaProdutoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -15,12 +18,11 @@ public class ProdutoService {
 
     private final ProdutoRepository produtoRepository;
     private final MarcaService marcaService;
-    private final TipoService tipoRepository;
     private final SubtipoService subtipoService;
+    private final VendaProdutoRepository vendaProdutoRepository;
 
     public List<Produto> listarProduto() {
-        List<Produto> produtos = produtoRepository.findAll();
-        return produtos;
+        return produtoRepository.findAll();
     }
 
     public Produto buscarPorId(Integer id) {
@@ -50,6 +52,11 @@ public class ProdutoService {
         }
         produtoAtualizado.setId(id);
         return produtoRepository.save(produtoAtualizado);
+    }
+
+    public List<Produto> popular(){
+        List<VendaProduto> vendas = vendaProdutoRepository.findByQtdProdutosVendido();
+        return vendas.stream().map(VendaProduto::getProduto).collect(Collectors.toList());
     }
 }
 

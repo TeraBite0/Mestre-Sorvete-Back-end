@@ -21,7 +21,7 @@ public class Produto {
     private String nome;
 
     @ManyToOne
-    @JoinColumn(name = "FK_ID_TIPO", referencedColumnName = "ID_TIPO")
+    @JoinColumn(name = "FK_ID_SUBT", referencedColumnName = "ID_SUBT")
     private Subtipo subtipo;
 
     @ManyToOne

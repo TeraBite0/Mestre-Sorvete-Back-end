@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface VendaRepository extends JpaRepository<Venda, Integer> {
-    List<Venda> findAllByOrderByDtVendaDesc();
+    List<Venda> findAllByOrderByDataCompraDesc();
 }

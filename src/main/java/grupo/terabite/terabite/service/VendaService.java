@@ -1,6 +1,5 @@
 package grupo.terabite.terabite.service;
 
-import grupo.terabite.terabite.entity.Produto;
 import grupo.terabite.terabite.entity.Venda;
 import grupo.terabite.terabite.entity.VendaProduto;
 import grupo.terabite.terabite.repository.VendaProdutoRepository;
@@ -11,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,7 +23,7 @@ public class VendaService {
     private VendaProdutoRepository vendaProdutoRepository;
 
     public List<Venda> listarVenda(){
-        List<Venda> vendas = vendaRepository.findAllByOrderByDtVendaDesc();
+        List<Venda> vendas = vendaRepository.findAllByOrderByDataCompraDesc();
         if(vendas.isEmpty()){
             throw new ResponseStatusException(HttpStatusCode.valueOf(204));
         }

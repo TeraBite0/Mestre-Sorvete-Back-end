@@ -10,21 +10,10 @@ import lombok.Data;
 public class ProdutoResponseDTO {
 
     private Integer id;
-    @NotBlank
     private String nome;
-
-    @NotBlank
     private Double preco;
-
-    @NotNull
-    private Integer qtdEstoque;
-
-    @NotBlank
-    private Boolean isAtivo = true;
-
-    @NotBlank
+    private Boolean isAtivo;
+    private Boolean emEstoque;
     private SubtipoResponseDTO subtipo;
-
-    @NotBlank
     private MarcaResponseDTO marca;
 }

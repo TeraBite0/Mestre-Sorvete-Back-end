@@ -12,12 +12,6 @@ import lombok.Data;
 public class AdminResponseDTO {
 
     private Integer id;
-    @NotBlank
-    @Email
-    @Schema(description = "Email do usuário")
     private String email;
-    @NotBlank
-    @Size(min = 8, max = 16)
-    @Schema(description = "Senha do usuário")
     private String senha;
 }

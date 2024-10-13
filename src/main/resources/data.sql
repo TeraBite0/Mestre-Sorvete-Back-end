@@ -1,6 +1,7 @@
 INSERT INTO TIPO
         (NOME_TIPO)
-VALUES ('Extrusado'),
+VALUES ('Não tem tipo'),
+       ('Extrusado'),
        ('Ao leite'),
        ('Cremosinho'),
        ('Especiais'),
@@ -11,13 +12,13 @@ VALUES ('Extrusado'),
 
 INSERT INTO SUBTIPO
        (NOME_SUBT, FK_ID_TIPO_PAI)
-VALUES ('Picolé', 1),
-       ('Pote', null),
-       ('Pote Pequenos', null),
-       ('Cone', null),
-       ('Palheta', null),
-       ('Açai', null),
-       ('Açai Pequeno', null);
+VALUES ('Picolé', 2),
+       ('Pote', 1),
+       ('Pote Pequenos', 1),
+       ('Cone', 1),
+       ('Palheta', 1),
+       ('Açai', 1),
+       ('Açai Pequeno', 1);
 
 INSERT INTO MARCA
         (NOME_MARCA)

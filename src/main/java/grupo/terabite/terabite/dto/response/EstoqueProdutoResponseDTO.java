@@ -7,15 +7,9 @@ import lombok.Data;
 @Data
 @Builder
 public class EstoqueProdutoResponseDTO {
-    @NotNull
+
     private Integer codigo;
-
-    @NotNull
     private String produto;
-
-    @NotNull
     private String marca;
-
-    @NotNull
     private Integer qtdEstoque;
 }

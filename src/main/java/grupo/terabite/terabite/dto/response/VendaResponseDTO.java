@@ -13,13 +13,8 @@ import java.util.List;
 @Builder
 public class VendaResponseDTO {
 
-    @NotNull
     private Integer id;
-
     private LocalDateTime dataCompra;
-
-    @NotEmpty
-    @Positive
     private List<VendaProdutoResponseDTO> produtos;
 
 }

@@ -4,10 +4,12 @@ import grupo.terabite.terabite.dto.create.ProdutoCreateDTO;
 import grupo.terabite.terabite.dto.response.MarcaResponseDTO;
 import grupo.terabite.terabite.dto.response.ProdutoResponseDTO;
 import grupo.terabite.terabite.dto.response.SubtipoResponseDTO;
+import grupo.terabite.terabite.dto.response.TipoResponseDTO;
 import grupo.terabite.terabite.dto.update.ProdutoUpdateDTO;
 import grupo.terabite.terabite.entity.Marca;
 import grupo.terabite.terabite.entity.Produto;
 import grupo.terabite.terabite.entity.Subtipo;
+import grupo.terabite.terabite.entity.Tipo;
 
 public class ProdutoMapper {
 
@@ -16,12 +18,14 @@ public class ProdutoMapper {
 
         Marca marca = produto.getMarca();
         Subtipo subtipo = produto.getSubtipo();
+        Tipo tipo = subtipo.getTipoPai();
 
         return ProdutoResponseDTO.builder()
                 .id(produto.getId())
                 .nome(produto.getNome())
                 .preco(produto.getPreco())
                 .isAtivo(produto.getIsAtivo())
+                .emEstoque(produto.getEmEstoque())
                 .marca(MarcaResponseDTO.builder()
                         .id(marca.getId())
                         .nome(marca.getNome())
@@ -29,6 +33,10 @@ public class ProdutoMapper {
                 .subtipo(SubtipoResponseDTO.builder()
                         .id(subtipo.getId())
                         .nome(subtipo.getNome())
+                        .tipoPai(TipoResponseDTO.builder()
+                                .id(tipo.getId())
+                                .nome(tipo.getNome())
+                                .build())
                         .build())
                 .build();
     }

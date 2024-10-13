@@ -12,14 +12,10 @@ import java.time.LocalDate;
 public class LoteResponseDTO {
 
     private Integer id;
-    @NotNull
     private LocalDate dtPedido;
     private LocalDate dtEntrega;
     private LocalDate dtVencimento;
-    @NotNull
     private Integer qtdProdutoComprado;
-    @NotNull
     private Double valorLote;
-    @NotNull
     private Produto produto;
 }

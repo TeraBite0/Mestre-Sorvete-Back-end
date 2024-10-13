@@ -9,6 +9,5 @@ import lombok.Data;
 public class MarcaResponseDTO {
 
     private Integer id;
-    @NotBlank
     private String nome;
 }

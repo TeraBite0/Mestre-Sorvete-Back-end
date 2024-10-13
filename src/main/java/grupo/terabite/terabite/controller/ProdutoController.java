@@ -2,6 +2,8 @@ package grupo.terabite.terabite.controller;
 
 import grupo.terabite.terabite.dto.create.ProdutoCreateDTO;
 import grupo.terabite.terabite.dto.mapper.ProdutoMapper;
+import grupo.terabite.terabite.dto.mapper.ProdutoPopularesMapper;
+import grupo.terabite.terabite.dto.response.ProdutoPopularesReponseDto;
 import grupo.terabite.terabite.dto.response.ProdutoResponseDTO;
 import grupo.terabite.terabite.dto.update.ProdutoUpdateDTO;
 import grupo.terabite.terabite.entity.Produto;
@@ -131,9 +133,9 @@ public class ProdutoController {
             @ApiResponse(responseCode = "204", description = "Operação sucedida, nenhum produto cadastrado")
     })
     @GetMapping("/populares")
-    public ResponseEntity<List<ProdutoResponseDTO>> populares() {
+    public ResponseEntity<List<ProdutoPopularesReponseDto>> populares() {
         List<Produto> produtos = produtoService.popular();
         if(produtos.isEmpty()) throw new ResponseStatusException(HttpStatusCode.valueOf(204));
-        return ResponseEntity.ok(produtos.stream().map(ProdutoMapper::toDetalhe).toList());
+        return ResponseEntity.ok(produtos.stream().map(ProdutoPopularesMapper::toDetalheProdutoPopularDto).toList());
     }
 }

@@ -55,7 +55,7 @@ public class ProdutoService {
     }
 
     public List<Produto> popular(){
-        List<VendaProduto> vendas = vendaProdutoRepository.findByQtdProdutosVendido();
+        List<VendaProduto> vendas = vendaProdutoRepository.findTop5ByOrderByQtdProdutosVendidoDesc();
         return vendas.stream().map(VendaProduto::getProduto).collect(Collectors.toList());
     }
 }

@@ -14,6 +14,7 @@ public interface VendaProdutoRepository extends JpaRepository<VendaProduto, Inte
     List<VendaProduto> findByVendaId(Integer vendaId);
 
     void deleteByVendaId(Integer vendaId);
-    @Query("SELECT vp FROM VendaProduto vp JOIN vp.produto p ORDER BY vp.qtdProdutosVendido DESC")
-    List<VendaProduto> findByQtdProdutosVendido();
+//    @Query("SELECT vp FROM VendaProduto vp JOIN vp.produto p ORDER BY vp.qtdProdutosVendido DESC")
+//    List<VendaProduto> findTop5ByQtdProdutosVendido();
+    List<VendaProduto> findTop5ByOrderByQtdProdutosVendidoDesc();
 }

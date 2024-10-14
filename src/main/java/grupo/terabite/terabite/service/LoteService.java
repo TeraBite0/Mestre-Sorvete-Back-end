@@ -16,11 +16,14 @@ import java.util.Optional;
 public class LoteService {
 
     @Autowired
-    LoteRepository loteRepository;
+    private LoteRepository loteRepository;
+
     @Autowired
-    ProdutoService produtoService;
+    private ProdutoService produtoService;
+
     @Autowired
-    PerdaService perdaService;
+    private PerdaService perdaService;
+
     @Autowired
     private VendaProdutoRepository vendaProdutoRepository;
 

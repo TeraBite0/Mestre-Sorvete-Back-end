@@ -57,7 +57,8 @@ public class PerdaController {
                     PerdaMapper.toResponsePerda(
                             perdaService.criarPerda(
                                     PerdaMapper.toCrearPerda(perdaCreateDTO),
-                                    perdaCreateDTO.getNome())));
+                                    perdaCreateDTO.getNome(), null // NULL PROVISÓRIO
+                                    )));
     }
 
     @Operation(summary = "Atualiza uma perda", description = "Atualiza a perda especificada pelo ID")

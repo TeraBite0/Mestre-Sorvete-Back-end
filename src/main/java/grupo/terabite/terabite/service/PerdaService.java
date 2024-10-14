@@ -17,7 +17,6 @@ public class PerdaService {
 
     private final PerdaRepository perdaRepository;
     private final ProdutoService  produtoService;
-    private final LoteService loteService;
 
     public List<Perda> listarPerda(){
         List<Perda> perdas = perdaRepository.findAll();
@@ -35,7 +34,7 @@ public class PerdaService {
         return perdasOpt.get();
     }
 
-    public Perda criarPerda(Perda novaPerda, String nome){
+    public Perda criarPerda(Perda novaPerda, String nome, LoteService loteService){
         novaPerda.setProduto(produtoService.buscarPorNomeProduto(nome));
 
         Produto p = produtoService.buscarPorId(novaPerda.getProduto().getId());

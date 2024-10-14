@@ -7,8 +7,10 @@ import grupo.terabite.terabite.dto.response.ProdutoPopularesReponseDto;
 import grupo.terabite.terabite.dto.response.ProdutoResponseDTO;
 import grupo.terabite.terabite.dto.update.ProdutoUpdateDTO;
 import grupo.terabite.terabite.entity.Produto;
+import grupo.terabite.terabite.service.MarcaService;
 import grupo.terabite.terabite.service.ProdutoService;
 import grupo.terabite.terabite.service.RecomendacaoService;
+import grupo.terabite.terabite.service.SubtipoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -29,6 +31,12 @@ public class ProdutoController {
     private ProdutoService produtoService;
     @Autowired
     private RecomendacaoService recomendacaoService;
+
+    @Autowired
+    private SubtipoService subtipoService;
+
+    @Autowired
+    private MarcaService marcaService;
 
     @Operation(summary = "Lista todos produtos", description = "Retorna uma lista com todos os produtos")
     @ApiResponses(value = {
@@ -103,7 +111,7 @@ public class ProdutoController {
         return ResponseEntity.status(201).body(
                 ProdutoMapper.toDetalhe(
                         produtoService.atualizarProduto(id,
-                                ProdutoMapper.toAtualizar(produtoUpdateDTO))));
+                                ProdutoMapper.toAtualizar(produtoUpdateDTO, subtipoService, marcaService))));
     }
 
     @Operation(summary = "Busca a recomendação do dia atual", description = "Retorna o produto aleatório que representa a recomendação do dia")
@@ -124,7 +132,7 @@ public class ProdutoController {
     })
     @PostMapping("/recomendacao-do-dia")
     public ResponseEntity<ProdutoResponseDTO> alterarRecomendacaoDoDia(@RequestBody @Valid ProdutoUpdateDTO produtoNovo) {
-        return ResponseEntity.ok(ProdutoMapper.toDetalhe(recomendacaoService.alterarRecomendacaoDoDia(ProdutoMapper.toAtualizar(produtoNovo))));
+        return ResponseEntity.ok(ProdutoMapper.toDetalhe(recomendacaoService.alterarRecomendacaoDoDia(ProdutoMapper.toAtualizar(produtoNovo, subtipoService, marcaService))));
     }
 
     @Operation(summary = "Busca os sorvetes mais populares no momento", description = "Retorna os 10 produtos mais populares que teve mais venda no momento")

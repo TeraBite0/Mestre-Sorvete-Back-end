@@ -29,11 +29,11 @@ public class ProdutoService {
         return produtoRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatusCode.valueOf(204)));
     }
 
-    public Produto buscarPorNomeProduto(String nomeProduto){
-        if(nomeProduto.isBlank()){
+    public Produto buscarPorNomeProduto(String nomeProduto) {
+        if (nomeProduto.isBlank()) {
             throw new ResponseStatusException(HttpStatusCode.valueOf(400));
         }
-        if(produtoRepository.findByNomeIgnoreCase(nomeProduto) == null){
+        if (produtoRepository.findByNomeIgnoreCase(nomeProduto) == null) {
             throw new ResponseStatusException(HttpStatusCode.valueOf(404));
         }
         return produtoRepository.findByNomeIgnoreCase(nomeProduto);
@@ -47,14 +47,18 @@ public class ProdutoService {
     }
 
     public Produto atualizarProduto(Integer id, Produto produtoAtualizado) {
-        if (!produtoRepository.existsById(id)) {
+        Produto produtoAntigo = produtoRepository.findById(id).orElse(null);
+        if (produtoAntigo == null) {
             throw new ResponseStatusException(HttpStatusCode.valueOf(404));
         }
         produtoAtualizado.setId(id);
+        if (produtoAtualizado.getEmEstoque() == null) {
+            produtoAtualizado.setEmEstoque(produtoAntigo.getEmEstoque());
+        }
         return produtoRepository.save(produtoAtualizado);
     }
 
-    public List<Produto> popular(){
+    public List<Produto> popular() {
         List<VendaProduto> vendas = vendaProdutoRepository.findTop5ByOrderByQtdProdutosVendidoDesc();
         return vendas.stream().map(VendaProduto::getProduto).collect(Collectors.toList());
     }

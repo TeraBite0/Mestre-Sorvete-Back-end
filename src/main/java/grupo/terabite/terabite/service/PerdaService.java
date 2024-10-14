@@ -1,6 +1,7 @@
 package grupo.terabite.terabite.service;
 
 import grupo.terabite.terabite.entity.Perda;
+import grupo.terabite.terabite.entity.Produto;
 import grupo.terabite.terabite.repository.PerdaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatusCode;
@@ -16,6 +17,7 @@ public class PerdaService {
 
     private final PerdaRepository perdaRepository;
     private final ProdutoService  produtoService;
+    private final LoteService loteService;
 
     public List<Perda> listarPerda(){
         List<Perda> perdas = perdaRepository.findAll();
@@ -35,6 +37,12 @@ public class PerdaService {
 
     public Perda criarPerda(Perda novaPerda, String nome){
         novaPerda.setProduto(produtoService.buscarPorNomeProduto(nome));
+
+        Produto p = produtoService.buscarPorId(novaPerda.getProduto().getId());
+        if(loteService.produtoEmEstoque(p.getId()) < 1){
+            p.setEmEstoque(false);
+            produtoService.atualizarProduto(p.getId(), p);
+        }
         return perdaRepository.save(novaPerda);
     }
 
@@ -51,5 +59,9 @@ public class PerdaService {
             throw new ResponseStatusException(HttpStatusCode.valueOf(404));
         }
         perdaRepository.deleteById(id);
+    }
+
+    public List<Perda> buscarPerdaPorProdutoId(Integer produtoId) {
+        return perdaRepository.findByProdutoId(produtoId);
     }
 }

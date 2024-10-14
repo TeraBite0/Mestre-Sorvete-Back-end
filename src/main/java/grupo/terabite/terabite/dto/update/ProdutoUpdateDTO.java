@@ -12,9 +12,15 @@ public class ProdutoUpdateDTO {
     @NotBlank
     private String nome;
 
-    @NotBlank
+    @NotNull
     private Double preco;
 
-    @NotBlank
+    @NotNull
     private Boolean isAtivo;
+
+    @NotNull
+    private Integer subtipoId;
+
+    @NotNull
+    private Integer marcaId;
 }

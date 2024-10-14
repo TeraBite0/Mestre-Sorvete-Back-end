@@ -10,6 +10,8 @@ import grupo.terabite.terabite.entity.Marca;
 import grupo.terabite.terabite.entity.Produto;
 import grupo.terabite.terabite.entity.Subtipo;
 import grupo.terabite.terabite.entity.Tipo;
+import grupo.terabite.terabite.service.MarcaService;
+import grupo.terabite.terabite.service.SubtipoService;
 
 public class ProdutoMapper {
 
@@ -51,13 +53,15 @@ public class ProdutoMapper {
                 .build();
     }
 
-    public static Produto toAtualizar(ProdutoUpdateDTO entity){
+    public static Produto toAtualizar(ProdutoUpdateDTO entity, SubtipoService subtipoService, MarcaService marcaService){
         if(entity == null) return null;
 
         return Produto.builder()
                 .nome(entity.getNome())
                 .preco(entity.getPreco())
                 .isAtivo(entity.getIsAtivo())
+                .subtipo(subtipoService.buscarPorId(entity.getSubtipoId()))
+                .marca(marcaService.buscarPorId(entity.getMarcaId()))
                 .build();
     }
 }

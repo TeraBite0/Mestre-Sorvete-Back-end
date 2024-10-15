@@ -43,6 +43,7 @@ public class ProdutoService {
         produto.setMarca(marcaService.buscarPorNomeMarca(nomeMarca));
         produto.setEmEstoque(false);
         produto.setSubtipo((subtipoService.buscarPorNomeSubtipo(nomeSubtipo)));
+        produto.setIsAtivo(true);
         return produtoRepository.save(produto);
     }
 

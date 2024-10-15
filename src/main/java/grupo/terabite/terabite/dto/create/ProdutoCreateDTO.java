@@ -18,9 +18,6 @@ public class ProdutoCreateDTO {
     @NotBlank
     private String nomeMarca;
 
-    @NotBlank
+    @NotNull
     private Double preco;
-
-    @NotBlank
-    private Boolean isAtivo;
 }

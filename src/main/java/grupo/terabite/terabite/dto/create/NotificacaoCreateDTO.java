@@ -2,6 +2,7 @@ package grupo.terabite.terabite.dto.create;
 
 import grupo.terabite.terabite.entity.Produto;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
 
@@ -10,8 +11,10 @@ import lombok.Data;
 public class NotificacaoCreateDTO {
 
     private Integer id;
+
     @NotBlank
     private String email;
-    @NotBlank
+
+    @NotNull
     private Produto produto;
 }

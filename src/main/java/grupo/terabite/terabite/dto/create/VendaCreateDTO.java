@@ -11,6 +11,7 @@ import java.util.List;
 @Builder
 @Data
 public class VendaCreateDTO {
+
     @NotEmpty
     private List<VendaProdutoCreateDTO> produtos;
 }

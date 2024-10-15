@@ -49,7 +49,6 @@ public class ProdutoMapper {
         return Produto.builder()
                 .nome(entity.getNome())
                 .preco(entity.getPreco())
-                .isAtivo(entity.getIsAtivo())
                 .build();
     }
 

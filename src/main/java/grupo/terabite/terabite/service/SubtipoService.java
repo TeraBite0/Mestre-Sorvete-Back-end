@@ -2,6 +2,7 @@ package grupo.terabite.terabite.service;
 
 import grupo.terabite.terabite.entity.Subtipo;
 import grupo.terabite.terabite.repository.SubtipoRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
@@ -10,10 +11,10 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class SubtipoService {
 
-    @Autowired
-    private SubtipoRepository subtipoRepository;
+    private final SubtipoRepository subtipoRepository;
 
     public List<Subtipo> listarSubtipo() {
         List<Subtipo> subtipos = subtipoRepository.findAll();

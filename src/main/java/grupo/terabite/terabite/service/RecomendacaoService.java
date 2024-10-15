@@ -3,6 +3,7 @@ package grupo.terabite.terabite.service;
 import grupo.terabite.terabite.entity.Produto;
 import grupo.terabite.terabite.entity.Recomendacao;
 import grupo.terabite.terabite.repository.RecomendacaoRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,13 +12,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class RecomendacaoService {
 
-    @Autowired
-    ProdutoService produtoService;
-
-    @Autowired
-    RecomendacaoRepository recomendacaoRepository;
+    private final ProdutoService produtoService;
+    private final RecomendacaoRepository recomendacaoRepository;
 
     public Produto alterarRecomendacaoDoDia(Integer produtoNovoId){
         Produto produtoNovo = produtoService.buscarPorId(produtoNovoId); // valida se o produto é inexistente por id

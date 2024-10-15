@@ -4,6 +4,7 @@ import grupo.terabite.terabite.entity.*;
 import grupo.terabite.terabite.repository.LoteRepository;
 import grupo.terabite.terabite.repository.PerdaRepository;
 import grupo.terabite.terabite.repository.VendaProdutoRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
@@ -14,21 +15,13 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class LoteService {
 
-    @Autowired
-    private LoteRepository loteRepository;
-
-    @Autowired
-    private ProdutoService produtoService;
-
-
-    @Autowired
-    private VendaProdutoRepository vendaProdutoRepository;
-
-    @Autowired
-    private PerdaRepository perdaRepository;
-
+    private final LoteRepository loteRepository;
+    private final ProdutoService produtoService;
+    private final VendaProdutoRepository vendaProdutoRepository;
+    private final PerdaRepository perdaRepository;
     private List<Perda> perdas;
 
     private List<Lote> listarLote() {

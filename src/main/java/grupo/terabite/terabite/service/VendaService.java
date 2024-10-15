@@ -5,6 +5,7 @@ import grupo.terabite.terabite.entity.Venda;
 import grupo.terabite.terabite.entity.VendaProduto;
 import grupo.terabite.terabite.repository.VendaProdutoRepository;
 import grupo.terabite.terabite.repository.VendaRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
@@ -15,19 +16,13 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class VendaService {
 
-    @Autowired
-    private VendaRepository vendaRepository;
-
-    @Autowired
-    private VendaProdutoRepository vendaProdutoRepository;
-
-    @Autowired
-    private LoteService loteService;
-
-    @Autowired
-    private ProdutoService produtoService;
+    private final VendaRepository vendaRepository;
+    private final VendaProdutoRepository vendaProdutoRepository;
+    private final LoteService loteService;
+    private final ProdutoService produtoService;
 
     public List<Venda> listarVenda() {
         List<Venda> vendas = vendaRepository.findAllByOrderByDataCompraDesc();

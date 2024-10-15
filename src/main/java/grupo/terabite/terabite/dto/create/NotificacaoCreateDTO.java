@@ -10,6 +10,7 @@ public class NotificacaoCreateDTO {
 
     @NotBlank
     private String email;
+
     @NotBlank
     private String nomeProduto;
 }

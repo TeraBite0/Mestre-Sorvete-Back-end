@@ -14,19 +14,15 @@ import java.time.LocalDate;
 @Builder
 public class LoteCreateDTO {
 
-    @JsonProperty("produtoId")
     @NotNull
     private Integer produtoId;
 
-    @JsonProperty("dtCompra")
     @NotNull
     private LocalDate dtCompra;
 
-    @JsonProperty("dtVencimento")
     @Future
     private LocalDate dtVencimento;
 
-    @JsonProperty("dtEntrega")
     @NotNull
     private LocalDate dtEntrega;
 
@@ -34,7 +30,6 @@ public class LoteCreateDTO {
     @Positive
     private Integer qtdProdutoComprado;
 
-    @JsonProperty("valorLote")
     @NotNull
     @Positive
     private Double valorLote;

@@ -1,8 +1,10 @@
 package grupo.terabite.terabite.controller;
 
+import grupo.terabite.terabite.dto.create.NotificacaoCreateDTO;
 import grupo.terabite.terabite.dto.mapper.NotificacaoMapper;
 import grupo.terabite.terabite.dto.response.NotificacaoResponseDTO;
 import grupo.terabite.terabite.entity.Notificacao;
+import grupo.terabite.terabite.repository.NotificacaoRepository;
 import grupo.terabite.terabite.service.NotificacaoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -23,12 +25,12 @@ public class NotificacaoController {
     private NotificacaoService service;
 
     @Operation(summary = "Lista todos alertas de notificação pendentes", description = "Retorna a lista de alertas")
-    @GetMapping
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Operação bem-sucedida, Alertas de produtos listados"),
             @ApiResponse(responseCode = "204", description = "Operação bem-sucedida, Sem alertas de produtos"),
             @ApiResponse(responseCode = "401", description = "Erro de requisição, Não autorizado")
     })
+    @GetMapping
     public ResponseEntity<List<NotificacaoResponseDTO>> listarNotificacoes() {
         List<Notificacao> notificacoes = service.listarNotificacoes();
         if(notificacoes.isEmpty()) throw new ResponseStatusException(HttpStatusCode.valueOf(204));
@@ -36,12 +38,16 @@ public class NotificacaoController {
     }
 
     @Operation(summary = "Cria um alerta de notificacao", description = "Retorna o alerta de notificação criado")
-    @PostMapping
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Alerta criado com sucesso"),
             @ApiResponse(responseCode = "400", description = "Parâmetros inválidos")
     })
-    public ResponseEntity<Notificacao> criarNotificacao(@RequestBody Notificacao novaNotificacao) {
-        return ResponseEntity.ok(service.criarNotificacao(novaNotificacao));
+    @PostMapping
+    public ResponseEntity<NotificacaoResponseDTO> criarNotificacao(
+            @RequestBody NotificacaoCreateDTO novaNotificacao) {
+        return ResponseEntity.ok(NotificacaoMapper.toResponseNotificacaoDto(
+                service.criarNotificacao(
+                        NotificacaoMapper.toCreateNotificacaoDto(novaNotificacao),
+                        novaNotificacao.getNomeProduto())));
     }
 }

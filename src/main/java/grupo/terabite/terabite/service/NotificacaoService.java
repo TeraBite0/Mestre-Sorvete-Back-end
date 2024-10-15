@@ -2,6 +2,7 @@ package grupo.terabite.terabite.service;
 
 import grupo.terabite.terabite.entity.Notificacao;
 import grupo.terabite.terabite.repository.NotificacaoRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
@@ -10,10 +11,11 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class NotificacaoService {
 
-    @Autowired
-    private NotificacaoRepository notificacaoRepository;
+    private final NotificacaoRepository notificacaoRepository;
+    private final ProdutoService produtoService;
 
     public List<Notificacao> listarNotificacoes() {
         List<Notificacao> notificacoes = notificacaoRepository.findAll();
@@ -23,8 +25,8 @@ public class NotificacaoService {
         return notificacoes;
     }
 
-    public Notificacao criarNotificacao(Notificacao novaNotificacao) {
-        novaNotificacao.setId(null);
+    public Notificacao criarNotificacao(Notificacao novaNotificacao, String nomeProduto) {
+        novaNotificacao.setProduto(produtoService.buscarPorNomeProduto(nomeProduto));
         return notificacaoRepository.save(novaNotificacao);
     }
 

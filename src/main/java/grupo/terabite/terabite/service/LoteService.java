@@ -2,6 +2,7 @@ package grupo.terabite.terabite.service;
 
 import grupo.terabite.terabite.entity.*;
 import grupo.terabite.terabite.repository.LoteRepository;
+import grupo.terabite.terabite.repository.PerdaRepository;
 import grupo.terabite.terabite.repository.VendaProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
@@ -26,6 +27,11 @@ public class LoteService {
 
     @Autowired
     private VendaProdutoRepository vendaProdutoRepository;
+
+    @Autowired
+    private PerdaRepository perdaRepository;
+
+    private List<Perda> perdas;
 
     private List<Lote> listarLote() {
         List<Lote> lotes = loteRepository.findAll();
@@ -61,7 +67,7 @@ public class LoteService {
         lote.setId(id);
         Lote novoLote = loteRepository.save(lote);
 
-        if(produtoEmEstoque(lote.getProduto().getId()) < 1){
+        if (produtoEmEstoque(lote.getProduto().getId()) < 1) {
             Produto p = produtoService.buscarPorId(lote.getProduto().getId());
             p.setEmEstoque(false);
             produtoService.atualizarProduto(p.getId(), p);
@@ -79,19 +85,10 @@ public class LoteService {
 
     public List<EstoqueProduto> estoque() {
         List<Produto> produtos = produtoService.listarProduto();
-        List<Lote> lotes = new ArrayList<>();
-        List<Perda> perdas = new ArrayList<>();
+        List<Lote> lotes = loteRepository.findAll();
+        List<Perda> perdas = perdaRepository.findAll();
         List<VendaProduto> vendas = vendaProdutoRepository.findAll();
         List<EstoqueProduto> estoque = new ArrayList<>();
-
-        try {
-            lotes = listarLote();
-            perdas = perdaService.listarPerda();
-        } catch (ResponseStatusException e) {
-            if (!e.getStatusCode().equals(HttpStatusCode.valueOf(204))) {
-                throw e;
-            }
-        }
 
         for (Produto p : produtos) {
             Integer qtdEmEstoque = 0;
@@ -127,7 +124,7 @@ public class LoteService {
         Integer qtdEmEstoque = 0;
         List<VendaProduto> vendaProdutos = vendaProdutoRepository.findByProdutoId(produtoId);
         List<Lote> lotes = loteRepository.findByProdutoId(produtoId);
-        List<Perda> perdas = perdaService.buscarPerdaPorProdutoId(produtoId);
+        List<Perda> perdas = perdaRepository.findByProdutoId(produtoId);
 
 
         for (Lote l : lotes) {

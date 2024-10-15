@@ -30,7 +30,7 @@ public class PerdaController {
     })
     public ResponseEntity<List<PerdaResponseDTO>> listarPerda() {
         List<Perda> perdas = perdaService.listarPerda();
-        if(perdas.isEmpty()) return ResponseEntity.noContent().build();
+        if (perdas.isEmpty()) return ResponseEntity.noContent().build();
         return ResponseEntity.ok(perdas.stream().map(PerdaMapper::toResponsePerda).toList());
     }
 
@@ -53,12 +53,12 @@ public class PerdaController {
     })
     public ResponseEntity<PerdaResponseDTO> criarPerda(
             @RequestBody @Valid PerdaCreateDTO perdaCreateDTO) {
-            return ResponseEntity.created(null).body(
-                    PerdaMapper.toResponsePerda(
-                            perdaService.criarPerda(
-                                    PerdaMapper.toCrearPerda(perdaCreateDTO),
-                                    perdaCreateDTO.getNome(), null // NULL PROVISÓRIO
-                                    )));
+        return ResponseEntity.created(null).body(
+                PerdaMapper.toResponsePerda(
+                        perdaService.criarPerda(
+                                PerdaMapper.toCrearPerda(perdaCreateDTO),
+                                perdaCreateDTO.getNome()
+                        )));
     }
 
     @Operation(summary = "Atualiza uma perda", description = "Atualiza a perda especificada pelo ID")
@@ -67,8 +67,10 @@ public class PerdaController {
             @ApiResponse(responseCode = "200", description = "Perda atualizada com sucesso"),
             @ApiResponse(responseCode = "404", description = "Perda não encontrada")
     })
-    public ResponseEntity<Perda> atualizarPerda(@PathVariable Integer id, @RequestBody Perda atualizarPerda) {
-        return ResponseEntity.ok(perdaService.atualizarPerda(id, atualizarPerda));
+    public ResponseEntity<PerdaResponseDTO> atualizarPerda(@PathVariable Integer id, @RequestBody Perda perdaAtualizada) {
+        return ResponseEntity.ok(
+                PerdaMapper.toResponsePerda(
+                        perdaService.atualizarPerda(id, perdaAtualizada)));
     }
 
     @Operation(summary = "Deleta uma perda pelo ID", description = "Deleta a perda e retorna o sucesso da exclusão")

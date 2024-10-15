@@ -17,6 +17,7 @@ public class PerdaService {
 
     private final PerdaRepository perdaRepository;
     private final ProdutoService  produtoService;
+    private final LoteService  loteService;
 
     public List<Perda> listarPerda(){
         List<Perda> perdas = perdaRepository.findAll();
@@ -34,7 +35,7 @@ public class PerdaService {
         return perdasOpt.get();
     }
 
-    public Perda criarPerda(Perda novaPerda, String nome, LoteService loteService){
+    public Perda criarPerda(Perda novaPerda, String nome){
         novaPerda.setProduto(produtoService.buscarPorNomeProduto(nome));
 
         Produto p = produtoService.buscarPorId(novaPerda.getProduto().getId());
@@ -60,7 +61,7 @@ public class PerdaService {
         perdaRepository.deleteById(id);
     }
 
-    public List<Perda> buscarPerdaPorProdutoId(Integer produtoId) {
+    public List<Perda> buscarPerdaPorProdutoId(Integer produtoId) { // não utilizar dentro de LoteService por motivos de dependencia de classes
         return perdaRepository.findByProdutoId(produtoId);
     }
 }

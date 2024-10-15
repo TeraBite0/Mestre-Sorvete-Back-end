@@ -181,3 +181,12 @@ VALUES  (1, 2, 30),
         (5, 78, 5),
         (5, 90, 10),
         (7, 3, 20);
+
+INSERT INTO NOTIFICACAO
+       (EMAIL_NOTI, FK_ID_PROD_NOTI)
+VALUES ('bruno@gmail.com', 20),
+       ('guilherme@gmail.com', 35),
+       ('gus@gmail.com', 15),
+       ('kauan@gmail.com', 11),
+       ('thamires@gmail.com', 19),
+       ('maria@gmail.com', 56);

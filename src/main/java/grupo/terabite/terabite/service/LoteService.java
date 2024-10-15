@@ -22,8 +22,6 @@ public class LoteService {
     @Autowired
     private ProdutoService produtoService;
 
-    @Autowired
-    private PerdaService perdaService;
 
     @Autowired
     private VendaProdutoRepository vendaProdutoRepository;

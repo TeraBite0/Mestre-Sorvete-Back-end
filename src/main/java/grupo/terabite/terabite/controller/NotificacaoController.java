@@ -9,6 +9,7 @@ import grupo.terabite.terabite.service.NotificacaoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -44,7 +45,7 @@ public class NotificacaoController {
     })
     @PostMapping
     public ResponseEntity<NotificacaoResponseDTO> criarNotificacao(
-            @RequestBody NotificacaoCreateDTO novaNotificacao) {
+            @RequestBody @Valid NotificacaoCreateDTO novaNotificacao) {
         return ResponseEntity.ok(NotificacaoMapper.toResponseNotificacaoDto(
                 service.criarNotificacao(
                         NotificacaoMapper.toCreateNotificacaoDto(novaNotificacao),

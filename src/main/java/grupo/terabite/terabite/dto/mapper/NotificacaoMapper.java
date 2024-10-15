@@ -10,32 +10,11 @@ public class NotificacaoMapper {
         if (notificacao == null) return null;
 
         Produto produto = notificacao.getProduto();
-        Marca marca = produto.getMarca();
-        Subtipo subtipo = produto.getSubtipo();
-        Tipo tipo = subtipo.getTipoPai();
 
         return NotificacaoResponseDTO.builder()
                 .id(notificacao.getId())
                 .email(notificacao.getEmail())
-                .produtoResponseDTO(ProdutoResponseDTO.builder()
-                        .id(produto.getId())
-                        .nome(produto.getNome())
-                        .preco(produto.getPreco())
-                        .isAtivo(produto.getIsAtivo())
-                        .emEstoque(produto.getEmEstoque())
-                        .marca(MarcaResponseDTO.builder()
-                                .id(marca.getId())
-                                .nome(marca.getNome())
-                                .build())
-                        .subtipo(SubtipoResponseDTO.builder()
-                                .id(subtipo.getId())
-                                .nome(subtipo.getNome())
-                                .tipoPai(TipoResponseDTO.builder()
-                                        .id(tipo.getId())
-                                        .nome(tipo.getNome())
-                                        .build())
-                                .build())
-                        .build())
+                .produtoResponseDTO(ProdutoMapper.toDetalhe(produto))
                 .build();
     }
 

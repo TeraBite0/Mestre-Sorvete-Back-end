@@ -9,7 +9,6 @@ import lombok.Data;
 @Builder
 public class NotificacaoCreateDTO {
 
-    private Integer id;
     @NotBlank
     private String email;
     @NotBlank

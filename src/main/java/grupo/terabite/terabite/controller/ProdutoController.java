@@ -15,7 +15,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,19 +24,14 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/produtos")
 public class ProdutoController {
 
-    @Autowired
-    private ProdutoService produtoService;
-    @Autowired
-    private RecomendacaoService recomendacaoService;
-
-    @Autowired
-    private SubtipoService subtipoService;
-
-    @Autowired
-    private MarcaService marcaService;
+    private final ProdutoService produtoService;
+    private final RecomendacaoService recomendacaoService;
+    private final SubtipoService subtipoService;
+    private final MarcaService marcaService;
 
     @Operation(summary = "Lista todos produtos", description = "Retorna uma lista com todos os produtos")
     @ApiResponses(value = {
@@ -63,8 +58,7 @@ public class ProdutoController {
         return ResponseEntity.ok(ProdutoMapper.toDetalhe(produtoService.buscarPorId(id)));
     }
 
-    @Operation(summary = "Busca produtos, com um filtro opcional",
-            description = "Retorna todos os produtos, ou retorna produtos conforme nome e/ou marca passados. Parâmetros: nomeProduto (Opcional), nomeMarca (Opcional)")
+    @Operation(summary = "Busca produtos, com um filtro opcional", description = "Retorna todos os produtos, ou retorna produtos conforme nome e/ou marca passados. Parâmetros: nomeProduto (Opcional), nomeMarca (Opcional)")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Operação bem-sucedida, produtos retornados"),
             @ApiResponse(responseCode = "204", description = "Operação bem-sucedida, sem produtos"),
@@ -86,8 +80,7 @@ public class ProdutoController {
             @ApiResponse(responseCode = "409", description = "Produto duplicado"),
     })
     @PostMapping
-    public ResponseEntity<ProdutoResponseDTO> criar(
-            @RequestBody @Valid ProdutoCreateDTO produtoCreateDTO) {
+    public ResponseEntity<ProdutoResponseDTO> criar(@RequestBody @Valid ProdutoCreateDTO produtoCreateDTO) {
         return ResponseEntity.created(null).body(
                 ProdutoMapper.toDetalhe(
                         produtoService.criarProduto(

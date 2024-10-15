@@ -31,9 +31,6 @@ public class VendaService {
 
     public List<Venda> listarVenda() {
         List<Venda> vendas = vendaRepository.findAllByOrderByDataCompraDesc();
-        if (vendas.isEmpty()) {
-            throw new ResponseStatusException(HttpStatusCode.valueOf(204));
-        }
         return vendas;
     }
 

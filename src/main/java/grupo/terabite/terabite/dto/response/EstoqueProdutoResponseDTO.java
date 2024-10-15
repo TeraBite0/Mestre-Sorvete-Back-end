@@ -9,7 +9,10 @@ import lombok.Data;
 public class EstoqueProdutoResponseDTO {
 
     private Integer codigo;
+
     private String produto;
+
     private String marca;
+
     private Integer qtdEstoque;
 }

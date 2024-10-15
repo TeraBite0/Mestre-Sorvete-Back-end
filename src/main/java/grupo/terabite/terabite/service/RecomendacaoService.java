@@ -19,8 +19,8 @@ public class RecomendacaoService {
     @Autowired
     RecomendacaoRepository recomendacaoRepository;
 
-    public Produto alterarRecomendacaoDoDia(Produto produtoNovo){
-        produtoNovo = produtoService.buscarPorId(produtoNovo.getId()); // valida se o produto é inexistente por id
+    public Produto alterarRecomendacaoDoDia(Integer produtoNovoId){
+        Produto produtoNovo = produtoService.buscarPorId(produtoNovoId); // valida se o produto é inexistente por id
         LocalDate hoje = LocalDate.now();
         Recomendacao recomendacaoDoDia = recomendacaoRepository.findByDtRecomendacao(hoje);
 

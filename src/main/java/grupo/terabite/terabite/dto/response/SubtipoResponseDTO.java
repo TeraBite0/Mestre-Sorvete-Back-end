@@ -9,6 +9,8 @@ import lombok.Data;
 public class SubtipoResponseDTO {
 
     private Integer id;
+
     private TipoResponseDTO tipoPai;
+
     private String nome;
 }

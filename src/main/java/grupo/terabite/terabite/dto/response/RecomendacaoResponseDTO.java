@@ -11,6 +11,8 @@ import java.time.LocalDate;
 public class RecomendacaoResponseDTO {
 
     private Integer id;
+
     private Produto produto;
+
     private LocalDate dtRecomendacao;
 }

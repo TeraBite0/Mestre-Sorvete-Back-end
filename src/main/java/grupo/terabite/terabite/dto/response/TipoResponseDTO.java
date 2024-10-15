@@ -8,5 +8,6 @@ import lombok.Data;
 public class TipoResponseDTO {
 
     private Integer id;
+
     private String nome;
 }

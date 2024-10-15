@@ -10,6 +10,7 @@ public class EstoqueProdutoMapper {
                 .codigo(estoqueProduto.getCodigo())
                 .produto(estoqueProduto.getProduto())
                 .qtdEstoque(estoqueProduto.getQtdEstoque())
+                .marca(estoqueProduto.getMarca())
                 .build();
     }
 }

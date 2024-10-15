@@ -10,5 +10,6 @@ import lombok.Data;
 public class VendaProdutoResponseDTO {
 
     private ProdutoResponseDTO produto;
+
     private Integer qtdVendida;
 }

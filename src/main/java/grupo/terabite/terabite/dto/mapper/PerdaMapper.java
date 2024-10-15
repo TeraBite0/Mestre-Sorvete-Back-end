@@ -4,6 +4,7 @@ import grupo.terabite.terabite.dto.create.PerdaCreateDTO;
 import grupo.terabite.terabite.dto.response.PerdaResponseDTO;
 import grupo.terabite.terabite.entity.Perda;
 import grupo.terabite.terabite.entity.Produto;
+import grupo.terabite.terabite.service.ProdutoService;
 
 public class PerdaMapper {
 
@@ -19,11 +20,12 @@ public class PerdaMapper {
                 .build();
     }
 
-    public static Perda toCrearPerda(PerdaCreateDTO perda){
-        if(perda == null) return null;
+    public static Perda toEntity(PerdaCreateDTO perda, ProdutoService produtoService){
+        if(perda == null || produtoService == null) return null;
 
         return Perda.builder()
                 .qtdProduto(perda.getQtdPerda())
+                .produto(produtoService.buscarPorId(perda.getProdutoId()))
                 .build();
     }
 }

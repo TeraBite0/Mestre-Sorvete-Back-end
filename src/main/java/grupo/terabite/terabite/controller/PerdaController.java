@@ -5,6 +5,7 @@ import grupo.terabite.terabite.dto.mapper.PerdaMapper;
 import grupo.terabite.terabite.dto.response.PerdaResponseDTO;
 import grupo.terabite.terabite.entity.Perda;
 import grupo.terabite.terabite.service.PerdaService;
+import grupo.terabite.terabite.service.ProdutoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -21,6 +22,9 @@ public class PerdaController {
 
     @Autowired
     private PerdaService perdaService;
+
+    @Autowired
+    private ProdutoService produtoService;
 
     @Operation(summary = "Lista todas as perdas", description = "Retorna todas perdas registradas")
     @GetMapping
@@ -56,8 +60,7 @@ public class PerdaController {
         return ResponseEntity.created(null).body(
                 PerdaMapper.toResponsePerda(
                         perdaService.criarPerda(
-                                PerdaMapper.toCrearPerda(perdaCreateDTO),
-                                perdaCreateDTO.getNome()
+                                PerdaMapper.toEntity(perdaCreateDTO, produtoService)
                         )));
     }
 
@@ -79,7 +82,7 @@ public class PerdaController {
             @ApiResponse(responseCode = "204", description = "Perda deletada com sucesso"),
             @ApiResponse(responseCode = "404", description = "Perda não encontrada")
     })
-    public ResponseEntity<Perda> deletarPerda(@PathVariable Integer id) {
+    public ResponseEntity<Void> deletarPerda(@PathVariable Integer id) {
         perdaService.deletarPerda(id);
         return ResponseEntity.noContent().build();
     }

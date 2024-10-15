@@ -10,6 +10,8 @@ import lombok.Data;
 public class NotificacaoResponseDTO {
 
     private Integer id;
+
     private String email;
+
     private Produto produto;
 }

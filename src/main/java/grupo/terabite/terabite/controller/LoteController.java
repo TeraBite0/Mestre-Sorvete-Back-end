@@ -1,9 +1,14 @@
 package grupo.terabite.terabite.controller;
 
+import grupo.terabite.terabite.dto.create.LoteCreateDTO;
 import grupo.terabite.terabite.dto.mapper.EstoqueProdutoMapper;
+import grupo.terabite.terabite.dto.mapper.LoteMapper;
 import grupo.terabite.terabite.dto.response.EstoqueProdutoResponseDTO;
+import grupo.terabite.terabite.dto.response.LoteResponseDTO;
+import grupo.terabite.terabite.dto.update.LoteUpdateDTO;
 import grupo.terabite.terabite.entity.Lote;
 import grupo.terabite.terabite.service.LoteService;
+import grupo.terabite.terabite.service.ProdutoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -17,7 +22,10 @@ import java.util.List;
 public class LoteController {
 
     @Autowired
-    private LoteService service;
+    private LoteService loteService;
+
+    @Autowired
+    private ProdutoService produtoService;
 
     @Operation(summary = "Lista todos produtos com informações de estoque", description = "Retorna todos os produtos com lotes registrados")
     @GetMapping
@@ -27,7 +35,7 @@ public class LoteController {
             @ApiResponse(responseCode = "401", description = "Erro de requisição, Não autorizado")
     })
     public ResponseEntity<List<EstoqueProdutoResponseDTO>> listarEstoque() {
-        return ResponseEntity.ok(service.estoque().stream().map(EstoqueProdutoMapper::toResponseDTO).toList());
+        return ResponseEntity.ok(loteService.estoque().stream().map(EstoqueProdutoMapper::toResponseDTO).toList());
     }
 
     @Operation(summary = "Busca um lote pelo ID", description = "Retorna um lote com base no seu ID")
@@ -37,9 +45,8 @@ public class LoteController {
             @ApiResponse(responseCode = "401", description = "Erro de requisição, Não autorizado"),
             @ApiResponse(responseCode = "404", description = "Nenhum lote não encontrado")
     })
-    public ResponseEntity<Lote> buscarPorId(@PathVariable Integer id) {
-        // return ResponseEntity.ok(service.buscarPorId(id));
-        return null;
+    public ResponseEntity<LoteResponseDTO> buscarPorId(@PathVariable Integer id) {
+        return ResponseEntity.ok(LoteMapper.toResponseDto(loteService.buscarPorId(id)));
     }
 
     @Operation(summary = "Registra um lote", description = "Retorna o lote registrado")
@@ -49,8 +56,8 @@ public class LoteController {
             @ApiResponse(responseCode = "400", description = "Parâmetros inválidos"),
             @ApiResponse(responseCode = "401", description = "Erro de requisição, Não autorizado")
     })
-    public ResponseEntity<Lote> adicionarLote(@RequestBody Lote novoLote) {
-        return ResponseEntity.ok(service.criarLote(novoLote));
+    public ResponseEntity<LoteResponseDTO> adicionarLote(@RequestBody LoteCreateDTO novoLote) {
+        return ResponseEntity.ok(LoteMapper.toResponseDto(loteService.criarLote(LoteMapper.toEntity(novoLote, produtoService))));
     }
 
     @Operation(summary = "Atualiza um lote apartir de um id", description = "Retorna o lote atualizado com base no seu ID")
@@ -61,8 +68,8 @@ public class LoteController {
             @ApiResponse(responseCode = "401", description = "Erro de requisição, Não autorizado"),
             @ApiResponse(responseCode = "404", description = "Lote não encontrado")
     })
-    public ResponseEntity<Lote> atualizarLote(@PathVariable Integer id, @RequestBody Lote loteAtualizado) {
-        return ResponseEntity.ok(service.atualizarLote(id, loteAtualizado));
+    public ResponseEntity<LoteResponseDTO> atualizarLote(@PathVariable Integer id, @RequestBody LoteUpdateDTO loteAtualizado) {
+        return ResponseEntity.ok(LoteMapper.toResponseDto(loteService.atualizarLote(id, LoteMapper.toEntity(loteAtualizado, produtoService))));
     }
 
     @Operation(summary = "Deleta um lote pelo ID", description = "Deleta lote e retorna o sucesso da exclusão")
@@ -73,7 +80,7 @@ public class LoteController {
             @ApiResponse(responseCode = "404", description = "Lote não encontrado")
     })
     public ResponseEntity<Void> deletarLote(@PathVariable Integer id) {
-        service.deletarLote(id);
+        loteService.deletarLote(id);
         return ResponseEntity.noContent().build();
     }
 }

@@ -14,7 +14,8 @@ import java.util.List;
 public class VendaResponseDTO {
 
     private Integer id;
-    private LocalDateTime dataCompra;
-    private List<VendaProdutoResponseDTO> produtos;
 
+    private LocalDateTime dataCompra;
+
+    private List<VendaProdutoResponseDTO> produtos;
 }

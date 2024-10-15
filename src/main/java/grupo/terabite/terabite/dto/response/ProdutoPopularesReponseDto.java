@@ -8,5 +8,6 @@ import lombok.Data;
 public class ProdutoPopularesReponseDto {
 
     private String nome;
+
     private Double preco;
 }

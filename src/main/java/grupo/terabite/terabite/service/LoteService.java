@@ -39,12 +39,12 @@ public class LoteService {
         return lotes;
     }
 
-    private Lote buscarPorId(Integer id) {
-        Optional<Lote> lotesOpt = loteRepository.findById(id);
-        if (lotesOpt.isEmpty()) {
+    public Lote buscarPorId(Integer id) {
+        Lote lote  = loteRepository.findById(id).orElse(null);
+        if(lote == null){
             throw new ResponseStatusException(HttpStatusCode.valueOf(404));
         }
-        return lotesOpt.get();
+        return lote;
     }
 
     public Lote criarLote(Lote novoLote) {

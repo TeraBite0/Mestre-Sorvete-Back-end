@@ -30,14 +30,12 @@ public class PerdaService {
     public Perda buscarPerdaPorId(Integer id){
         Optional<Perda> perdasOpt = perdaRepository.findById(id);
         if(perdasOpt.isEmpty()){
-            throw new ResponseStatusException(HttpStatusCode.valueOf(204));
+            throw new ResponseStatusException(HttpStatusCode.valueOf(404));
         }
         return perdasOpt.get();
     }
 
-    public Perda criarPerda(Perda novaPerda, String nome){
-        novaPerda.setProduto(produtoService.buscarPorNomeProduto(nome));
-
+    public Perda criarPerda(Perda novaPerda){
         Produto p = produtoService.buscarPorId(novaPerda.getProduto().getId());
         if(loteService.produtoEmEstoque(p.getId()) < 1){
             p.setEmEstoque(false);

@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -19,11 +20,11 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/notificacoes")
 public class NotificacaoController {
 
-    @Autowired
-    private NotificacaoService service;
+    private final NotificacaoService service;
 
     @Operation(summary = "Lista todos alertas de notificação pendentes", description = "Retorna a lista de alertas")
     @ApiResponses(value = {
@@ -44,8 +45,7 @@ public class NotificacaoController {
             @ApiResponse(responseCode = "400", description = "Parâmetros inválidos")
     })
     @PostMapping
-    public ResponseEntity<NotificacaoResponseDTO> criarNotificacao(
-            @RequestBody @Valid NotificacaoCreateDTO novaNotificacao) {
+    public ResponseEntity<NotificacaoResponseDTO> criarNotificacao(@RequestBody @Valid NotificacaoCreateDTO novaNotificacao) {
         return ResponseEntity.ok(NotificacaoMapper.toResponseNotificacaoDto(
                 service.criarNotificacao(
                         NotificacaoMapper.toCreateNotificacaoDto(novaNotificacao),

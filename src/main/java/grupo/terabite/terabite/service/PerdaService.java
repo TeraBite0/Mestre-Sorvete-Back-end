@@ -48,7 +48,7 @@ public class PerdaService {
         if(!perdaRepository.existsById(id)){
             throw new ResponseStatusException(HttpStatusCode.valueOf(404));
         }
-        atualizarPerda.setId(null);
+        atualizarPerda.setId(id);
         return perdaRepository.save(atualizarPerda);
     }
 

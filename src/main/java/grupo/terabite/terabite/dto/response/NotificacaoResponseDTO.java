@@ -1,6 +1,5 @@
 package grupo.terabite.terabite.dto.response;
 
-import grupo.terabite.terabite.entity.Produto;
 import lombok.Builder;
 import lombok.Data;
 

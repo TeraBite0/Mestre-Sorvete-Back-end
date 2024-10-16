@@ -99,7 +99,7 @@ public class ProdutoController {
     })
     @PutMapping("/{id}")
     public ResponseEntity<ProdutoResponseDTO> atualizarProduto(@PathVariable Integer id, @RequestBody @Valid ProdutoUpdateDTO produtoUpdateDTO) {
-        return ResponseEntity.status(201).body(ProdutoMapper.toDetalhe(produtoService.atualizarProduto(id, ProdutoMapper.toAtualizar(produtoUpdateDTO, subtipoService, marcaService))));
+        return ResponseEntity.ok(ProdutoMapper.toDetalhe(produtoService.atualizarProduto(id, ProdutoMapper.toAtualizar(produtoUpdateDTO, subtipoService, marcaService))));
     }
 
     @Operation(summary = "Busca a recomendação do dia atual", description = "Retorna o produto aleatório que representa a recomendação do dia")

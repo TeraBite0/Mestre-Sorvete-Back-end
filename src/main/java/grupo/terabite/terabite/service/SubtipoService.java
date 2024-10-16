@@ -15,6 +15,7 @@ import java.util.List;
 public class SubtipoService {
 
     private final SubtipoRepository subtipoRepository;
+    private final TipoService tipoService;
 
     public List<Subtipo> listarSubtipo() {
         List<Subtipo> subtipos = subtipoRepository.findAll();
@@ -36,6 +37,7 @@ public class SubtipoService {
         if(subtipoRepository.findByNomeIgnoreCase(nomeSubtipo) == null){
             Subtipo novoSubtipo = new Subtipo();
             novoSubtipo.setNome(nomeSubtipo);
+            novoSubtipo.setTipoPai(tipoService.buscarPorId(1));
             criarSubtipo(novoSubtipo);
         }
         return subtipoRepository.findByNomeIgnoreCase(nomeSubtipo);

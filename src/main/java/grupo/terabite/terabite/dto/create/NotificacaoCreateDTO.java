@@ -1,6 +1,7 @@
 package grupo.terabite.terabite.dto.create;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
 
@@ -11,6 +12,6 @@ public class NotificacaoCreateDTO {
     @NotBlank
     private String email;
 
-    @NotBlank
-    private String nomeProduto;
+    @NotNull
+    private Integer idProduto;
 }

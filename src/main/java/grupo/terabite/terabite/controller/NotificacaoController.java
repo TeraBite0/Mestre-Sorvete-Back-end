@@ -47,6 +47,6 @@ public class NotificacaoController {
         return ResponseEntity.ok(NotificacaoMapper.toResponseNotificacaoDto(
                 service.criarNotificacao(
                         NotificacaoMapper.toCreateNotificacaoDto(novaNotificacao),
-                        novaNotificacao.getNomeProduto())));
+                        novaNotificacao.getIdProduto())));
     }
 }

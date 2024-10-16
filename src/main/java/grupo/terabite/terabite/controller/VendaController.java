@@ -9,6 +9,7 @@ import grupo.terabite.terabite.service.VendaService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
@@ -24,8 +25,8 @@ import java.util.List;
 @RequestMapping("/vendas")
 public class VendaController {
 
-    private VendaService service;
-    private ProdutoService produtoService;
+    private final VendaService service;
+    private final ProdutoService produtoService;
 
     @Operation(summary = "Lista todas as vendas feitas", description = "Retorna uma lista de vendas")
     @ApiResponses(value = {
@@ -63,7 +64,7 @@ public class VendaController {
             @ApiResponse(responseCode = "401", description = "Erro de requisição, Não autorizado")
     })
     @PostMapping
-    public ResponseEntity<VendaResponseDTO> criarVenda(@RequestBody VendaCreateDTO novaVenda) {
+    public ResponseEntity<VendaResponseDTO> criarVenda(@RequestBody @Valid VendaCreateDTO novaVenda) {
         return ResponseEntity.status(201).body(VendaMapper.toResponseDTO(service.criarVenda(VendaMapper.toEntity(novaVenda, produtoService)), service));
     }
 

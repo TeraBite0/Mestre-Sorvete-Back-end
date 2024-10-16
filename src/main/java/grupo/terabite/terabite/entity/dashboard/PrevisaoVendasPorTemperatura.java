@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter @Setter
 @Builder
 @AllArgsConstructor
-public class PrevisaoTemperatura {
+public class PrevisaoVendasPorTemperatura {
     private String data;
 
     private Double porcentagemVenda;

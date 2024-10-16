@@ -46,7 +46,7 @@ public class NotificacaoController {
     })
     @PostMapping
     public ResponseEntity<NotificacaoResponseDTO> criarNotificacao(@RequestBody @Valid NotificacaoCreateDTO novaNotificacao) {
-        return ResponseEntity.ok(NotificacaoMapper.toResponseNotificacaoDto(
+        return ResponseEntity.created(null).body(NotificacaoMapper.toResponseNotificacaoDto(
                 service.criarNotificacao(
                         NotificacaoMapper.toCreateNotificacaoDto(novaNotificacao, produtoService))));
     }

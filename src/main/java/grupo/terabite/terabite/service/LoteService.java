@@ -130,4 +130,12 @@ public class LoteService {
 
         return qtdEmEstoque;
     }
+
+    public List<Lote> buscarPorProdutoId(Integer id) {
+        List<Lote> lotes = loteRepository.findByProdutoId(id);
+        if(lotes.isEmpty()){
+            throw new ResponseStatusException(HttpStatusCode.valueOf(204));
+        }
+        return lotes;
+    }
 }

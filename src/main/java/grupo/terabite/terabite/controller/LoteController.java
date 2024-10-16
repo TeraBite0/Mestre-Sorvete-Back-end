@@ -6,6 +6,7 @@ import grupo.terabite.terabite.dto.mapper.LoteMapper;
 import grupo.terabite.terabite.dto.response.EstoqueProdutoResponseDTO;
 import grupo.terabite.terabite.dto.response.LoteResponseDTO;
 import grupo.terabite.terabite.dto.update.LoteUpdateDTO;
+import grupo.terabite.terabite.entity.Lote;
 import grupo.terabite.terabite.service.LoteService;
 import grupo.terabite.terabite.service.ProdutoService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -15,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -80,5 +82,22 @@ public class LoteController {
     public ResponseEntity<Void> deletarLote(@PathVariable Integer id) {
         loteService.deletarLote(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @Operation(summary = "Busca lotea pelo ID de um produto", description = "Retorna lotes com base no produto atrelado")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Operação bem sucedida, Lotes retornado"),
+            @ApiResponse(responseCode = "204", description = "Operação bem sucedida, Sem lotes cadastrados"),
+            @ApiResponse(responseCode = "401", description = "Erro de requisição, Não autorizado"),
+            @ApiResponse(responseCode = "404", description = "Produto não encontrado")
+    })
+    @GetMapping("/produtos/{id}")
+    public ResponseEntity<List<LoteResponseDTO>> buscarPorProdutoId(@PathVariable Integer id) {
+        List<Lote> lotes = loteService.buscarPorProdutoId(id);
+        List<LoteResponseDTO> loteResponseDtos = new ArrayList<>();
+        for (Lote l : lotes) {
+            loteResponseDtos.add(LoteMapper.toResponseDto(l));
+        }
+        return ResponseEntity.ok(loteResponseDtos);
     }
 }

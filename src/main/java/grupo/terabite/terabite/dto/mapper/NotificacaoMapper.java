@@ -3,6 +3,7 @@ package grupo.terabite.terabite.dto.mapper;
 import grupo.terabite.terabite.dto.create.NotificacaoCreateDTO;
 import grupo.terabite.terabite.dto.response.*;
 import grupo.terabite.terabite.entity.*;
+import grupo.terabite.terabite.service.ProdutoService;
 
 public class NotificacaoMapper {
 
@@ -18,11 +19,12 @@ public class NotificacaoMapper {
                 .build();
     }
 
-    public static Notificacao toCreateNotificacaoDto(NotificacaoCreateDTO notificacaoCreateDTO) {
-        if (notificacaoCreateDTO == null) return null;
+    public static Notificacao toCreateNotificacaoDto(NotificacaoCreateDTO notificacaoCreateDTO, ProdutoService produtoService) {
+        if (notificacaoCreateDTO == null || produtoService == null) return null;
 
         return Notificacao.builder()
                 .email(notificacaoCreateDTO.getEmail())
+                .produto(produtoService.buscarPorId(notificacaoCreateDTO.getIdProduto()))
                 .build();
     }
 }

@@ -5,6 +5,7 @@ import grupo.terabite.terabite.dto.mapper.NotificacaoMapper;
 import grupo.terabite.terabite.dto.response.NotificacaoResponseDTO;
 import grupo.terabite.terabite.entity.Notificacao;
 import grupo.terabite.terabite.service.NotificacaoService;
+import grupo.terabite.terabite.service.ProdutoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -23,6 +24,7 @@ import java.util.List;
 public class NotificacaoController {
 
     private final NotificacaoService service;
+    private final ProdutoService produtoService;
 
     @Operation(summary = "Lista todos alertas de notificação pendentes", description = "Retorna a lista de alertas")
     @ApiResponses(value = {
@@ -46,7 +48,6 @@ public class NotificacaoController {
     public ResponseEntity<NotificacaoResponseDTO> criarNotificacao(@RequestBody @Valid NotificacaoCreateDTO novaNotificacao) {
         return ResponseEntity.ok(NotificacaoMapper.toResponseNotificacaoDto(
                 service.criarNotificacao(
-                        NotificacaoMapper.toCreateNotificacaoDto(novaNotificacao),
-                        novaNotificacao.getIdProduto())));
+                        NotificacaoMapper.toCreateNotificacaoDto(novaNotificacao, produtoService))));
     }
 }

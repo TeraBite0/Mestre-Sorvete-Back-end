@@ -25,8 +25,7 @@ public class NotificacaoService {
         return notificacoes;
     }
 
-    public Notificacao criarNotificacao(Notificacao novaNotificacao, Integer idProduto) {
-        novaNotificacao.setProduto(produtoService.buscarPorId(idProduto));
+    public Notificacao criarNotificacao(Notificacao novaNotificacao) {
         return notificacaoRepository.save(novaNotificacao);
     }
 

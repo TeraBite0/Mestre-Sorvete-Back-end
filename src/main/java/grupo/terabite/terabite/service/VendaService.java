@@ -5,6 +5,7 @@ import grupo.terabite.terabite.entity.Venda;
 import grupo.terabite.terabite.entity.VendaProduto;
 import grupo.terabite.terabite.repository.VendaProdutoRepository;
 import grupo.terabite.terabite.repository.VendaRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
@@ -26,13 +27,16 @@ public class VendaService {
 
     public List<Venda> listarVenda() {
         List<Venda> vendas = vendaRepository.findAllByOrderByDataCompraDesc();
+        if(vendas.isEmpty()){
+            throw new ResponseStatusException(HttpStatusCode.valueOf(204));
+        }
         return vendas;
     }
 
     public Venda buscarVendaPorId(Integer id) {
         Optional<Venda> vendasOpt = vendaRepository.findById(id);
         if (vendasOpt.isEmpty()) {
-            throw new ResponseStatusException(HttpStatusCode.valueOf(204));
+            throw new ResponseStatusException(HttpStatusCode.valueOf(404));
         }
         return vendasOpt.get();
     }
@@ -90,6 +94,7 @@ public class VendaService {
         return venda;
     }
 
+    @Transactional
     public void deletarVenda(Integer id) {
         Venda venda = vendaRepository.findById(id).orElse(null);
 

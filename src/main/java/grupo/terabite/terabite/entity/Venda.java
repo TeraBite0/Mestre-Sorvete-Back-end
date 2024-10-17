@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -23,4 +24,11 @@ public class Venda {
 
     @Column(name = "DATA_COMPRA_VEND")
     private LocalDateTime dataCompra;
+
+    public Venda(LocalDateTime dataCompra) {
+        this.dataCompra = dataCompra;
+    }
+
+    @OneToMany(mappedBy = "venda", fetch = FetchType.LAZY)
+    private List<VendaProduto> produtos;
 }

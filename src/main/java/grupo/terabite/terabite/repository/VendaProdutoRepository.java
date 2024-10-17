@@ -11,13 +11,12 @@ import java.util.List;
 @Repository
 public interface VendaProdutoRepository extends JpaRepository<VendaProduto, Integer> {
 
+
     List<VendaProduto> findByVendaId(Integer vendaId);
 
     List<VendaProduto> findByProdutoId(Integer produtoId);
     void deleteByVendaId(Integer vendaId);
 
-
-//    @Query("SELECT vp FROM VendaProduto vp JOIN vp.produto p ORDER BY vp.qtdProdutosVendido DESC")
-//    List<VendaProduto> findTop5ByQtdProdutosVendido();
-    List<VendaProduto> findTop5ByOrderByQtdProdutosVendidoDesc();
+    @Query("SELECT vp FROM Venda v JOIN v.produtos vp WHERE MONTH(v.dataCompra) = MONTH(CURRENT_DATE) AND YEAR(v.dataCompra) = YEAR(CURRENT_DATE)")
+    List<VendaProduto> procurarVendasMesAtual();
 }

@@ -42,7 +42,7 @@ public class VendaService {
     }
 
     public Venda criarVenda(List<VendaProduto> vendaProdutos) {
-        Venda novaVenda = new Venda(null, LocalDateTime.now());
+        Venda novaVenda = new Venda(LocalDateTime.now());
 
         Venda venda = vendaRepository.save(novaVenda);
         for (VendaProduto vp : vendaProdutos) {

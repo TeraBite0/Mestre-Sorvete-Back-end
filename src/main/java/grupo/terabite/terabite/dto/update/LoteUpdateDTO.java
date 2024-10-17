@@ -1,7 +1,7 @@
 package grupo.terabite.terabite.dto.update;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import grupo.terabite.terabite.entity.Produto;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
 
@@ -11,20 +11,21 @@ import java.time.LocalDate;
 @Builder
 public class LoteUpdateDTO {
 
-    @JsonProperty("produtoId")
+    @NotNull
     private Integer produtoId;
 
-    @JsonProperty("dtCompra")
+    @NotBlank
     private LocalDate dtCompra;
 
-    @JsonProperty("dtVencimento")
+    @NotBlank
     private LocalDate dtVencimento;
 
-    @JsonProperty("dtEntrega")
+    @NotBlank
     private LocalDate dtEntrega;
 
+    @NotNull
     private Integer qtdProdutoComprado;
 
-    @JsonProperty("valorLote")
+    @NotNull
     private Double valorLote;
 }

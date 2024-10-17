@@ -1,6 +1,5 @@
 package grupo.terabite.terabite.dto.response;
 
-import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Data;
 

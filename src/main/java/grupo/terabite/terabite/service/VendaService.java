@@ -75,10 +75,7 @@ public class VendaService {
     }
 
     public Venda atualizarVenda(Integer id, List<VendaProduto> vendaProdutos) {
-        Venda venda = vendaRepository.findById(id).orElse(null);
-        if (venda == null) {
-            throw new ResponseStatusException(HttpStatusCode.valueOf(404));
-        }
+        Venda venda = vendaRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatusCode.valueOf(404)));
 
         vendaProdutoRepository.deleteByVendaId(id);
 

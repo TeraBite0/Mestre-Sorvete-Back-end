@@ -1,6 +1,7 @@
-package grupo.terabite.terabite.service;
+package grupo.terabite.terabite.service.api;
 
 import grupo.terabite.terabite.entity.Notificacao;
+import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -14,6 +15,7 @@ import java.util.Scanner;
 import javax.mail.*;
 import javax.mail.internet.*;
 
+@Service
 public class EmailApiService {
     final String username = System.getenv("EMAIL_BENEFICIARIO");
     final String password = System.getenv("SENHA_APP_EMAIL");

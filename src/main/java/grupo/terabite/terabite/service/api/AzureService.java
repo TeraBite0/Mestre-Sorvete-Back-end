@@ -1,4 +1,4 @@
-package grupo.terabite.terabite.service;
+package grupo.terabite.terabite.service.api;
 
 import org.springframework.stereotype.Service;
 import com.azure.storage.blob.BlobServiceClient;

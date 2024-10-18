@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import grupo.terabite.terabite.service.AzureService;
+import grupo.terabite.terabite.service.api.AzureService;
 
 @RestController
 @RequestMapping("/azure")

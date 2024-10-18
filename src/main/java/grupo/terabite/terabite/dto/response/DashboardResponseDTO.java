@@ -2,6 +2,8 @@ package grupo.terabite.terabite.dto.response;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
@@ -18,6 +20,8 @@ public class DashboardResponseDTO {
 
     List<ProdutoEstoque> produtosBaixoEstoque;
 
+    @Getter
+    @Setter
     public static class ResumoDoMes{
         private String data; // EXEMPLO 10/24 (MM/AA)
 
@@ -32,6 +36,8 @@ public class DashboardResponseDTO {
         }
     }
 
+    @Getter
+    @Setter
     public static class PrevisaoVendasPorTemperatura{
         private String data; // EXEMPLO 16/10 (DD/MM)
 
@@ -43,6 +49,8 @@ public class DashboardResponseDTO {
         }
     }
 
+    @Getter
+    @Setter
     public static class ProdutoVendido{
         private String nome;
 
@@ -54,6 +62,8 @@ public class DashboardResponseDTO {
         }
     }
 
+    @Getter
+    @Setter
     public static class ProdutoEstoque{
         private String nome;
 

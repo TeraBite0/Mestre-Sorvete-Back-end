@@ -41,8 +41,9 @@ public class DashboardController {
         return DashboardMapper.toResponseDTO(dashboardService.gerarDashboard());
     }
 
-    @GetMapping("teste")
-    public List<VendaProduto> testeDeQuery(){
-        return vendaProdutoRepository.procurarVendasMesAtual();
-    }
+//    @GetMapping("teste")
+//    public List<VendaProduto> testeDeQuery(){
+//        return vendaProdutoRepository.procurarVendasMesAtual();
+//    }
+
 }

@@ -1,4 +1,4 @@
-package grupo.terabite.terabite.service;
+package grupo.terabite.terabite.service.api;
 
 import grupo.terabite.terabite.dto.external.ForecastExternalDTO;
 import grupo.terabite.terabite.dto.external.HgExternalDTO;

@@ -1,8 +1,12 @@
 package grupo.terabite.terabite.dto.external;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
-public class ForecastExternalDTO {
+@AllArgsConstructor
+@NoArgsConstructor
+public class ForecastExternalDTO implements Comparable<ForecastExternalDTO> {
 
     @JsonProperty("date")
     private String date;
@@ -25,7 +29,6 @@ public class ForecastExternalDTO {
     @JsonProperty("condition")
     private String condition;
 
-    // Getters e Setters
     public String getDate() {
         return date;
     }
@@ -72,5 +75,10 @@ public class ForecastExternalDTO {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Override
+    public int compareTo(ForecastExternalDTO o) {
+        return this.date.compareTo(o.getDate());
     }
 }

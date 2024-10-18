@@ -4,5 +4,5 @@ import java.util.List;
 
 public interface IOrdenadorGeneric<T extends Comparable<T>> {
 
-    List<T> ordenarMaximo();
+
 }

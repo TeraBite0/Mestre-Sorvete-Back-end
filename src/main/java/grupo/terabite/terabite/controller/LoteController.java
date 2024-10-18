@@ -3,18 +3,26 @@ package grupo.terabite.terabite.controller;
 import grupo.terabite.terabite.dto.create.LoteCreateDTO;
 import grupo.terabite.terabite.dto.mapper.EstoqueProdutoMapper;
 import grupo.terabite.terabite.dto.mapper.LoteMapper;
+import grupo.terabite.terabite.dto.mapper.ProdutoMapper;
 import grupo.terabite.terabite.dto.response.EstoqueProdutoResponseDTO;
 import grupo.terabite.terabite.dto.response.LoteResponseDTO;
+import grupo.terabite.terabite.dto.response.ProdutoResponseDTO;
 import grupo.terabite.terabite.dto.update.LoteUpdateDTO;
+import grupo.terabite.terabite.entity.EstoqueProduto;
 import grupo.terabite.terabite.entity.Lote;
+import grupo.terabite.terabite.entity.Produto;
 import grupo.terabite.terabite.service.LoteService;
 import grupo.terabite.terabite.service.ProdutoService;
+import grupo.terabite.terabite.service.api.HgApiService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +34,7 @@ public class LoteController {
 
     private final LoteService loteService;
     private final ProdutoService produtoService;
+    private final HgApiService weatherService;
 
     @Operation(summary = "Lista todos produtos com informações de estoque", description = "Retorna todos os produtos com lotes registrados")
     @ApiResponses(value = {
@@ -99,5 +108,18 @@ public class LoteController {
             loteResponseDtos.add(LoteMapper.toResponseDto(l));
         }
         return ResponseEntity.ok(loteResponseDtos);
+    }
+
+    @Operation(summary = "Lista todos produtos por marca ou nome", description = "Retorna todos os produtos com base no termo pesquisado sendo marca ou nome")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Operação bem-sucedida, Produto do estoque listado com sucesso"),
+            @ApiResponse(responseCode = "204", description = "Operação bem-sucedida, sem produtos"),
+            @ApiResponse(responseCode = "401", description = "Erro de requisição, Não autorizado")
+    })
+    @GetMapping("/produtos/pesquisar")
+    public ResponseEntity<List<EstoqueProdutoResponseDTO>> pesquisarPorNomeProuduto(@RequestParam @Valid String termo) {
+        List<EstoqueProduto> lotes = loteService.buscarPorTermo(termo, termo);
+        if(lotes.isEmpty()) throw new ResponseStatusException(HttpStatusCode.valueOf(204));
+        return ResponseEntity.ok(lotes.stream().map(EstoqueProdutoMapper::toResponseDTO).toList());
     }
 }

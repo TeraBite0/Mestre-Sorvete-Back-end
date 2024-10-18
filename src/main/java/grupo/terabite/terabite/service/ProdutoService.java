@@ -1,7 +1,6 @@
 package grupo.terabite.terabite.service;
 
 import grupo.terabite.terabite.entity.Produto;
-import grupo.terabite.terabite.entity.VendaProduto;
 import grupo.terabite.terabite.repository.ProdutoRepository;
 import grupo.terabite.terabite.repository.VendaProdutoRepository;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +21,11 @@ public class ProdutoService {
 
     public List<Produto> listarProduto() {
         return produtoRepository.findAll();
+    }
+
+    public List<Produto> buscarPorTermo(String termo, String marca){
+        List<Produto> produtos = produtoRepository.findByNomeContainingIgnoreCaseOrMarca_NomeContainingIgnoreCase(termo, marca);
+        return produtos;
     }
 
     public Produto buscarPorId(Integer id) {

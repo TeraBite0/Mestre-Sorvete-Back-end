@@ -13,6 +13,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -74,8 +75,45 @@ public class LoteService {
         loteRepository.deleteById(id);
     }
 
+    public Integer produtoEmEstoque(Integer produtoId) {
+        Integer qtdEmEstoque = 0;
+        List<VendaProduto> vendaProdutos = vendaProdutoRepository.findByProdutoId(produtoId);
+        List<Lote> lotes = loteRepository.findByProdutoId(produtoId);
+        List<Perda> perdas = perdaRepository.findByProdutoId(produtoId);
+
+
+        for (Lote l : lotes) {
+            qtdEmEstoque += l.getQtdProdutoComprado();
+        }
+        for (VendaProduto v : vendaProdutos) {
+            qtdEmEstoque -= v.getQtdProdutosVendido();
+        }
+        for (Perda p : perdas) {
+            qtdEmEstoque -= p.getQtdProduto();
+        }
+
+        return qtdEmEstoque;
+    }
+
+    public List<Lote> buscarPorProdutoId(Integer id) {
+        List<Lote> lotes = loteRepository.findByProdutoId(id);
+        if(lotes.isEmpty()){
+            throw new ResponseStatusException(HttpStatusCode.valueOf(204));
+        }
+        return lotes;
+    }
+
+    public List<EstoqueProduto> buscarPorTermo(String termo, String marca) {
+        List<Produto> produtos = produtoService.buscarPorTermo(termo, marca);
+        return estoqueFormat(produtos);
+    }
+
     public List<EstoqueProduto> estoque() {
         List<Produto> produtos = produtoService.listarProduto();
+        return estoqueFormat(produtos);
+    }
+
+    public List<EstoqueProduto> estoqueFormat(List<Produto> produtos){
         List<Lote> lotes = loteRepository.findAll();
         List<Perda> perdas = perdaRepository.findAll();
         List<VendaProduto> vendas = vendaProdutoRepository.findAll();
@@ -109,33 +147,5 @@ public class LoteService {
         }
 
         return estoque;
-    }
-
-    public Integer produtoEmEstoque(Integer produtoId) {
-        Integer qtdEmEstoque = 0;
-        List<VendaProduto> vendaProdutos = vendaProdutoRepository.findByProdutoId(produtoId);
-        List<Lote> lotes = loteRepository.findByProdutoId(produtoId);
-        List<Perda> perdas = perdaRepository.findByProdutoId(produtoId);
-
-
-        for (Lote l : lotes) {
-            qtdEmEstoque += l.getQtdProdutoComprado();
-        }
-        for (VendaProduto v : vendaProdutos) {
-            qtdEmEstoque -= v.getQtdProdutosVendido();
-        }
-        for (Perda p : perdas) {
-            qtdEmEstoque -= p.getQtdProduto();
-        }
-
-        return qtdEmEstoque;
-    }
-
-    public List<Lote> buscarPorProdutoId(Integer id) {
-        List<Lote> lotes = loteRepository.findByProdutoId(id);
-        if(lotes.isEmpty()){
-            throw new ResponseStatusException(HttpStatusCode.valueOf(204));
-        }
-        return lotes;
     }
 }

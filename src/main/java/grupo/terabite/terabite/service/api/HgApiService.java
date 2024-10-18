@@ -28,5 +28,28 @@ public class HgApiService implements IOrdenadorGeneric<ForecastExternalDTO> {
     public Optional<List<ForecastExternalDTO>> buscarPrevisao() {
         return buscarClima().map(WeatherResultsExternalDTO::getForecast);
     }
+
+    @Override
+    public void quickSort(List<ForecastExternalDTO> list, int indInicio, int indFim) {
+        int i = indInicio;
+        int j = indFim;
+        int pivo = list.get((indInicio + indFim) / 2).getMax();
+
+        while (i <= j) {
+            while (i < indFim && list.get(i).getMax() > pivo) i++;
+            while (j > indInicio && list.get(j).getMax() < pivo) j--;
+
+            if (i <= j) {
+                ForecastExternalDTO aux = list.get(i);
+                list.set(i, list.get(j));
+                list.set(j, aux);
+                i = i + 1;
+                j = j - 1;
+            }
+
+            if (indInicio < j) quickSort(list, indInicio, j);
+            if (i < indFim) quickSort(list, i, indFim);
+        }
+    }
 }
 

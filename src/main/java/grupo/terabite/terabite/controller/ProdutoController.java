@@ -1,16 +1,16 @@
 package grupo.terabite.terabite.controller;
 
 import grupo.terabite.terabite.dto.create.ProdutoCreateDTO;
+import grupo.terabite.terabite.dto.mapper.EstoqueProdutoMapper;
 import grupo.terabite.terabite.dto.mapper.ProdutoMapper;
 import grupo.terabite.terabite.dto.mapper.ProdutoPopularesMapper;
+import grupo.terabite.terabite.dto.response.EstoqueProdutoResponseDTO;
 import grupo.terabite.terabite.dto.response.ProdutoPopularesReponseDto;
 import grupo.terabite.terabite.dto.response.ProdutoResponseDTO;
 import grupo.terabite.terabite.dto.update.ProdutoUpdateDTO;
+import grupo.terabite.terabite.entity.EstoqueProduto;
 import grupo.terabite.terabite.entity.Produto;
-import grupo.terabite.terabite.service.MarcaService;
-import grupo.terabite.terabite.service.ProdutoService;
-import grupo.terabite.terabite.service.RecomendacaoService;
-import grupo.terabite.terabite.service.SubtipoService;
+import grupo.terabite.terabite.service.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -32,6 +32,7 @@ public class ProdutoController {
     private final RecomendacaoService recomendacaoService;
     private final SubtipoService subtipoService;
     private final MarcaService marcaService;
+    private final LoteService loteService;
 
     @Operation(summary = "Lista todos produtos", description = "Retorna uma lista com todos os produtos")
     @ApiResponses(value = {
@@ -66,10 +67,25 @@ public class ProdutoController {
             @ApiResponse(responseCode = "401", description = "Erro de requisição, Não autorizado"),
             @ApiResponse(responseCode = "400", description = "Erro de requisição, parâmetros inválidos")
     })
-    @GetMapping("/filtro")
+    @GetMapping("/filtrar-nome-tipo")
         public ResponseEntity<List<ProdutoResponseDTO>> listarComFiltroTipoOuNome(@RequestParam(required = false) String termo) {
         List<Produto> produtos = produtoService.buscarPorFiltroTipoOuNome(termo, termo);
         if (produtos.isEmpty()) throw new ResponseStatusException(HttpStatusCode.valueOf(204));
+        return ResponseEntity.ok(produtos.stream().map(ProdutoMapper::toDetalhe).toList());
+    }
+
+    @Operation(summary = "Lista produtos, com base no termo passado", description = "Retorna todos os produtos conforme nome e/ou marca passados. Parâmetros: nomeProduto (Opcional), nomeMarca (Opcional)")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Operação bem-sucedida, produtos retornados"),
+            @ApiResponse(responseCode = "204", description = "Operação bem-sucedida, sem produtos"),
+            @ApiResponse(responseCode = "404", description = "Nenhum produto encontrado"),
+            @ApiResponse(responseCode = "401", description = "Erro de requisição, Não autorizado"),
+            @ApiResponse(responseCode = "400", description = "Erro de requisição, parâmetros inválidos")
+    })
+    @GetMapping("/filtrar-nome-marca")
+    public ResponseEntity<List<ProdutoResponseDTO>> pesquisarPorNomeProuduto(@RequestParam @Valid String termo) {
+        List<Produto> produtos = produtoService.buscarPorTermo(termo, termo);
+        if(produtos.isEmpty()) throw new ResponseStatusException(HttpStatusCode.valueOf(204));
         return ResponseEntity.ok(produtos.stream().map(ProdutoMapper::toDetalhe).toList());
     }
 

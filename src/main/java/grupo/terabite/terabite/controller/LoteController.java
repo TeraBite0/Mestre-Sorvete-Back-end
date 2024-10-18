@@ -93,7 +93,7 @@ public class LoteController {
         return ResponseEntity.noContent().build();
     }
 
-    @Operation(summary = "Busca lotea pelo ID de um produto", description = "Retorna lotes com base no produto atrelado")
+    @Operation(summary = "Busca lotes pelo ID de um produto", description = "Retorna lotes com base no produto atrelado")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Operação bem sucedida, Lotes retornado"),
             @ApiResponse(responseCode = "204", description = "Operação bem sucedida, Sem lotes cadastrados"),
@@ -108,20 +108,5 @@ public class LoteController {
             loteResponseDtos.add(LoteMapper.toResponseDto(l));
         }
         return ResponseEntity.ok(loteResponseDtos);
-    }
-
-    @Operation(summary = "Lista produtos, com base no termo passado", description = "Retorna todos os produtos conforme nome e/ou marca passados. Parâmetros: nomeProduto (Opcional), nomeMarca (Opcional)")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Operação bem-sucedida, produtos retornados"),
-            @ApiResponse(responseCode = "204", description = "Operação bem-sucedida, sem produtos"),
-            @ApiResponse(responseCode = "404", description = "Nenhum produto encontrado"),
-            @ApiResponse(responseCode = "401", description = "Erro de requisição, Não autorizado"),
-            @ApiResponse(responseCode = "400", description = "Erro de requisição, parâmetros inválidos")
-    })
-    @GetMapping("/produtos/pesquisar")
-    public ResponseEntity<List<EstoqueProdutoResponseDTO>> pesquisarPorNomeProuduto(@RequestParam @Valid String termo) {
-        List<EstoqueProduto> lotes = loteService.buscarPorTermo(termo, termo);
-        if(lotes.isEmpty()) throw new ResponseStatusException(HttpStatusCode.valueOf(204));
-        return ResponseEntity.ok(lotes.stream().map(EstoqueProdutoMapper::toResponseDTO).toList());
     }
 }

@@ -103,17 +103,8 @@ public class LoteService {
         return lotes;
     }
 
-    public List<EstoqueProduto> buscarPorTermo(String termo, String marca) {
-        List<Produto> produtos = produtoService.buscarPorTermo(termo, marca);
-        return estoqueFormat(produtos);
-    }
-
-    public List<EstoqueProduto> estoque() {
+    public List<EstoqueProduto> estoque(){
         List<Produto> produtos = produtoService.listarProduto();
-        return estoqueFormat(produtos);
-    }
-
-    public List<EstoqueProduto> estoqueFormat(List<Produto> produtos){
         List<Lote> lotes = loteRepository.findAll();
         List<Perda> perdas = perdaRepository.findAll();
         List<VendaProduto> vendas = vendaProdutoRepository.findAll();

@@ -110,11 +110,13 @@ public class LoteController {
         return ResponseEntity.ok(loteResponseDtos);
     }
 
-    @Operation(summary = "Lista todos produtos por marca ou nome", description = "Retorna todos os produtos com base no termo pesquisado sendo marca ou nome")
+    @Operation(summary = "Lista produtos, com base no termo passado", description = "Retorna todos os produtos conforme nome e/ou marca passados. Parâmetros: nomeProduto (Opcional), nomeMarca (Opcional)")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Operação bem-sucedida, Produto do estoque listado com sucesso"),
+            @ApiResponse(responseCode = "200", description = "Operação bem-sucedida, produtos retornados"),
             @ApiResponse(responseCode = "204", description = "Operação bem-sucedida, sem produtos"),
-            @ApiResponse(responseCode = "401", description = "Erro de requisição, Não autorizado")
+            @ApiResponse(responseCode = "404", description = "Nenhum produto encontrado"),
+            @ApiResponse(responseCode = "401", description = "Erro de requisição, Não autorizado"),
+            @ApiResponse(responseCode = "400", description = "Erro de requisição, parâmetros inválidos")
     })
     @GetMapping("/produtos/pesquisar")
     public ResponseEntity<List<EstoqueProdutoResponseDTO>> pesquisarPorNomeProuduto(@RequestParam @Valid String termo) {

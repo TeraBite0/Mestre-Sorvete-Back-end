@@ -33,13 +33,14 @@ public class ProdutoService {
     }
 
     public Produto buscarPorNomeProduto(String nomeProduto) {
-        if (nomeProduto.isBlank()) {
-            throw new ResponseStatusException(HttpStatusCode.valueOf(400));
-        }
         if (produtoRepository.findByNomeIgnoreCase(nomeProduto) == null) {
             throw new ResponseStatusException(HttpStatusCode.valueOf(404));
         }
         return produtoRepository.findByNomeIgnoreCase(nomeProduto);
+    }
+
+    public List<Produto> buscarPorFiltroTipoOuNome(String nome, String tipo){
+        return produtoRepository.findByNomeIgnoreCaseContainingOrSubtipo_TipoPai_NomeIgnoreCaseContaining(nome, tipo);
     }
 
     public Produto criarProduto(Produto produto, String nomeMarca, String nomeSubtipo) {

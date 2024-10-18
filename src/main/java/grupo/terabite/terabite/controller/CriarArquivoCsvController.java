@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/csv")
+@RequestMapping("/exportcsv")
 public class CriarArquivoCsvController {
 
     private final Escritor escritor;

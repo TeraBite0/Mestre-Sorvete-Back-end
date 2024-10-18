@@ -58,7 +58,7 @@ public class ProdutoController {
         return ResponseEntity.ok(ProdutoMapper.toDetalhe(produtoService.buscarPorId(id)));
     }
 
-    @Operation(summary = "Busca produtos, com um filtro opcional", description = "Retorna todos os produtos, ou retorna produtos conforme nome e/ou marca passados. Parâmetros: nomeProduto (Opcional), nomeMarca (Opcional)")
+    @Operation(summary = "Busca produtos, com base no nome ou tipo", description = "Retorna todos os produtos conforme nome ou tipo passados. Parâmetros: nomeProduto (Opcional), nomeTipo (Opcional)")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Operação bem-sucedida, produtos retornados"),
             @ApiResponse(responseCode = "204", description = "Operação bem-sucedida, sem produtos"),
@@ -66,10 +66,23 @@ public class ProdutoController {
             @ApiResponse(responseCode = "401", description = "Erro de requisição, Não autorizado"),
             @ApiResponse(responseCode = "400", description = "Erro de requisição, parâmetros inválidos")
     })
-    @GetMapping("/nome-produto")
-    public ResponseEntity<List<Produto>> listarComFiltro(@RequestParam(required = false) String nomeProduto,
-                                                         @RequestParam(required = false) String nomeMarca) {
-        return null;
+    @GetMapping("/filtro")
+        public ResponseEntity<List<ProdutoResponseDTO>> listarComFiltroTipoOuNome(@RequestParam(required = false) String termo) {
+        List<Produto> produtos = produtoService.buscarPorFiltroTipoOuNome(termo, termo);
+        if (produtos.isEmpty()) throw new ResponseStatusException(HttpStatusCode.valueOf(204));
+        return ResponseEntity.ok(produtos.stream().map(ProdutoMapper::toDetalhe).toList());
+    }
+
+    @Operation(summary = "Busca um produto pelo nome com IgnoreCase", description = "Retorna um produto com base no seu nome passado como variável")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Operação bem-sucedida, produto retornado"),
+            @ApiResponse(responseCode = "401", description = "Erro de requisição, Não autorizado"),
+            @ApiResponse(responseCode = "404", description = "Nenhum produto encontrado"),
+            @ApiResponse(responseCode = "400", description = "Erro de requisição, parâmetros inválidos")
+    })
+    @GetMapping("/nome/{nome}")
+    public ResponseEntity<ProdutoResponseDTO> buscarPorNome(@PathVariable String nome) {
+        return ResponseEntity.ok(ProdutoMapper.toDetalhe(produtoService.buscarPorNomeProduto(nome)));
     }
 
     @Operation(summary = "Cria um produto", description = "Retorna o produto criado caso sucesso na criação")

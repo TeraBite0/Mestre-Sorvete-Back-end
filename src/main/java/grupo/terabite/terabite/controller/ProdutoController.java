@@ -1,16 +1,18 @@
 package grupo.terabite.terabite.controller;
 
 import grupo.terabite.terabite.dto.create.ProdutoCreateDTO;
-import grupo.terabite.terabite.dto.mapper.EstoqueProdutoMapper;
+import grupo.terabite.terabite.dto.external.ForecastExternalDTO;
 import grupo.terabite.terabite.dto.mapper.ProdutoMapper;
 import grupo.terabite.terabite.dto.mapper.ProdutoPopularesMapper;
-import grupo.terabite.terabite.dto.response.EstoqueProdutoResponseDTO;
 import grupo.terabite.terabite.dto.response.ProdutoPopularesReponseDto;
 import grupo.terabite.terabite.dto.response.ProdutoResponseDTO;
 import grupo.terabite.terabite.dto.update.ProdutoUpdateDTO;
-import grupo.terabite.terabite.entity.EstoqueProduto;
 import grupo.terabite.terabite.entity.Produto;
-import grupo.terabite.terabite.service.*;
+import grupo.terabite.terabite.service.MarcaService;
+import grupo.terabite.terabite.service.ProdutoService;
+import grupo.terabite.terabite.service.RecomendacaoService;
+import grupo.terabite.terabite.service.SubtipoService;
+import grupo.terabite.terabite.service.api.HgApiService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -32,7 +35,7 @@ public class ProdutoController {
     private final RecomendacaoService recomendacaoService;
     private final SubtipoService subtipoService;
     private final MarcaService marcaService;
-    private final LoteService loteService;
+    private final HgApiService weatherService;
 
     @Operation(summary = "Lista todos produtos", description = "Retorna uma lista com todos os produtos")
     @ApiResponses(value = {

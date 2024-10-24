@@ -29,22 +29,15 @@ public class TemperaturaService {
         Double temperaturaMediaHoje = (Double.valueOf(previsao.getMin()) + Double.valueOf(previsao.getMax())) / 2;
 
         if(hoje.getDayOfMonth() == 1){
-            List<TemperaturaDia> temperaturaDias = temperaturaDiaRepository.findAll();
+            List<TemperaturaDia> temperaturaDias = temperaturaDiaRepository.buscarPorMes(hoje.minusDays(10));
 
-            Double temperaturaMediaMes = 0.0;
+            Double temperaturaMediaMes = temperaturaDias.get(temperaturaDias.size() / 2).getTemperaturaMedia(); // PEGA MEDIANA DO MÊS
 
-            for (int i = 0; i < temperaturaDias.size(); i++) {
-                temperaturaMediaMes += temperaturaDias.get(i).getTemperaturaMedia();
-            }
-            temperaturaMediaMes = temperaturaMediaMes / temperaturaDias.size();
+            temperaturaMesRepository.save(new TemperaturaMes(null, hoje.minusMonths(1), temperaturaMediaMes));
 
-            temperaturaMesRepository.save(new TemperaturaMes(null, hoje.minusMonths(1).getMonthValue(), temperaturaMediaMes));
-
-            // FAZER DELETAR TEMPERATURA MES MAIS ANTIGO QUE 6 MESES
-
-            temperaturaDiaRepository.deleteAll();
+            temperaturaDiaRepository.deletarDadosAntigos(hoje.minusMonths(2));
+            temperaturaMesRepository.deletarDadosAntigos(hoje.minusMonths(6));
         }
-
         temperaturaDiaRepository.save(new TemperaturaDia(null, hoje, temperaturaMediaHoje));
     }
 }

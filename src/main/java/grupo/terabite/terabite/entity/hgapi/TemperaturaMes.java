@@ -21,7 +21,7 @@ public class TemperaturaMes {
     private Integer id;
 
     @Column(name = "DT_TEMPERATURA_TMES")
-    private Integer dtMes;
+    private LocalDate dtMes;
 
     @Column(name = "TEMPERATURA_MEDIA_TMES")
     private Double temperaturaMedia;

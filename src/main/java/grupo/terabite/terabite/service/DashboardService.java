@@ -7,6 +7,7 @@ import grupo.terabite.terabite.entity.hgapi.TemperaturaDia;
 import grupo.terabite.terabite.entity.hgapi.TemperaturaMes;
 import grupo.terabite.terabite.repository.ProdutoRepository;
 import grupo.terabite.terabite.repository.VendaProdutoRepository;
+import grupo.terabite.terabite.repository.hgapi.TemperaturaDiaRepository;
 import grupo.terabite.terabite.repository.hgapi.TemperaturaMesRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,7 @@ public class DashboardService {
     private final VendaProdutoRepository vendaProdutoRepository;
     private final ProdutoRepository produtoRepository;
     private final TemperaturaMesRepository temperaturaMesRepository;
+    private final TemperaturaDiaRepository temperaturaDiaRepository;
 
     public Dashboard gerarDashboard() {
         List<ResumoDoMes> resumoDosMeses = getResumoDoMes();
@@ -42,6 +44,7 @@ public class DashboardService {
 
         List<ResumoDoMes> resumoDoMeses = new ArrayList<>();
         List<TemperaturaMes> temperaturaMeses = temperaturaMesRepository.findAll();
+        List<VendaProduto> vendaProdutos = vendaProdutoRepository.findAll();
         LocalDate hoje = LocalDate.now();
 
         for (int i = 0; i < 6; i++) { // LOOP PARA CALCULAR POR CADA MÊS
@@ -51,15 +54,17 @@ public class DashboardService {
             String dataResposta = dataIteracao.getMonthValue() + "/" + dataIteracao.getYear();
             Double temperaturaMediaMesIteracao = 0.0;
 
-            List<VendaProduto> vendaProdutos = vendaProdutoRepository.procurarVendasPorMesEAno(dataIteracao.getMonthValue(), dataIteracao.getYear()).stream()
-                    .sorted(Comparator.comparing(vendaProduto -> vendaProduto.getProduto().getId())).toList();
+//            List<VendaProduto> vendaProdutosIteracao = vendaProdutoRepository.procurarVendasPorMesEAno(dataIteracao.getMonthValue(), dataIteracao.getYear()).stream()
+//                    .sorted(Comparator.comparing(vendaProduto -> vendaProduto.getProduto().getId())).toList();
+            List<VendaProduto> vendaProdutosIteracao = vendaProdutos.stream()
+                    .filter(vendaProduto -> vendaProduto.getVenda().getDataCompra().getMonthValue() == dataIteracao.getMonthValue()).toList();
 
-            for(VendaProduto vp : vendaProdutos){ // PARA CADA VENDA DESTE MÊS, INCREMENTE O FATURAMENTO COM O VALOR DAS VENDAS
+            for(VendaProduto vp : vendaProdutosIteracao){ // PARA CADA VENDA DESTE MÊS, INCREMENTE O FATURAMENTO COM O VALOR DAS VENDAS
                 faturamentoDoMes += vp.getQtdProdutosVendido() * vp.getProduto().getPreco();
             }
 
             for(TemperaturaMes tm : temperaturaMeses){
-                if(tm.getDtMes() == dataIteracao.getMonthValue()){
+                if(tm.getDtMes().getMonthValue() == dataIteracao.getMonthValue()){
                     temperaturaMediaMesIteracao = tm.getTemperaturaMedia();
                 }
             }
@@ -75,15 +80,20 @@ public class DashboardService {
 
 
         //APLICAR REGRA DE 3
-        //SE EM TAL MES EU VENDI X/30 COM TEMPERATURA Y
+        //SE EM TAL DIA EU VENDI X COM TEMPERATURA Y
         //HOJE EU VENDEREI XX COM TEMPERATURA YY
 
         LocalDate hoje = LocalDate.now();
+        LocalDate mesPassado = hoje.minusDays(hoje.getDayOfMonth() - 1);
+        List<TemperaturaDia> temperaturaDias = temperaturaDiaRepository.buscarPorMes(mesPassado);
         List<PrevisaoVendasPorTemperatura> previsaoVendasPorTemperaturas = new ArrayList<>();
+        List<VendaProduto> vendaProdutos = vendaProdutoRepository.procurarVendasPorMesEAno(mesPassado.getMonthValue(), mesPassado.getYear());
+        List<Double> previsoes = new ArrayList<>();
 
-        for(ResumoDoMes rm : resumoDosMeses){
-            Double x = rm.getFaturamento() / 30;
-            Double y = rm.getTemperaturaMedia();
+        for(TemperaturaDia td : temperaturaDias){
+            List<VendaProduto> vendaProdutosDiaIteracao = vendaProdutos.stream().filter(vendaProduto -> {return vendaProduto.getVenda().getDataCompra().toLocalDate().isAfter(td.getDtTemperatura());}).toList();
+            Double x = null;
+            Double y = null;
             Double xx = null; // QUERO DESCOBRIR
             Double yy = null; // FAZER REQUISIÇÃO DA TEMPERATURA
         }

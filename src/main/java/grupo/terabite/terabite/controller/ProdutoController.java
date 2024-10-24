@@ -50,6 +50,19 @@ public class ProdutoController {
         return ResponseEntity.ok(produtos.stream().map(ProdutoMapper::toDetalhe).toList());
     }
 
+    @Operation(summary = "Lista todos produtos que estão ativos", description = "Retorna uma lista com todos os produtos que estão ativos")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Operação bem-sucedida, produtos listados"),
+            @ApiResponse(responseCode = "204", description = "Operação bem-sucedida, sem produtos"),
+            @ApiResponse(responseCode = "401", description = "Erro de requisição, Não autorizado"),
+    })
+    @GetMapping("/isAtivos")
+    public ResponseEntity<List<ProdutoResponseDTO>> listarTodosIsAtivo() {
+        List<Produto> produtos = produtoService.listarProduto();
+        if (produtos.isEmpty()) return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(produtos.stream().map(ProdutoMapper::toDetalhe).toList());
+    }
+
     @Operation(summary = "Busca um produto pelo ID", description = "Retorna um produto com base no seu ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Operação bem-sucedida, produto retornado"),

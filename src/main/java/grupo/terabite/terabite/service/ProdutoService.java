@@ -22,6 +22,9 @@ public class ProdutoService {
     public List<Produto> listarProduto() {
         return produtoRepository.findAll();
     }
+    public List<Produto> listarProdutoIsAtivos() {
+        return produtoRepository.findByIsAtivoTrue();
+    }
 
     public List<Produto> buscarPorTermo(String termo, String marca){
         List<Produto> produtos = produtoRepository.findByNomeContainingIgnoreCaseOrMarca_NomeContainingIgnoreCase(termo, marca);

@@ -1,7 +1,7 @@
 package grupo.terabite.terabite.entity;
 
 
-// ESta classe não representa uma entidade do banco, mas sim um conjunto de outros dados processados de outras tabelas
+// Esta classe não representa uma entidade do banco, mas sim um conjunto de outros dados processados de outras tabelas
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,6 +18,8 @@ public class EstoqueProduto {
     private String produto; // Nome do produto
 
     private String marca; // Marca do produto
+
+    private Double valorUnitario; // Valor do produto
 
     private Integer qtdEstoque; // Calculo da qtd de produtos (em lotes - vendidos - perdas)
     }

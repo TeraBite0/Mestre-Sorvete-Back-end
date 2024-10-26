@@ -40,4 +40,5 @@ public class TemperaturaService {
         }
         temperaturaDiaRepository.save(new TemperaturaDia(null, hoje, temperaturaMediaHoje));
     }
+
 }

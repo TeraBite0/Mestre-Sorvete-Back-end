@@ -133,6 +133,7 @@ public class LoteService {
                     p.getId(),
                     p.getNome(),
                     p.getMarca().getNome(),
+                    p.getPreco(),
                     qtdEmEstoque
             ));
         }

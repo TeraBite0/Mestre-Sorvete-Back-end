@@ -1,6 +1,6 @@
 package grupo.terabite.terabite.repository;
 
-import grupo.terabite.terabite.entity.Produto;
+import grupo.terabite.terabite.dto.internal.ProdutoQuantidadeDTO;
 import grupo.terabite.terabite.entity.VendaProduto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -20,4 +20,8 @@ public interface VendaProdutoRepository extends JpaRepository<VendaProduto, Inte
 
     @Query("SELECT vp FROM Venda v JOIN v.produtos vp WHERE MONTH(v.dataCompra) = :mes AND YEAR(v.dataCompra) = :ano")
     List<VendaProduto> procurarVendasPorMesEAno(@Param("mes") Integer mes, @Param("ano") Integer ano);
+
+
+    @Query("SELECT new grupo.terabite.terabite.dto.internal.ProdutoQuantidadeDTO(vp.produto, SUM(vp.qtdProdutosVendido)) FROM VendaProduto vp WHERE MONTH(vp.venda.dataCompra) = :mes AND YEAR(vp.venda.dataCompra) = :ano GROUP BY vp.produto")
+    List<ProdutoQuantidadeDTO> qtdVendidosPorMesEAno(@Param("mes") Integer mes, @Param("ano") Integer ano);
 }

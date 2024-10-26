@@ -17,8 +17,10 @@ import javax.mail.internet.*;
 
 @Service
 public class EmailApiService {
+    final String adminname = System.getenv("EMAIL_SUPORTE");
+    final String adminpassword = System.getenv("SENHA_APP_SUPORTE");
     final String username = System.getenv("EMAIL_BENEFICIARIO");
-    final String password = System.getenv("SENHA_APP_EMAIL");
+    final String password = System.getenv("SENHA_APP_ ");
     final Properties props;
 
     final Session session;

@@ -81,4 +81,17 @@ public class ForecastExternalDTO implements Comparable<ForecastExternalDTO> {
     public int compareTo(ForecastExternalDTO o) {
         return this.date.compareTo(o.getDate());
     }
+
+    @Override
+    public String toString() {
+        return "ForecastExternalDTO{" +
+                "date='" + date + '\'' +
+                ", weekday='" + weekday + '\'' +
+                ", max=" + max +
+                ", min=" + min +
+                ", rainProbability=" + rainProbability +
+                ", description='" + description + '\'' +
+                ", condition='" + condition + '\'' +
+                '}';
+    }
 }

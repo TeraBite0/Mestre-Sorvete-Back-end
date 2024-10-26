@@ -1,5 +1,6 @@
 package grupo.terabite.terabite.service.api;
 
+import com.sun.tools.javac.Main;
 import grupo.terabite.terabite.dto.external.ForecastExternalDTO;
 import grupo.terabite.terabite.dto.external.HgExternalDTO;
 import grupo.terabite.terabite.dto.external.WeatherResultsExternalDTO;
@@ -67,7 +68,7 @@ public class HgApiService implements IOrdenadorGeneric<ForecastExternalDTO> {
             Integer meio = (indinf + indsup) / 2;
             String dia = list.get(meio).getDate().substring(0,2);
             String mes = list.get(meio).getDate().substring(3,5);
-            String data = "2024-"+mes+"-"+dia;
+            String data = LocalDate.now().getYear()+"-"+mes+"-"+dia;
             if(LocalDate.parse(data).equals(busca)){
                 return list.get(meio);
             } else if (busca.isBefore(LocalDate.parse(data))){

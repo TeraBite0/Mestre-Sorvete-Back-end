@@ -1,11 +1,11 @@
 package grupo.terabite.terabite.service.api;
 
-import org.springframework.stereotype.Service;
 import com.azure.storage.blob.BlobServiceClient;
 import com.azure.storage.blob.BlobServiceClientBuilder;
 import com.azure.storage.blob.sas.BlobSasPermission;
 import com.azure.storage.blob.sas.BlobServiceSasSignatureValues;
 import com.azure.storage.common.StorageSharedKeyCredential;
+import org.springframework.stereotype.Service;
 
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
@@ -13,7 +13,7 @@ import java.time.ZoneOffset;
 @Service
 public class AzureService {
 
-    public String gerarTokenSAS(){
+    public String gerarTokenSAS() {
         String accountKey = System.getenv("AZURE_ACCOUNT_KEY");
 
         String accountName = "terabite";
@@ -39,6 +39,7 @@ public class AzureService {
         return blobServiceClient.getBlobContainerClient(containerName)
                 .generateSas(values);
     }
+
     public static void main(String[] args) {
         //RODAR PARA TESTE EU GERAMENTO MANUAL DO TOKEN SAS
         System.out.println(new AzureService().gerarTokenSAS());

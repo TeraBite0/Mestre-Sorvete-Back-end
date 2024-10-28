@@ -7,6 +7,8 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface RecomendacaoRepository extends JpaRepository<Recomendacao, Integer> {
+
     Recomendacao findByDtRecomendacao(LocalDate dtRecomendacao);
+
     List<Recomendacao> findByDtRecomendacaoBefore(LocalDate dtRecomendacao);
 }

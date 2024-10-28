@@ -6,7 +6,7 @@ import grupo.terabite.terabite.entity.Usuario;
 public class UsuarioMapper {
 
     public static UsuarioTokenDto of(Usuario usuario, String token) {
-        if(usuario == null || token == null ) return null;
+        if (usuario == null || token == null) return null;
         return UsuarioTokenDto.builder()
                 .userId(usuario.getId())
                 .email(usuario.getEmail())

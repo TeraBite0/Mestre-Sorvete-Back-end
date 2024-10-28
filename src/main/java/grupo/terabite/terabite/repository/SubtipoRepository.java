@@ -6,5 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface SubtipoRepository extends JpaRepository<Subtipo, Integer> {
+
     Subtipo findByNomeIgnoreCase(String subtipo);
 }

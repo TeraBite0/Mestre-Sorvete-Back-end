@@ -1,7 +1,6 @@
 package grupo.terabite.terabite.controller;
 
 import grupo.terabite.terabite.dto.create.ProdutoCreateDTO;
-import grupo.terabite.terabite.dto.external.ForecastExternalDTO;
 import grupo.terabite.terabite.dto.mapper.ProdutoMapper;
 import grupo.terabite.terabite.dto.mapper.ProdutoPopularesMapper;
 import grupo.terabite.terabite.dto.response.ProdutoPopularesReponseDto;
@@ -24,7 +23,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -84,7 +82,7 @@ public class ProdutoController {
             @ApiResponse(responseCode = "400", description = "Erro de requisição, parâmetros inválidos")
     })
     @GetMapping("/filtrar-nome-tipo")
-        public ResponseEntity<List<ProdutoResponseDTO>> listarComFiltroTipoOuNome(@RequestParam(required = false) String termo) {
+    public ResponseEntity<List<ProdutoResponseDTO>> listarComFiltroTipoOuNome(@RequestParam(required = false) String termo) {
         List<Produto> produtos = produtoService.buscarPorFiltroTipoOuNome(termo, termo);
         if (produtos.isEmpty()) throw new ResponseStatusException(HttpStatusCode.valueOf(204));
         return ResponseEntity.ok(produtos.stream().map(ProdutoMapper::toDetalhe).toList());
@@ -101,7 +99,7 @@ public class ProdutoController {
     @GetMapping("/filtrar-nome-marca")
     public ResponseEntity<List<ProdutoResponseDTO>> pesquisarPorNomeProuduto(@RequestParam @Valid String termo) {
         List<Produto> produtos = produtoService.buscarPorTermo(termo, termo);
-        if(produtos.isEmpty()) throw new ResponseStatusException(HttpStatusCode.valueOf(204));
+        if (produtos.isEmpty()) throw new ResponseStatusException(HttpStatusCode.valueOf(204));
         return ResponseEntity.ok(produtos.stream().map(ProdutoMapper::toDetalhe).toList());
     }
 
@@ -176,7 +174,7 @@ public class ProdutoController {
     @GetMapping("/populares")
     public ResponseEntity<List<ProdutoPopularesReponseDto>> populares() {
         List<Produto> produtos = produtoService.popular();
-        if(produtos.isEmpty()) throw new ResponseStatusException(HttpStatusCode.valueOf(204));
+        if (produtos.isEmpty()) throw new ResponseStatusException(HttpStatusCode.valueOf(204));
         return ResponseEntity.ok(produtos.stream().map(ProdutoPopularesMapper::toDetalheProdutoPopularDto).toList());
     }
 }

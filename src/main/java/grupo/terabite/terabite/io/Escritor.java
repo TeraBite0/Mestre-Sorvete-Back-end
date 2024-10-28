@@ -1,10 +1,8 @@
 package grupo.terabite.terabite.io;
 
 import grupo.terabite.terabite.entity.Lote;
-import grupo.terabite.terabite.entity.Produto;
 import grupo.terabite.terabite.generic.listagenerica.ListaObj;
 import grupo.terabite.terabite.repository.LoteRepository;
-import grupo.terabite.terabite.repository.ProdutoRepository;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;

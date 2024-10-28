@@ -5,8 +5,8 @@ import grupo.terabite.terabite.entity.Produto;
 
 public class ProdutoPopularesMapper {
 
-    public static ProdutoPopularesReponseDto toDetalheProdutoPopularDto(Produto produto){
-        if(produto == null) return null;
+    public static ProdutoPopularesReponseDto toDetalheProdutoPopularDto(Produto produto) {
+        if (produto == null) return null;
 
         return ProdutoPopularesReponseDto.builder()
                 .nome(produto.getNome())

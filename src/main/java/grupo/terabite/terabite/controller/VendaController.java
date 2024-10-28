@@ -9,10 +9,8 @@ import grupo.terabite.terabite.service.VendaService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,7 +36,7 @@ public class VendaController {
     @GetMapping
     public ResponseEntity<List<VendaResponseDTO>> listarVenda() {
         List<VendaResponseDTO> vendas = new ArrayList<>();
-        for(Venda v :service.listarVenda()){
+        for (Venda v : service.listarVenda()) {
             vendas.add(VendaMapper.toResponseDTO(v, service));
         }
         if (vendas.isEmpty()) {

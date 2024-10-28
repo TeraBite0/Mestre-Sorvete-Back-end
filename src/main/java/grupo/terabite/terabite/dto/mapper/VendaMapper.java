@@ -2,16 +2,12 @@ package grupo.terabite.terabite.dto.mapper;
 
 import grupo.terabite.terabite.dto.create.VendaCreateDTO;
 import grupo.terabite.terabite.dto.create.VendaProdutoCreateDTO;
-import grupo.terabite.terabite.dto.response.ProdutoResponseDTO;
 import grupo.terabite.terabite.dto.response.VendaProdutoResponseDTO;
-import grupo.terabite.terabite.entity.Produto;
 import grupo.terabite.terabite.entity.Venda;
 import grupo.terabite.terabite.dto.response.VendaResponseDTO;
 import grupo.terabite.terabite.entity.VendaProduto;
-import grupo.terabite.terabite.repository.VendaProdutoRepository;
 import grupo.terabite.terabite.service.ProdutoService;
 import grupo.terabite.terabite.service.VendaService;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

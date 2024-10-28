@@ -3,6 +3,11 @@ package grupo.terabite.terabite.service.api;
 import grupo.terabite.terabite.entity.Notificacao;
 import org.springframework.stereotype.Service;
 
+import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -12,8 +17,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Properties;
 import java.util.Scanner;
-import javax.mail.*;
-import javax.mail.internet.*;
 
 @Service
 public class EmailApiService {
@@ -25,12 +28,12 @@ public class EmailApiService {
 
     final Session session;
 
-    public void enviarAlertaDeProdutos(List<Notificacao> notificacoes){
+    public void enviarAlertaDeProdutos(List<Notificacao> notificacoes) {
         montarEmailsDeAlerta(notificacoes);
     }
 
-    private void montarEmailsDeAlerta(List<Notificacao> notificacoes){
-        if(notificacoes.isEmpty()) return;
+    private void montarEmailsDeAlerta(List<Notificacao> notificacoes) {
+        if (notificacoes.isEmpty()) return;
 
         Notificacao n = notificacoes.get(notificacoes.size() - 1);
         String destinatario = n.getEmail();
@@ -57,22 +60,22 @@ public class EmailApiService {
         });
     }
 
-    public void enviarEmail(String destinatario,String assunto, String body){
+    public void enviarEmail(String destinatario, String assunto, String body) {
         Message email = construirEmail(destinatario, assunto, body);
 
-        try{
+        try {
             Transport.send(email);
-        } catch ( Exception e){
+        } catch (Exception e) {
             throw new RuntimeException("Erro ao enviar email.", e);
         }
     }
 
-    public Message construirEmail(String destinatario,String assunto , String bodyText){
+    public Message construirEmail(String destinatario, String assunto, String bodyText) {
         Message message = new MimeMessage(session);
         String headerPath = "email/header.png";
         String footerPath = "email/footer.png";
 
-        try{
+        try {
             message.setFrom(new InternetAddress(username));
 
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(destinatario));
@@ -85,7 +88,7 @@ public class EmailApiService {
             MimeBodyPart footer = new MimeBodyPart();
             InputStream imageStreamFooter = EmailApiService.class.getClassLoader().getResourceAsStream(footerPath);
 
-            if(imageStreamHeader == null || imageStreamFooter == null){
+            if (imageStreamHeader == null || imageStreamFooter == null) {
                 throw new FileNotFoundException("Imagem não encontrada no classpath.");
             }
 
@@ -126,8 +129,8 @@ public class EmailApiService {
             headerFile.deleteOnExit();
             footerFile.deleteOnExit();
 
-        } catch (Exception e){
-            throw new RuntimeException("Erro na criação do conteúdo do email",e);
+        } catch (Exception e) {
+            throw new RuntimeException("Erro na criação do conteúdo do email", e);
         }
 
         System.out.println("Email enviado para (" + destinatario + ")");
@@ -137,7 +140,7 @@ public class EmailApiService {
 
     public static void main(String[] args) { // Teste de emails
         String seuEmail = "";
-        if(seuEmail.isBlank()){
+        if (seuEmail.isBlank()) {
             Scanner sc = new Scanner(System.in);
             System.out.println("Digite o email do destinatário:");
             seuEmail = sc.nextLine();
@@ -146,6 +149,6 @@ public class EmailApiService {
 
         EmailApiService service = new EmailApiService();
         String body = "<br>Teste<br><br>Teste de email concluido com sucesso.<br>";
-        service.enviarEmail(seuEmail,"Teste" + LocalDateTime.now(), body);
+        service.enviarEmail(seuEmail, "Teste" + LocalDateTime.now(), body);
     }
 }

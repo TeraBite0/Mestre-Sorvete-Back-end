@@ -22,13 +22,13 @@ public class TemperaturaService {
     private final TemperaturaMesRepository temperaturaMesRepository;
 
     @Scheduled(cron = "0 0 12 * * ?", zone = "America/Sao_Paulo") // ESPECIFICA MÉTODO PARA RODAR TODO DIA 12AM
-    public void salvarTemperatura(){
+    public void salvarTemperatura() {
         LocalDate hoje = LocalDate.now();
 
         ForecastExternalDTO previsao = hgApiService.buscarPrevisao().get().get(0);
         Double temperaturaMediaHoje = (Double.valueOf(previsao.getMin()) + Double.valueOf(previsao.getMax())) / 2;
 
-        if(hoje.getDayOfMonth() == 1){
+        if (hoje.getDayOfMonth() == 1) {
             List<TemperaturaDia> temperaturaDias = temperaturaDiaRepository.buscarPorMes(hoje.minusDays(10));
 
             Double temperaturaMediaMes = temperaturaDias.get(temperaturaDias.size() / 2).getTemperaturaMedia(); // PEGA MEDIANA DO MÊS

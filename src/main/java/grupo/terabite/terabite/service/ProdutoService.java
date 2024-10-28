@@ -22,11 +22,12 @@ public class ProdutoService {
     public List<Produto> listarProduto() {
         return produtoRepository.findAll();
     }
+
     public List<Produto> listarProdutoIsAtivos() {
         return produtoRepository.findByIsAtivoTrue();
     }
 
-    public List<Produto> buscarPorTermo(String termo, String marca){
+    public List<Produto> buscarPorTermo(String termo, String marca) {
         List<Produto> produtos = produtoRepository.findByNomeContainingIgnoreCaseOrMarca_NomeContainingIgnoreCase(termo, marca);
         return produtos;
     }
@@ -42,7 +43,7 @@ public class ProdutoService {
         return produtoRepository.findByNomeIgnoreCase(nomeProduto);
     }
 
-    public List<Produto> buscarPorFiltroTipoOuNome(String nome, String tipo){
+    public List<Produto> buscarPorFiltroTipoOuNome(String nome, String tipo) {
         return produtoRepository.findByNomeIgnoreCaseContainingOrSubtipo_TipoPai_NomeIgnoreCaseContaining(nome, tipo);
     }
 

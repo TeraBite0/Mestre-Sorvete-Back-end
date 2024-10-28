@@ -1,6 +1,5 @@
 package grupo.terabite.terabite.entity;
 
-
 // Esta classe não representa uma entidade do banco, mas sim um conjunto de outros dados processados de outras tabelas
 
 import lombok.AllArgsConstructor;

@@ -9,8 +9,8 @@ import grupo.terabite.terabite.service.ProdutoService;
 
 public class PerdaMapper {
 
-    public static PerdaResponseDTO toResponsePerda(Perda perda){
-        if(perda == null) return null;
+    public static PerdaResponseDTO toResponsePerda(Perda perda) {
+        if (perda == null) return null;
 
         Produto produto = perda.getProduto();
 
@@ -21,8 +21,8 @@ public class PerdaMapper {
                 .build();
     }
 
-    public static Perda toEntity(PerdaCreateDTO perda, ProdutoService produtoService){
-        if(perda == null || produtoService == null) return null;
+    public static Perda toEntity(PerdaCreateDTO perda, ProdutoService produtoService) {
+        if (perda == null || produtoService == null) return null;
 
         return Perda.builder()
                 .qtdProduto(perda.getQtdPerda())
@@ -30,8 +30,8 @@ public class PerdaMapper {
                 .build();
     }
 
-    public static Perda toUpdatePerdaDTO(PerdaUpdateDTO perda, ProdutoService produtoService){
-        if(perda == null || produtoService == null) return null;
+    public static Perda toUpdatePerdaDTO(PerdaUpdateDTO perda, ProdutoService produtoService) {
+        if (perda == null || produtoService == null) return null;
 
         return Perda.builder()
                 .qtdProduto(perda.getQtdPerda())

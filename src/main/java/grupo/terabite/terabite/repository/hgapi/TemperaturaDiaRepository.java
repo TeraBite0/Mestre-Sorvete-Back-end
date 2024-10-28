@@ -13,6 +13,7 @@ import java.util.List;
 
 @Repository
 public interface TemperaturaDiaRepository extends JpaRepository<TemperaturaDia, Integer> {
+
     @Query("SELECT td FROM TemperaturaDia td WHERE MONTH(td.dtTemperatura) = MONTH(:dtMes) ORDER BY td.temperaturaMedia")
     List<TemperaturaDia> buscarPorMes(@Param("dtMes") LocalDate dtMes);
 

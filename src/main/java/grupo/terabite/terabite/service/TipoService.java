@@ -3,7 +3,6 @@ package grupo.terabite.terabite.service;
 import grupo.terabite.terabite.entity.Tipo;
 import grupo.terabite.terabite.repository.TipoRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -28,12 +27,12 @@ public class TipoService {
         return tipoRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatusCode.valueOf(204)));
     }
 
-    public Tipo buscarPorNomeTipo(String nomeTipo){
-        if(nomeTipo.isBlank()){
+    public Tipo buscarPorNomeTipo(String nomeTipo) {
+        if (nomeTipo.isBlank()) {
             throw new ResponseStatusException(HttpStatusCode.valueOf(400));
         }
 
-        if(tipoRepository.findByNomeIgnoreCase(nomeTipo) == null){
+        if (tipoRepository.findByNomeIgnoreCase(nomeTipo) == null) {
             Tipo novoTipo = new Tipo();
             novoTipo.setNome(nomeTipo);
             criarTipo(novoTipo);

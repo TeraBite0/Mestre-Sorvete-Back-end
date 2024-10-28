@@ -4,7 +4,6 @@ import grupo.terabite.terabite.entity.Produto;
 import grupo.terabite.terabite.entity.Recomendacao;
 import grupo.terabite.terabite.repository.RecomendacaoRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -18,12 +17,12 @@ public class RecomendacaoService {
     private final ProdutoService produtoService;
     private final RecomendacaoRepository recomendacaoRepository;
 
-    public Produto alterarRecomendacaoDoDia(Integer produtoNovoId){
+    public Produto alterarRecomendacaoDoDia(Integer produtoNovoId) {
         Produto produtoNovo = produtoService.buscarPorId(produtoNovoId); // valida se o produto é inexistente por id
         LocalDate hoje = LocalDate.now();
         Recomendacao recomendacaoDoDia = recomendacaoRepository.findByDtRecomendacao(hoje);
 
-        if(recomendacaoDoDia == null){ // valida se a recomendacao atual não foi gerada ainda
+        if (recomendacaoDoDia == null) { // valida se a recomendacao atual não foi gerada ainda
             recomendacaoDoDia = new Recomendacao();
             recomendacaoDoDia.setDtRecomendacao(hoje);
         }
@@ -79,10 +78,10 @@ public class RecomendacaoService {
         return produtos.get(n.intValue());
     }
 
-    private void excluirDadosAntigos(){
+    private void excluirDadosAntigos() {
         LocalDate dtLimite = LocalDate.now().minusDays(7); // <- qtd de dias que definem uma recomendação antida
         List<Recomendacao> recomendacoes = recomendacaoRepository.findByDtRecomendacaoBefore(dtLimite);
-        for(Recomendacao r: recomendacoes){
+        for (Recomendacao r : recomendacoes) {
             recomendacaoRepository.deleteById(r.getId());
         }
     }

@@ -35,7 +35,7 @@ public class NotificacaoController {
     @GetMapping
     public ResponseEntity<List<NotificacaoResponseDTO>> listarNotificacoes() {
         List<Notificacao> notificacoes = service.listarNotificacoes();
-        if(notificacoes.isEmpty()) throw new ResponseStatusException(HttpStatusCode.valueOf(204));
+        if (notificacoes.isEmpty()) throw new ResponseStatusException(HttpStatusCode.valueOf(204));
         return ResponseEntity.ok(notificacoes.stream().map(NotificacaoMapper::toResponseNotificacaoDto).toList());
     }
 

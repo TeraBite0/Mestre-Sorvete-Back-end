@@ -5,15 +5,12 @@ import grupo.terabite.terabite.repository.LoteRepository;
 import grupo.terabite.terabite.repository.PerdaRepository;
 import grupo.terabite.terabite.repository.VendaProdutoRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -23,7 +20,7 @@ public class LoteService {
     private final ProdutoService produtoService;
     private final VendaProdutoRepository vendaProdutoRepository;
     private final PerdaRepository perdaRepository;
-    private List<Perda> perdas;
+    private final NotificacaoService notificacaoService;
 
     private List<Lote> listarLote() {
         List<Lote> lotes = loteRepository.findAll();
@@ -34,8 +31,8 @@ public class LoteService {
     }
 
     public Lote buscarPorId(Integer id) {
-        Lote lote  = loteRepository.findById(id).orElse(null);
-        if(lote == null){
+        Lote lote = loteRepository.findById(id).orElse(null);
+        if (lote == null) {
             throw new ResponseStatusException(HttpStatusCode.valueOf(404));
         }
         return lote;
@@ -49,6 +46,7 @@ public class LoteService {
             p.setEmEstoque(true);
             produtoService.atualizarProduto(p.getId(), p);
         }
+
         return loteRepository.save(novoLote);
     }
 
@@ -97,13 +95,13 @@ public class LoteService {
 
     public List<Lote> buscarPorProdutoId(Integer id) {
         List<Lote> lotes = loteRepository.findByProdutoId(id);
-        if(lotes.isEmpty()){
+        if (lotes.isEmpty()) {
             throw new ResponseStatusException(HttpStatusCode.valueOf(204));
         }
         return lotes;
     }
 
-    public List<EstoqueProduto> estoque(){
+    public List<EstoqueProduto> estoque() {
         List<Produto> produtos = produtoService.listarProduto();
         List<Lote> lotes = loteRepository.findAll();
         List<Perda> perdas = perdaRepository.findAll();

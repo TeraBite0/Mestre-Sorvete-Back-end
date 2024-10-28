@@ -1,6 +1,5 @@
 package grupo.terabite.terabite;
 
-import grupo.terabite.terabite.service.TemperaturaService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

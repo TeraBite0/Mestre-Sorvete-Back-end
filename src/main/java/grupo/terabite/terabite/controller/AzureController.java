@@ -1,5 +1,6 @@
 package grupo.terabite.terabite.controller;
 
+import grupo.terabite.terabite.service.api.AzureService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -8,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import grupo.terabite.terabite.service.api.AzureService;
 
 @RestController
 @RequestMapping("/azure")
@@ -23,7 +23,7 @@ public class AzureController {
             @ApiResponse(responseCode = "200", description = "Operação bem-sucedida,Token gerado e retornado"),
             @ApiResponse(responseCode = "401", description = "Erro de requisição, Não autorizado")
     })
-    public ResponseEntity<String> gerarTokenSas(){
+    public ResponseEntity<String> gerarTokenSas() {
         return ResponseEntity.ok(azureService.gerarTokenSAS());
     }
 }

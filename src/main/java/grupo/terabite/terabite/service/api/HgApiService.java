@@ -1,20 +1,15 @@
 package grupo.terabite.terabite.service.api;
 
-import com.sun.tools.javac.Main;
 import grupo.terabite.terabite.dto.external.ForecastExternalDTO;
 import grupo.terabite.terabite.dto.external.HgExternalDTO;
 import grupo.terabite.terabite.dto.external.WeatherResultsExternalDTO;
 import grupo.terabite.terabite.generic.IOrdenadorGeneric;
-import org.springframework.cglib.core.Local;
-import org.springframework.data.repository.core.RepositoryCreationException;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -64,14 +59,14 @@ public class HgApiService implements IOrdenadorGeneric<ForecastExternalDTO> {
         LocalDate busca = LocalDate.parse((String) indBusca);
         Integer indinf = 0;
         Integer indsup = list.size() - 1;
-        while (indinf <= indsup){
+        while (indinf <= indsup) {
             Integer meio = (indinf + indsup) / 2;
-            String dia = list.get(meio).getDate().substring(0,2);
-            String mes = list.get(meio).getDate().substring(3,5);
-            String data = LocalDate.now().getYear()+"-"+mes+"-"+dia;
-            if(LocalDate.parse(data).equals(busca)){
+            String dia = list.get(meio).getDate().substring(0, 2);
+            String mes = list.get(meio).getDate().substring(3, 5);
+            String data = LocalDate.now().getYear() + "-" + mes + "-" + dia;
+            if (LocalDate.parse(data).equals(busca)) {
                 return list.get(meio);
-            } else if (busca.isBefore(LocalDate.parse(data))){
+            } else if (busca.isBefore(LocalDate.parse(data))) {
                 indsup = meio - 1;
             } else {
                 indinf = meio + 1;

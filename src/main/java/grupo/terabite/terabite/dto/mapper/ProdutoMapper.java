@@ -15,8 +15,8 @@ import grupo.terabite.terabite.service.SubtipoService;
 
 public class ProdutoMapper {
 
-    public static ProdutoResponseDTO toDetalhe(Produto produto){
-        if(produto == null) return null;
+    public static ProdutoResponseDTO toDetalhe(Produto produto) {
+        if (produto == null) return null;
 
         Marca marca = produto.getMarca();
         Subtipo subtipo = produto.getSubtipo();
@@ -43,8 +43,8 @@ public class ProdutoMapper {
                 .build();
     }
 
-    public static Produto toCriarProduto(ProdutoCreateDTO entity){
-        if(entity == null) return null;
+    public static Produto toCriarProduto(ProdutoCreateDTO entity) {
+        if (entity == null) return null;
 
         return Produto.builder()
                 .nome(entity.getNome())
@@ -52,8 +52,8 @@ public class ProdutoMapper {
                 .build();
     }
 
-    public static Produto toAtualizar(ProdutoUpdateDTO entity, SubtipoService subtipoService, MarcaService marcaService){
-        if(entity == null) return null;
+    public static Produto toAtualizar(ProdutoUpdateDTO entity, SubtipoService subtipoService, MarcaService marcaService) {
+        if (entity == null) return null;
 
         return Produto.builder()
                 .nome(entity.getNome())

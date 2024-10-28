@@ -7,7 +7,6 @@ import grupo.terabite.terabite.entity.VendaProduto;
 import grupo.terabite.terabite.entity.dashboard.*;
 import grupo.terabite.terabite.entity.hgapi.TemperaturaDia;
 import grupo.terabite.terabite.entity.hgapi.TemperaturaMes;
-import grupo.terabite.terabite.repository.ProdutoRepository;
 import grupo.terabite.terabite.repository.VendaProdutoRepository;
 import grupo.terabite.terabite.repository.hgapi.TemperaturaDiaRepository;
 import grupo.terabite.terabite.repository.hgapi.TemperaturaMesRepository;
@@ -17,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.*;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -27,7 +25,6 @@ public class DashboardService {
     //Não consumir de outras services pois a dashboard é um caso isolado de toda regra de negócio, e também por possiveis exceptions não desejadas
     private final VendaProdutoRepository vendaProdutoRepository;
     private final LoteService loteService;
-    private final ProdutoRepository produtoRepository;
     private final TemperaturaMesRepository temperaturaMesRepository;
     private final TemperaturaDiaRepository temperaturaDiaRepository;
     private final HgApiService hgApiService;
@@ -60,8 +57,8 @@ public class DashboardService {
             Double faturamentoDoMes = 0.0;
             String dataResposta = dataIteracao.getMonthValue() + "/" + dataIteracao.getYear();
             Double temperaturaMediaMesIteracao = 0.0;
-            for(TemperaturaMes tm: temperaturaMeses){
-                if(tm.getDtMes().getMonthValue() == hoje.getMonthValue() && tm.getDtMes().getYear() == hoje.getYear()){
+            for (TemperaturaMes tm : temperaturaMeses) {
+                if (tm.getDtMes().getMonthValue() == hoje.getMonthValue() && tm.getDtMes().getYear() == hoje.getYear()) {
                     temperaturaMediaMesIteracao = tm.getTemperaturaMedia();
                 }
             }
@@ -69,12 +66,12 @@ public class DashboardService {
             List<VendaProduto> vendaProdutosIteracao = vendaProdutos.stream()
                     .filter(vendaProduto -> vendaProduto.getVenda().getDataCompra().getMonthValue() == dataIteracao.getMonthValue()).toList();
 
-            for(VendaProduto vp : vendaProdutosIteracao){ // PARA CADA VENDA DESTE MÊS, INCREMENTE O FATURAMENTO COM O VALOR DAS VENDAS
+            for (VendaProduto vp : vendaProdutosIteracao) { // PARA CADA VENDA DESTE MÊS, INCREMENTE O FATURAMENTO COM O VALOR DAS VENDAS
                 faturamentoDoMes += vp.getQtdProdutosVendido() * vp.getProduto().getPreco();
             }
 
-            for(TemperaturaMes tm : temperaturaMeses){
-                if(tm.getDtMes().getMonthValue() == dataIteracao.getMonthValue()){
+            for (TemperaturaMes tm : temperaturaMeses) {
+                if (tm.getDtMes().getMonthValue() == dataIteracao.getMonthValue()) {
                     temperaturaMediaMesIteracao = tm.getTemperaturaMedia();
                 }
             }
@@ -85,7 +82,7 @@ public class DashboardService {
         return resumoDoMeses;
     }
 
-    private List<PrevisaoVendasPorTemperatura> getPrevisaoVendasPorTemperatura(LocalDate hoje, List<ResumoDoMes> resumoDosMeses){
+    private List<PrevisaoVendasPorTemperatura> getPrevisaoVendasPorTemperatura(LocalDate hoje, List<ResumoDoMes> resumoDosMeses) {
         // PARTE 2
 
         LocalDate mesPassado = hoje.minusDays(hoje.getDayOfMonth() - 1);
@@ -96,8 +93,10 @@ public class DashboardService {
         List<ForecastExternalDTO> previsoesTemperatura = hgApiService.buscarPrevisao().get().stream().limit(4).toList();
         Map<String, Double> previsoesVenda = new HashMap<>();
 
-        for(TemperaturaDia td : temperaturaDias){
-            List<VendaProduto> vendaProdutosDiaIteracao = vendaProdutos.stream().filter(vendaProduto -> {return vendaProduto.getVenda().getDataCompra().toLocalDate().isAfter(td.getDtTemperatura());}).toList();
+        for (TemperaturaDia td : temperaturaDias) {
+            List<VendaProduto> vendaProdutosDiaIteracao = vendaProdutos.stream().filter(vendaProduto -> {
+                return vendaProduto.getVenda().getDataCompra().toLocalDate().isAfter(td.getDtTemperatura());
+            }).toList();
             Map<String, Double> previsoesVendaIteracao = new HashMap<>();
 
             // REGRA DE 3
@@ -109,8 +108,8 @@ public class DashboardService {
 
             Double faturamentoPorTemperaturaUnitaria = x / y;
 
-            for(ForecastExternalDTO f : previsoesTemperatura){
-                Double yy = (((Integer)f.getMax()).doubleValue() + ((Integer)f.getMin()).doubleValue()) / 2.0;
+            for (ForecastExternalDTO f : previsoesTemperatura) {
+                Double yy = (((Integer) f.getMax()).doubleValue() + ((Integer) f.getMin()).doubleValue()) / 2.0;
                 Double xx = faturamentoPorTemperaturaUnitaria * yy;
 
                 previsoesVendaIteracao.put(f.getDate(), xx);
@@ -132,31 +131,31 @@ public class DashboardService {
                                 .data(data)
                                 .porcentagemVenda(media / (faturamentoDoMesPassado / 30.00))
                                 .build())
-                );
+        );
         return previsaoVendasPorTemperaturas;
     }
 
-    private List<ProdutoVendido> getProdutosMaisVendidos(List<ProdutoQuantidadeDTO> produtoQuantidadeDTOS){
+    private List<ProdutoVendido> getProdutosMaisVendidos(List<ProdutoQuantidadeDTO> produtoQuantidadeDTOS) {
         // PARTE 3
-        List<ProdutoQuantidadeDTO> produtoQuantidadeDTOMaisVendidos= produtoQuantidadeDTOS.stream().sorted((p1, p2) -> Long.compare(p2.getQtdVendida(), p1.getQtdVendida())).limit(5).toList();
-        List<ProdutoVendido> produtoMaisVendidos= new ArrayList<>();
+        List<ProdutoQuantidadeDTO> produtoQuantidadeDTOMaisVendidos = produtoQuantidadeDTOS.stream().sorted((p1, p2) -> Long.compare(p2.getQtdVendida(), p1.getQtdVendida())).limit(5).toList();
+        List<ProdutoVendido> produtoMaisVendidos = new ArrayList<>();
 
-        for(ProdutoQuantidadeDTO dto : produtoQuantidadeDTOMaisVendidos){
+        for (ProdutoQuantidadeDTO dto : produtoQuantidadeDTOMaisVendidos) {
             produtoMaisVendidos.add(ProdutoVendido.builder()
-                            .nome(dto.getProduto().getNome())
-                            .qtdVendido(dto.getQtdVendida().intValue())
+                    .nome(dto.getProduto().getNome())
+                    .qtdVendido(dto.getQtdVendida().intValue())
                     .build());
         }
         return produtoMaisVendidos;
     }
 
-    private List<ProdutoVendido> getProdutosMenosVendidos(List<ProdutoQuantidadeDTO> produtoQuantidadeDTOS){
+    private List<ProdutoVendido> getProdutosMenosVendidos(List<ProdutoQuantidadeDTO> produtoQuantidadeDTOS) {
         // PARTE 4
 
-        List<ProdutoQuantidadeDTO> produtoQuantidadeDTOMenosVendidos= produtoQuantidadeDTOS.stream().sorted((p1, p2) -> Long.compare(p1.getQtdVendida(), p2.getQtdVendida())).limit(5).toList();
+        List<ProdutoQuantidadeDTO> produtoQuantidadeDTOMenosVendidos = produtoQuantidadeDTOS.stream().sorted((p1, p2) -> Long.compare(p1.getQtdVendida(), p2.getQtdVendida())).limit(5).toList();
         List<ProdutoVendido> produtoMenosVendidos = new ArrayList<>();
 
-        for(ProdutoQuantidadeDTO dto : produtoQuantidadeDTOMenosVendidos){
+        for (ProdutoQuantidadeDTO dto : produtoQuantidadeDTOMenosVendidos) {
             produtoMenosVendidos.add(ProdutoVendido.builder()
                     .nome(dto.getProduto().getNome())
                     .qtdVendido(dto.getQtdVendida().intValue())
@@ -171,12 +170,12 @@ public class DashboardService {
         List<EstoqueProduto> estoqueProdutosMenores = loteService.estoque().stream().sorted(Comparator.comparingInt(EstoqueProduto::getQtdEstoque)).limit(20).toList();
         List<ProdutoEstoque> produtosMenosEstoques = new ArrayList<>();
 
-        for(EstoqueProduto ep : estoqueProdutosMenores){
+        for (EstoqueProduto ep : estoqueProdutosMenores) {
             produtosMenosEstoques.add(ProdutoEstoque.builder()
-                            .nome(ep.getProduto())
-                            .marca(ep.getMarca())
-                            .qtdEmEstoque(ep.getQtdEstoque())
-                            .valorUnitario(ep.getValorUnitario())
+                    .nome(ep.getProduto())
+                    .marca(ep.getMarca())
+                    .qtdEmEstoque(ep.getQtdEstoque())
+                    .valorUnitario(ep.getValorUnitario())
                     .build());
         }
 

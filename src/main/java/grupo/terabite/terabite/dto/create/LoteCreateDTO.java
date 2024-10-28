@@ -1,7 +1,5 @@
 package grupo.terabite.terabite.dto.create;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import grupo.terabite.terabite.entity.Produto;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;

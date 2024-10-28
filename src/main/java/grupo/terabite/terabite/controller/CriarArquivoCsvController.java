@@ -14,7 +14,7 @@ public class CriarArquivoCsvController {
     private final Escritor escritor;
 
     @GetMapping
-    public void gerarArquivo(){
+    public void gerarArquivo() {
         escritor.escrever();
     }
 }

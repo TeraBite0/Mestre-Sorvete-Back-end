@@ -7,7 +7,6 @@ import grupo.terabite.terabite.repository.VendaProdutoRepository;
 import grupo.terabite.terabite.repository.VendaRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -27,7 +26,7 @@ public class VendaService {
 
     public List<Venda> listarVenda() {
         List<Venda> vendas = vendaRepository.findAllByOrderByDataCompraDesc();
-        if(vendas.isEmpty()){
+        if (vendas.isEmpty()) {
             throw new ResponseStatusException(HttpStatusCode.valueOf(204));
         }
         return vendas;

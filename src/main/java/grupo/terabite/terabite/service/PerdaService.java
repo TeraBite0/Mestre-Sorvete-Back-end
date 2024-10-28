@@ -16,44 +16,44 @@ import java.util.Optional;
 public class PerdaService {
 
     private final PerdaRepository perdaRepository;
-    private final ProdutoService  produtoService;
-    private final LoteService  loteService;
+    private final ProdutoService produtoService;
+    private final LoteService loteService;
 
-    public List<Perda> listarPerda(){
+    public List<Perda> listarPerda() {
         List<Perda> perdas = perdaRepository.findAll();
-        if(perdas.isEmpty()){
+        if (perdas.isEmpty()) {
             throw new ResponseStatusException(HttpStatusCode.valueOf(204));
         }
         return perdas;
     }
 
-    public Perda buscarPerdaPorId(Integer id){
+    public Perda buscarPerdaPorId(Integer id) {
         Optional<Perda> perdasOpt = perdaRepository.findById(id);
-        if(perdasOpt.isEmpty()){
+        if (perdasOpt.isEmpty()) {
             throw new ResponseStatusException(HttpStatusCode.valueOf(404));
         }
         return perdasOpt.get();
     }
 
-    public Perda criarPerda(Perda novaPerda){
+    public Perda criarPerda(Perda novaPerda) {
         Produto p = produtoService.buscarPorId(novaPerda.getProduto().getId());
-        if(loteService.produtoEmEstoque(p.getId()) < 1){
+        if (loteService.produtoEmEstoque(p.getId()) < 1) {
             p.setEmEstoque(false);
             produtoService.atualizarProduto(p.getId(), p);
         }
         return perdaRepository.save(novaPerda);
     }
 
-    public Perda atualizarPerda(Integer id, Perda atualizarPerda){
-        if(!perdaRepository.existsById(id)){
+    public Perda atualizarPerda(Integer id, Perda atualizarPerda) {
+        if (!perdaRepository.existsById(id)) {
             throw new ResponseStatusException(HttpStatusCode.valueOf(404));
         }
         atualizarPerda.setId(id);
         return perdaRepository.save(atualizarPerda);
     }
 
-    public void deletarPerda(Integer id){
-        if(!perdaRepository.existsById(id)){
+    public void deletarPerda(Integer id) {
+        if (!perdaRepository.existsById(id)) {
             throw new ResponseStatusException(HttpStatusCode.valueOf(404));
         }
         perdaRepository.deleteById(id);

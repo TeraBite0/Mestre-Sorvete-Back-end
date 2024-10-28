@@ -27,11 +27,11 @@ public class MarcaService {
         return marcaRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatusCode.valueOf(204)));
     }
 
-    public Marca buscarPorNomeMarca(String marca){
-        if(marca.isBlank()){
+    public Marca buscarPorNomeMarca(String marca) {
+        if (marca.isBlank()) {
             throw new ResponseStatusException(HttpStatusCode.valueOf(400));
         }
-        if(marcaRepository.findByNomeIgnoreCase(marca) == null){
+        if (marcaRepository.findByNomeIgnoreCase(marca) == null) {
             Marca novaMarca = new Marca();
             novaMarca.setNome(marca);
             criarMarca(novaMarca);

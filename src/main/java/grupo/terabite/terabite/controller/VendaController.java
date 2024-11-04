@@ -11,11 +11,15 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,6 +46,22 @@ public class VendaController {
         if (vendas.isEmpty()) {
             throw new ResponseStatusException(HttpStatusCode.valueOf(204));
         }
+        return ResponseEntity.ok(vendas);
+    }
+
+    @Operation(summary = "Lista todas as vendas feitas", description = "Retorna uma lista de vendas")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Operação bem-sucedida, vendas listadas"),
+            @ApiResponse(responseCode = "204", description = "Operação bem-sucedida, sem vendas"),
+            @ApiResponse(responseCode = "401", description = "Erro de requisição, Não autorizado")
+    })
+    @GetMapping("/data")
+    public ResponseEntity<List<VendaResponseDTO>> listarVendaPorData(@RequestParam @Valid LocalDateTime data) {
+        List<VendaResponseDTO> vendas = new ArrayList<>();
+
+        for (Venda v : service.listarVendaPorData(data)) vendas.add(VendaMapper.toResponseDTO(v, service));
+        if (vendas.isEmpty()) throw new ResponseStatusException(HttpStatus.NO_CONTENT);
+
         return ResponseEntity.ok(vendas);
     }
 

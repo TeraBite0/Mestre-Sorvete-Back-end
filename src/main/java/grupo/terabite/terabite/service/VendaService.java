@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -99,5 +100,10 @@ public class VendaService {
         }
         vendaProdutoRepository.deleteByVendaId(id);
         vendaRepository.deleteById(id);
+    }
+
+    public List<Venda> listarVendaPorData(LocalDateTime data) {
+        List<Venda> vendas = vendaRepository.findByDataCompra(data);
+        return vendas;
     }
 }

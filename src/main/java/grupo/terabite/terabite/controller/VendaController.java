@@ -56,7 +56,7 @@ public class VendaController {
             @ApiResponse(responseCode = "401", description = "Erro de requisição, Não autorizado")
     })
     @GetMapping("/data")
-    public ResponseEntity<List<VendaResponseDTO>> listarVendaPorData(@RequestParam @Valid LocalDateTime data) {
+    public ResponseEntity<List<VendaResponseDTO>> listarVendaPorData(@RequestParam @Valid LocalDate data) {
         List<VendaResponseDTO> vendas = new ArrayList<>();
 
         for (Venda v : service.listarVendaPorData(data)) vendas.add(VendaMapper.toResponseDTO(v, service));

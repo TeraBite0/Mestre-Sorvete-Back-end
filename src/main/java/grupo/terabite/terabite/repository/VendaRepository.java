@@ -11,5 +11,5 @@ import java.util.List;
 @Repository
 public interface VendaRepository extends JpaRepository<Venda, Integer> {
     List<Venda> findAllByOrderByDataCompraDesc();
-    List<Venda> findByDataCompra(LocalDateTime data);
+    List<Venda> findByDataCompraBetween(LocalDateTime inicioDoDia, LocalDateTime finalDoDia);
 }

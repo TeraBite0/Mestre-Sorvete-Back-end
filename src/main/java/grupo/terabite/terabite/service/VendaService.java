@@ -13,6 +13,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -102,8 +103,10 @@ public class VendaService {
         vendaRepository.deleteById(id);
     }
 
-    public List<Venda> listarVendaPorData(LocalDateTime data) {
-        List<Venda> vendas = vendaRepository.findByDataCompra(data);
-        return vendas;
+    public List<Venda> listarVendaPorData(LocalDate data) {
+        LocalDateTime startOfDay = data.atStartOfDay();
+        LocalDateTime endOfDay = data.atTime(LocalTime.MAX);
+
+        return vendaRepository.findByDataCompraBetween(startOfDay, endOfDay);
     }
 }

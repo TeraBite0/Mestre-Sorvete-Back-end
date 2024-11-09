@@ -27,9 +27,14 @@ public class NotificacaoService {
     }
 
     public void notificarProdutoEmEstoque(Produto produto) {
-        List<Notificacao> notificacoes = notificacaoRepository.findByProdutoId(produto.getId());
-        if (!notificacoes.isEmpty()) {
-            emailApiService.enviarAlertaDeProdutos(notificacoes);
+        if (produto.getEmEstoque() && produto.getIsAtivo()) {
+
+            List<Notificacao> notificacoes = notificacaoRepository.findByProdutoId(produto.getId());
+            if (!notificacoes.isEmpty()) {
+                emailApiService.enviarAlertaDeProdutos(notificacoes);
+            }
+        } else {
+            throw new RuntimeException("Erro ao notificar, produto inapto para notificar");
         }
     }
 
@@ -37,10 +42,7 @@ public class NotificacaoService {
         return notificacaoRepository.save(novaNotificacao);
     }
 
-    public void deletarNotificacao(Integer id) { // fazer cenário para caso o produto seja desativado
-        if (!notificacaoRepository.existsById(id)) {
-            throw new ResponseStatusException(HttpStatusCode.valueOf(404));
-        }
-        notificacaoRepository.deleteById(id);
+    public void deletarNotificacaoPorProdutoId(Integer produtoId) {
+        notificacaoRepository.deleteByProdutoId(produtoId);
     }
 }

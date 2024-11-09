@@ -8,5 +8,8 @@ import java.util.List;
 
 @Repository
 public interface NotificacaoRepository extends JpaRepository<Notificacao, Integer> {
+
     List<Notificacao> findByProdutoId(Integer produtoId);
+
+    void deleteByProdutoId(Integer produtoId);
 }

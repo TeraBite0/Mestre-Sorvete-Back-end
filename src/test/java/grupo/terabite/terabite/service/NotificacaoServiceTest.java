@@ -9,7 +9,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,6 +83,11 @@ class NotificacaoServiceTest {
         }
 
         assertEquals(notificacoes.size(), notificacaoResposta.size(), "O numero de notificações retornado é diferente do esperado");
+
+        notificacaoRepository.deleteAll();
+
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> notificacaoService.listarNotificacoes());
+        assertEquals(exception.getStatusCode(), HttpStatusCode.valueOf(204), "O status da resposta não é o correto");
     }
 
     @Test

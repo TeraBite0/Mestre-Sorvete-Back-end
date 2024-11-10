@@ -1,5 +1,6 @@
 package grupo.terabite.terabite.service;
 
+import grupo.terabite.terabite.dto.internal.ProdutoQuantidadeDTO;
 import grupo.terabite.terabite.entity.Produto;
 import grupo.terabite.terabite.repository.ProdutoRepository;
 import grupo.terabite.terabite.repository.VendaProdutoRepository;
@@ -8,6 +9,8 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -68,9 +71,17 @@ public class ProdutoService {
     }
 
     public List<Produto> popular() {
-        //List<VendaProduto> vendas = vendaProdutoRepository.findTop5ByOrderByQtdProdutosVendidoDesc();
-        //return vendas.stream().map(VendaProduto::getProduto).collect(Collectors.toList());
-        return null;
+        LocalDate mesPassado = LocalDate.now().minusMonths(1);
+        List<ProdutoQuantidadeDTO> produtoQuantidadeDTO = vendaProdutoRepository.qtdVendidosPorMesEAno(mesPassado.getMonthValue(), mesPassado.getYear());
+        List<Produto> populares = new ArrayList<>();
+
+        if (produtoQuantidadeDTO.size() < 5) { throw new ResponseStatusException(HttpStatusCode.valueOf(201)); }
+
+        for (int i = 0; i < 5; i++) {
+            populares.add(produtoQuantidadeDTO.get(i).getProduto());
+        }
+
+        return populares;
     }
 }
 

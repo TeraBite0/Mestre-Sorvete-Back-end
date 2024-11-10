@@ -74,13 +74,11 @@ public class ProdutoService {
         LocalDate mesPassado = LocalDate.now().minusMonths(1);
         List<ProdutoQuantidadeDTO> produtoQuantidadeDTO = vendaProdutoRepository.qtdVendidosPorMesEAno(mesPassado.getMonthValue(), mesPassado.getYear());
         List<Produto> populares = new ArrayList<>();
-
-        if (produtoQuantidadeDTO.size() < 5) { throw new ResponseStatusException(HttpStatusCode.valueOf(201)); }
-
-        for (int i = 0; i < 5; i++) {
-            populares.add(produtoQuantidadeDTO.get(i).getProduto());
+        for(int i = 0; populares.size() < 5 || i == produtoQuantidadeDTO.size(); i++) {
+            if (produtoQuantidadeDTO.get(i).getProduto().getIsAtivo()) {
+                populares.add(produtoQuantidadeDTO.get(i).getProduto());
+            }
         }
-
         return populares;
     }
 }

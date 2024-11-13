@@ -161,7 +161,7 @@ public class ProdutoController {
             @ApiResponse(responseCode = "404", description = "Produto inexistente"),
             @ApiResponse(responseCode = "401", description = "Erro de requisição, Não autorizado"),
     })
-    @PostMapping("/recomendacao-do-dia")
+    @PutMapping("/recomendacao-do-dia")
     public ResponseEntity<ProdutoResponseDTO> alterarRecomendacaoDoDia(@RequestBody @Valid Integer produtoNovoId) {
         return ResponseEntity.ok(ProdutoMapper.toDetalhe(recomendacaoService.alterarRecomendacaoDoDia(produtoNovoId)));
     }

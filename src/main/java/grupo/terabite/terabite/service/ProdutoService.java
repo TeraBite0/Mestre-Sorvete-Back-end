@@ -27,7 +27,11 @@ public class ProdutoService {
     }
 
     public List<Produto> listarProdutoIsAtivos() {
-        return produtoRepository.findByIsAtivoTrue();
+        List<Produto> produtos = produtoRepository.findByIsAtivoTrue();
+        if(produtos.isEmpty()){
+            throw new ResponseStatusException(HttpStatusCode.valueOf(204));
+        }
+        return produtos;
     }
 
     public List<Produto> buscarPorTermo(String termo, String marca) {
@@ -74,7 +78,7 @@ public class ProdutoService {
         LocalDate mesPassado = LocalDate.now().minusMonths(1);
         List<ProdutoQuantidadeDTO> produtoQuantidadeDTO = vendaProdutoRepository.qtdVendidosPorMesEAno(mesPassado.getMonthValue(), mesPassado.getYear());
         List<Produto> populares = new ArrayList<>();
-        for(int i = 0; populares.size() < 5 || i == produtoQuantidadeDTO.size(); i++) {
+        for(int i = 0; populares.size() < 5 || i == produtoQuantidadeDTO.size() - 1; i++) {
             if (produtoQuantidadeDTO.get(i).getProduto().getIsAtivo()) {
                 populares.add(produtoQuantidadeDTO.get(i).getProduto());
             }
@@ -82,4 +86,3 @@ public class ProdutoService {
         return populares;
     }
 }
-

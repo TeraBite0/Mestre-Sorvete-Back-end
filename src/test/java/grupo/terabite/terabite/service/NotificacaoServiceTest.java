@@ -112,7 +112,7 @@ class NotificacaoServiceTest {
             }
         }
 
-        assertEquals(delecoes, delecoesEsperadas, "O numero de deleções é diferente do esperado");
+        assertEquals(delecoesEsperadas, delecoes, "O numero de deleções é diferente do esperado");
     }
 
     //testar envio de alertas

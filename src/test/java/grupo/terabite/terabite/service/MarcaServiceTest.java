@@ -14,7 +14,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -71,12 +70,10 @@ class MarcaServiceTest {
     }
 
     @Test
-    @DisplayName("Quando buscar por ID inexistente, deve lançar ResponseStatusException com status 204")
+    @DisplayName("Quando buscar por ID inexistente, deve lançar ResponseStatusException com status 404 (NOT_FOUND)")
     void deveLancarExecaoQuandoNaoEncontrarMarcaPorID() {
-        when(marcaRepository.findById(Mockito.anyInt())).thenReturn(Optional.empty());
-
         ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> marcaService.buscarPorId(2));
-        assertEquals(HttpStatus.NO_CONTENT, exception.getStatusCode(), "O status HTTP esperado é 204 (NO_CONTENT)");
+        assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode(), "O status HTTP esperado é 404 (NOT_FOUND)");
     }
 
     @Test

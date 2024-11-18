@@ -1,8 +1,7 @@
 package grupo.terabite.terabite.service;
 
 import grupo.terabite.terabite.entity.*;
-import grupo.terabite.terabite.repository.*;
-import org.junit.jupiter.api.Assertions;
+import grupo.terabite.terabite.repository.PerdaRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,14 +15,14 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("Perda")
@@ -36,40 +35,10 @@ class PerdaServiceTest {
     private PerdaService perdaService;
 
     @Mock
-    private MarcaRepository marcaRepository;
-
-    @InjectMocks
-    private MarcaService marcaService;
-
-    @Mock
-    private SubtipoRepository subtipoRepository;
-
-    @InjectMocks
-    private SubtipoService subtipoService;
-
-    @Mock
-    private TipoRepository tipoRepository;
-
-    @InjectMocks
-    private TipoService tipoService;
-
-    @Mock
-    private ProdutoRepository produtoRepository;
-
-    @InjectMocks
     private ProdutoService produtoService;
 
     @Mock
-    private LoteRepository loteRepository;
-
-    @InjectMocks
     private LoteService loteService;
-
-    @Mock
-    private VendaProdutoRepository vendaProdutoRepository;
-
-    @InjectMocks
-    private VendaService vendaService;
 
     public List<Marca> marcas;
 
@@ -156,12 +125,10 @@ class PerdaServiceTest {
     }
 
     @Test
-    @DisplayName("Quando buscar por ID inexistente, deve lançar ResponseStatusException com status 404")
+    @DisplayName("Quando buscar por ID inexistente, deve lançar ResponseStatusException com status 404 (NOT_FOUND)")
     void deveLancarExecaoQuandoNaoEncontrarPerdaPorID() {
-        when(perdaRepository.findById(Mockito.anyInt())).thenReturn(Optional.empty());
-
-        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> perdaService.buscarPerdaPorId(2));
-        assertEquals(HttpStatusCode.valueOf(404), exception.getStatusCode(), "O status HTTP esperado é 404 (NOT_FOUND)");
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> perdaService.buscarPerdaPorId(10));
+        assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode(), "O status HTTP esperado é 404 (NOT_FOUND)");
     }
 
     @Test
@@ -171,7 +138,6 @@ class PerdaServiceTest {
         when(perdaRepository.findById(1)).thenReturn(Optional.of(perda));
 
         Perda resultado;
-
         try{
             resultado = perdaService.buscarPerdaPorId(1);
         } catch (Exception e) {
@@ -187,21 +153,84 @@ class PerdaServiceTest {
 
     @Test
     @DisplayName("Quando criar uma nova perda, deve definir o ID como null e salvar no repositório")
-    void deveCriarNovaPerda() {
+    void deveCriarNovaPerdaQuandoEstoqueForMenorQueUm() {
+        Perda perda = perdasEsperadas.get(0);
+        when(perdaRepository.save(perda)).thenReturn(perdasEsperadas.get(0));
+        when(produtoService.buscarPorId(Mockito.anyInt())).thenReturn(produtos.get(0));
+        when(loteService.produtoEmEstoque(Mockito.anyInt())).thenReturn(0);
+        when(produtoService.atualizarProduto(1,lotes.get(0).getProduto())).thenReturn(lotes.get(0).getProduto());
+
+        Perda resultado;
+        try{
+            resultado = perdaService.criarPerda(perda);
+        } catch (Exception e) {
+            fail("Erro ao buscar perda com ID existente: " + (e.getMessage() != null ? e.getMessage() : e.getCause()));
+            return;
+        }
+
+        assertNotNull(resultado);
+        assertEquals(perda.getId(), resultado.getId(), "O ID do perda salvo não está correto");
+        assertEquals(perda.getQtdProduto(), resultado.getQtdProduto(), "A quantidade de perda salva não está correto");
+        assertEquals(perda.getDataPerda(), resultado.getDataPerda(), "A data da perda salva não está correto");
+        assertEquals(perda.getProduto(), resultado.getProduto(), "O produto da perda salva não está correto");
+
+        when(loteService.produtoEmEstoque(Mockito.anyInt())).thenReturn(2);
+        perdaService.criarPerda(perda);
     }
 
     @Test
-    @DisplayName("Deve atualizar")
+    @DisplayName("Quando passar um Id que não existe no banco de dados para atualizar a perda, deve lançar exeção 404 (NOT_FOUND)")
+    void deveLancarExecaoQuandoNaoExistirPerdaPorIdPassadoMetodoAtualizarPerda(){
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> perdaService.atualizarPerda(50,perdasEsperadas.get(0)));
+        assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode(), "O status HTTP esperado é 404 (NOT FOUND)");
+    }
+
+    @Test
+    @DisplayName("Quando passado uma perda que existe no banco de dados, deve atualizar a perda com os dados novos")
     void atualizarPerda() {
+        Perda perdaExistente = perdasEsperadas.get(0);
+
+        Perda perdaAtualizada = new Perda();
+        perdaAtualizada.setProduto(produtos.get(3));
+
+        when(perdaRepository.existsById(perdaExistente.getId())).thenReturn(true);
+        when(perdaRepository.save(any(Perda.class))).thenReturn(perdaAtualizada);
+
+        Perda resultado;
+        try{
+            resultado = perdaService.atualizarPerda(perdaExistente.getId(), perdaAtualizada);
+        } catch (Exception e) {
+            fail("Erro ao buscar perda com ID existente: " + (e.getMessage() != null ? e.getMessage() : e.getCause()));
+            return;
+        }
+
+        assertNotNull(resultado);
+        assertEquals(perdaAtualizada.getQtdProduto(), resultado.getQtdProduto(), "A quantidade de perdas não foi atualizada com o valor da nova perda");
+        assertEquals(perdaAtualizada.getDataPerda(), resultado.getDataPerda(), "A data da perda não foi atualizada com o valor da nova data");
+        assertEquals(perdaAtualizada.getProduto(), resultado.getProduto(), "O produto da perda não foi atualizada com o valor do novo produto");
     }
 
     @Test
-    @DisplayName("Quando deletar por ID existente, deve executar sem impetimentos")
+    @DisplayName("Quando passar um Id que não existe no banco de dados para deletar a perda, deve lançar exeção 404 (NOT_FOUND)")
+    void deveLancarExecaoQuandoNaoExistirPerdaPorIdPassadoNoMetodoDeletar(){
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> perdaService.deletarPerda(50));
+        assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode(), "O status HTTP esperado é 404 (NOT FOUND)");
+    }
+
+    @Test
+    @DisplayName("Quando passar um Id que existe no banco de dados, deve deletar a perda por id")
     void deletarPerda() {
-    }
+        Integer id = 1;
+        when(perdaRepository.existsById(id)).thenReturn(true);
 
-    @Test
-    @DisplayName("deve buscar por produto id")
-    void buscarPerdaPorProdutoId() {
+        try{
+            perdaService.deletarPerda(id);
+        } catch (Exception e) {
+            fail("Erro ao buscar marca com nome não existente: " + (e.getMessage() != null ? e.getMessage() : e.getCause()));
+            return;
+        }
+
+        verify(perdaRepository).existsById(id);
+        verify(perdaRepository).deleteById(id);
     }
 }

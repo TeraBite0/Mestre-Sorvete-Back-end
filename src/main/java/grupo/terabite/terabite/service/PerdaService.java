@@ -4,6 +4,7 @@ import grupo.terabite.terabite.entity.Perda;
 import grupo.terabite.terabite.entity.Produto;
 import grupo.terabite.terabite.repository.PerdaRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -28,11 +29,7 @@ public class PerdaService {
     }
 
     public Perda buscarPerdaPorId(Integer id) {
-        Optional<Perda> perdasOpt = perdaRepository.findById(id);
-        if (perdasOpt.isEmpty()) {
-            throw new ResponseStatusException(HttpStatusCode.valueOf(404));
-        }
-        return perdasOpt.get();
+        return perdaRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
     public Perda criarPerda(Perda novaPerda) {
@@ -57,9 +54,5 @@ public class PerdaService {
             throw new ResponseStatusException(HttpStatusCode.valueOf(404));
         }
         perdaRepository.deleteById(id);
-    }
-
-    public List<Perda> buscarPerdaPorProdutoId(Integer produtoId) { // não utilizar dentro de LoteService por motivos de dependencia de classes
-        return perdaRepository.findByProdutoId(produtoId);
     }
 }

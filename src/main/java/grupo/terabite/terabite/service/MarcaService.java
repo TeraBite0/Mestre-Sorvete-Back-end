@@ -26,7 +26,7 @@ public class MarcaService {
     }
 
     public Marca buscarPorId(Integer id) {
-        return marcaRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatusCode.valueOf(204)));
+        return marcaRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
     public Marca buscarPorNomeMarca(String nomeMarca) {

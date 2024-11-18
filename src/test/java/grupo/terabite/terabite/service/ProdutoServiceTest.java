@@ -2,7 +2,9 @@ package grupo.terabite.terabite.service;
 
 import grupo.terabite.terabite.dto.internal.ProdutoQuantidadeDTO;
 import grupo.terabite.terabite.entity.*;
-import grupo.terabite.terabite.repository.*;
+import grupo.terabite.terabite.repository.ProdutoRepository;
+import grupo.terabite.terabite.repository.VendaProdutoRepository;
+import grupo.terabite.terabite.repository.VendaRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

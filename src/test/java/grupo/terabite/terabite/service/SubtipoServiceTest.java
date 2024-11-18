@@ -1,10 +1,8 @@
 package grupo.terabite.terabite.service;
 
-import grupo.terabite.terabite.entity.Marca;
 import grupo.terabite.terabite.entity.Subtipo;
 import grupo.terabite.terabite.entity.Tipo;
 import grupo.terabite.terabite.repository.SubtipoRepository;
-import grupo.terabite.terabite.repository.TipoRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -120,9 +118,9 @@ class SubtipoServiceTest {
     }
 
     @Test
-    @DisplayName("Quando passar um  que não existe no banco de dados, deve cadastrar uma nova marca")
+    @DisplayName("Quando passar um  que não existe no banco de dados, deve cadastrar uma novo subtipo")
     void deveCriarNovoSubtipoQuandoBuscarPorNomeNaoExistente(){
-        String nomeSubtipo = "Nova Marca";
+        String nomeSubtipo = "Novo subtipo";
         when(subtipoRepository.findByNomeIgnoreCase(nomeSubtipo)).thenReturn(null);
         when(tipoService.buscarPorId(Mockito.anyInt())).thenReturn(new Tipo(1, "Picolé"));
 
@@ -164,21 +162,21 @@ class SubtipoServiceTest {
     @DisplayName("Quando criar um novo subtipo, deve definir o ID como null e salvar no repositório")
     void deveRetornarCriarSubtipo() {
         Subtipo subtipoSalvo = new Subtipo(3, tipos.get(0),"Novo Subtipo");
-        Subtipo novaSubtipo = new Subtipo(null, tipos.get(0),"Novo Subtipo");
+        Subtipo novoSubtipo = new Subtipo(null, tipos.get(0),"Novo Subtipo");
 
-        when(subtipoRepository.save(novaSubtipo)).thenReturn(subtipoSalvo);
+        when(subtipoRepository.save(novoSubtipo)).thenReturn(subtipoSalvo);
 
         Subtipo resultado;
         try{
-            resultado = subtipoService.criarSubtipo(novaSubtipo);
+            resultado = subtipoService.criarSubtipo(novoSubtipo);
         } catch (Exception e) {
-            fail("Erro ao buscar marca com nome não existente: " + (e.getMessage() != null ? e.getMessage() : e.getCause()));
+            fail("Erro ao buscar subtipo com nome não existente: " + (e.getMessage() != null ? e.getMessage() : e.getCause()));
             return;
         }
 
         assertNotNull(resultado, "O resultado não deve ser nulo");
         assertEquals(subtipoSalvo.getId(), resultado.getId(), "O ID do subtipo salvo não está correto");
-        assertEquals(subtipoSalvo.getNome(), resultado.getNome(), "O nome da marca salva não está correto");
+        assertEquals(subtipoSalvo.getNome(), resultado.getNome(), "O nome da subtipo salva não está correto");
         assertEquals(subtipoSalvo.getTipoPai(), resultado.getTipoPai(), "O tipoPai do subtipo salva não está correto");
 
         verify(subtipoRepository).save(ArgumentMatchers.argThat(subtipo -> subtipo.getId() == null && "Novo Subtipo".equals(subtipo.getNome())));

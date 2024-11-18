@@ -1,6 +1,7 @@
 package grupo.terabite.terabite.service;
 
 import grupo.terabite.terabite.entity.Subtipo;
+import grupo.terabite.terabite.entity.Tipo;
 import grupo.terabite.terabite.repository.SubtipoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatusCode;
@@ -29,17 +30,13 @@ public class SubtipoService {
     }
 
     public Subtipo buscarPorNomeSubtipo(String nomeSubtipo) {
-        if (nomeSubtipo.isBlank()) {
-            throw new ResponseStatusException(HttpStatusCode.valueOf(400));
-        }
+        if (nomeSubtipo.isBlank()) throw new ResponseStatusException(HttpStatusCode.valueOf(400));
 
-        if (subtipoRepository.findByNomeIgnoreCase(nomeSubtipo) == null) {
-            Subtipo novoSubtipo = new Subtipo();
-            novoSubtipo.setNome(nomeSubtipo);
-            novoSubtipo.setTipoPai(tipoService.buscarPorId(1));
-            criarSubtipo(novoSubtipo);
-        }
-        return subtipoRepository.findByNomeIgnoreCase(nomeSubtipo);
+        Subtipo subtipo = subtipoRepository.findByNomeIgnoreCase(nomeSubtipo);
+
+        if (subtipo == null) subtipo = criarSubtipo(new Subtipo(null, tipoService.buscarPorId(1),nomeSubtipo));
+
+        return subtipo;
     }
 
     public Subtipo criarSubtipo(Subtipo novoSubtipo) {

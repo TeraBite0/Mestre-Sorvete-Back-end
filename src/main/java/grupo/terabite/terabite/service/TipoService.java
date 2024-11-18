@@ -32,12 +32,11 @@ public class TipoService {
             throw new ResponseStatusException(HttpStatusCode.valueOf(400));
         }
 
-        if (tipoRepository.findByNomeIgnoreCase(nomeTipo) == null) {
-            Tipo novoTipo = new Tipo();
-            novoTipo.setNome(nomeTipo);
-            criarTipo(novoTipo);
-        }
-        return tipoRepository.findByNomeIgnoreCase(nomeTipo);
+        Tipo tipo = tipoRepository.findByNomeIgnoreCase(nomeTipo);
+
+        if (tipoRepository.findByNomeIgnoreCase(nomeTipo) == null) tipo = criarTipo(new Tipo(null, nomeTipo));
+
+        return tipo;
     }
 
     public Tipo criarTipo(Tipo novoTipo) {

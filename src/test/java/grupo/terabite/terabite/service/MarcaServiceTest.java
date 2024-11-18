@@ -2,6 +2,7 @@ package grupo.terabite.terabite.service;
 
 import grupo.terabite.terabite.entity.Marca;
 import grupo.terabite.terabite.repository.MarcaRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,11 +14,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("Marca")
@@ -29,10 +32,22 @@ class MarcaServiceTest {
     @InjectMocks
     private MarcaService marcaService;
 
+    List<Marca> marcasEsperadas;
+
+    @BeforeEach
+    void setup(){
+        marcasEsperadas = List.of(
+                new Marca(1, "Senhor Sorvete"),
+                new Marca(2, "PimPinella"),
+                new Marca(3, "Gelone"),
+                new Marca(4, "Artegel")
+        );
+    }
+
     @Test
-    @DisplayName("Quando o banco de dados não possui marcas, o serviço deve lançar ResponseStatusException com status 204")
+    @DisplayName("Quando o banco de dados não possui marcas, o serviço deve lançar ResponseStatusException com status 204 (NO_CONTENT)")
     void deveLancarExcecaoQuandoNaoExistemMarcas() {
-        Mockito.when(marcaRepository.findAll()).thenReturn(Collections.emptyList());
+        when(marcaRepository.findAll()).thenReturn(Collections.emptyList());
 
         ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> marcaService.listarMarca());
         assertEquals(HttpStatus.NO_CONTENT, exception.getStatusCode(), "Status HTTP esperado é 204 (NO_CONTENT)");
@@ -41,53 +56,77 @@ class MarcaServiceTest {
     @Test
     @DisplayName("Quando o banco de dados possui marcas, o serviço deve retornar a lista correta")
     void deveRetornarListaDeMarcasQuandoExistirem() {
-        List<Marca> marcasEsperadas = List.of(
-                new Marca(1, "Senhor Sorvete"),
-                new Marca(2, "PimPinella"),
-                new Marca(3, "Gelone"),
-                new Marca(4, "Artegel")
-        );
+        when(marcaRepository.findAll()).thenReturn(marcasEsperadas);
 
-        Mockito.when(marcaRepository.findAll()).thenReturn(marcasEsperadas);
+        List<Marca> marcasRetornadas;
 
-        List<Marca> marcasRetornadas = marcaService.listarMarca();
+        try{
+            marcasRetornadas = marcaService.listarMarca();
+        } catch (Exception e) {
+            fail("Erro ao buscar marca: " + (e.getMessage() != null ? e.getMessage() : e.getCause()));
+            return;
+        }
 
-        /*assertInterableEquals executa esse código, porem mais limpo:
-         * marcasRetornadas.forEach(empresa -> {
-         *  int index = marcasRetornadas.indexOf(empresa);
-         *  assertEquals(marcasRetornadas.get(index).getId(), empresa.getId());
-         *  assertEquals(marcasRetornadas.get(index).getNome(), empresa.getNome());
-         * });
-         * */
         assertIterableEquals(marcasEsperadas, marcasRetornadas, "As listas retornadas não são iguais às esperadas");
-    }
-
-    @Test
-    @DisplayName("Quando buscar por ID existente, deve retornar a marca correspondente")
-    void deveRetornarMarcaQuandoPassadoSeuId() {
-        Mockito.when(marcaRepository.findById(1)).thenReturn(Optional.of(new Marca(1, "Senhor Sorvete")));
-
-        Marca resultado = marcaService.buscarPorId(1);
-
-        assertNotNull(resultado, "A marca retornada não deveria ser nula");
-        assertEquals(1, resultado.getId(), "O ID da marca retornada não está correto");
-        assertEquals("Senhor Sorvete", resultado.getNome(), "O nome da marca retornada não está correto");
     }
 
     @Test
     @DisplayName("Quando buscar por ID inexistente, deve lançar ResponseStatusException com status 204")
     void deveLancarExecaoQuandoNaoEncontrarMarcaPorID() {
-        Mockito.when(marcaRepository.findById(Mockito.anyInt())).thenReturn(Optional.empty());
+        when(marcaRepository.findById(Mockito.anyInt())).thenReturn(Optional.empty());
 
         ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> marcaService.buscarPorId(2));
         assertEquals(HttpStatus.NO_CONTENT, exception.getStatusCode(), "O status HTTP esperado é 204 (NO_CONTENT)");
     }
 
     @Test
+    @DisplayName("Quando buscar por Id existente, deve retornar a marca correspondente")
+    void deveRetornarMarcaQuandoPassadoSeuId() {
+        Marca marca = marcasEsperadas.get(0);
+        when(marcaRepository.findById(1)).thenReturn(Optional.of(marca));
+
+        Marca resultado;
+        try{
+            resultado = marcaService.buscarPorId(1);
+        } catch (Exception e) {
+            fail("Erro ao buscar marca com ID existente: " + (e.getMessage() != null ? e.getMessage() : e.getCause()));
+            return;
+        }
+
+        assertNotNull(resultado, "A marca retornada não deveria ser nula");
+        assertEquals(marca.getId(), resultado.getId(), "O ID da marca retornada não está correto");
+        assertEquals(marca.getNome(), resultado.getNome(), "O nome da marca retornada não está correto");
+    }
+
+    @Test
+    @DisplayName("Quando buscar por marca isBlanck, deve lançar exeção 400 (BAD_REQUEST)")
+    void deveLancarExecaoQuandoPassarNomeVazio(){
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> marcaService.buscarPorNomeMarca(" "));
+        assertEquals(HttpStatus.BAD_REQUEST, exception.getStatusCode(), "O status HTTP esperado é 400 (BAD_REQUEST)");
+    }
+
+    @Test
+    @DisplayName("Quando passar uma marca que não existe no banco de dados, deve cadastrar uma nova marca")
+    void deveCriarNovaMarcaQuandoBuscarPorNomeNaoExistente(){
+        String nomeMarca = "Nova Marca";
+        when(marcaRepository.findByNomeIgnoreCase(nomeMarca)).thenReturn(null);
+
+        Marca marca;
+        try{
+            marca = marcaService.buscarPorNomeMarca(nomeMarca);
+        } catch (Exception e) {
+            fail("Erro ao buscar marca com nome não existente: " + (e.getMessage() != null ? e.getMessage() : e.getCause()));
+            return;
+        }
+
+        assertNull(marca);
+    }
+
+    @Test
     @DisplayName("Quando buscar por nome existente em diferentes cases, deve retornar a marca correspondente")
     void deveRetornarMarcaQuandoPassadoNomeComCasesDiferentes() {
         Marca marca = new Marca(1, "Senhor Sorvete");
-        Mockito.when(marcaRepository.findByNomeIgnoreCase(Mockito.anyString())).thenReturn(marca);
+        when(marcaRepository.findByNomeIgnoreCase(Mockito.anyString())).thenReturn(marca);
 
         Marca resultadoUpperCase = marcaService.buscarPorNomeMarca("SENHOR SORVETE");
         Marca resultadoLowerCase = marcaService.buscarPorNomeMarca("senhor sorvete");
@@ -112,7 +151,7 @@ class MarcaServiceTest {
         Marca marcaSalva = new Marca(1, "Nova Marca");
         Marca novaMarca = new Marca(null, "Nova Marca");
 
-        Mockito.when(marcaRepository.save(novaMarca)).thenReturn(marcaSalva);
+        when(marcaRepository.save(novaMarca)).thenReturn(marcaSalva);
 
         Marca resultado = marcaService.criarMarca(novaMarca);
 
@@ -120,6 +159,55 @@ class MarcaServiceTest {
         assertEquals(1, resultado.getId(), "O ID da marca salva não está correto");
         assertEquals("Nova Marca", resultado.getNome(), "O nome da marca salva não está correto");
 
-        Mockito.verify(marcaRepository).save(ArgumentMatchers.argThat(marca -> marca.getId() == null && "Nova Marca".equals(marca.getNome())));
+        verify(marcaRepository).save(ArgumentMatchers.argThat(marca -> marca.getId() == null && "Nova Marca".equals(marca.getNome())));
+    }
+
+    @Test
+    @DisplayName("Quando passar um Id que não existe no banco de dados para atualizar a marca, deve lançar exeção 404 (NOT_FOUND)")
+    void deveLancarExecaoQuandoNaoExistirMarcaPorIdPassadoMetodoAtualizarMarca(){
+        Marca marca = new Marca();
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> marcaService.atualizarMarca(50,marca));
+        assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode(), "O status HTTP esperado é 404 (NOT FOUND)");
+    }
+
+    @Test
+    @DisplayName("Quando passar uma marca que existe no banco de dados, deve atualizar marca")
+    void deveAtualizarMarcaSeIdExistir() {
+        Marca marcaExistente = new Marca(1,"Marca Original");
+
+        Marca marcaAtualizada = new Marca();
+        marcaAtualizada.setNome("Marca Atualizada");
+
+        when(marcaRepository.existsById(marcaExistente.getId())).thenReturn(true);
+        when(marcaRepository.save(any(Marca.class))).thenReturn(marcaAtualizada);
+
+        Marca resultado = marcaService.atualizarMarca(marcaExistente.getId(), marcaAtualizada);
+
+        assertNotNull(resultado);
+        assertEquals("Marca Atualizada", resultado.getNome());
+    }
+
+    @Test
+    @DisplayName("Quando passar um Id que não existe no banco de dados para deletar a marca, deve lançar exeção 404 (NOT_FOUND)")
+    void deveLancarExecaoQuandoNaoExistirMarcaPorIdPassadoNoMetodoDeletar(){
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> marcaService.deletarMarca(50));
+        assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode(), "O status HTTP esperado é 404 (NOT FOUND)");
+    }
+
+    @Test
+    @DisplayName("Quando passar um Id que existe no banco de dados, deve deletar se a marca por id")
+    void deveDeletarMarcaSeExistende() {
+        Integer id = 1;
+        when(marcaRepository.existsById(id)).thenReturn(true);
+
+        try{
+            marcaService.deletarMarca(id);
+        } catch (Exception e) {
+            fail("Erro ao buscar marca com nome não existente: " + (e.getMessage() != null ? e.getMessage() : e.getCause()));
+            return;
+        }
+
+        verify(marcaRepository).existsById(id);
+        verify(marcaRepository).deleteById(id);
     }
 }

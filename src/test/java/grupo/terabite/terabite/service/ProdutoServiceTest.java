@@ -2,7 +2,9 @@ package grupo.terabite.terabite.service;
 
 import grupo.terabite.terabite.dto.internal.ProdutoQuantidadeDTO;
 import grupo.terabite.terabite.entity.*;
-import grupo.terabite.terabite.repository.*;
+import grupo.terabite.terabite.repository.ProdutoRepository;
+import grupo.terabite.terabite.repository.VendaProdutoRepository;
+import grupo.terabite.terabite.repository.VendaRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -114,7 +116,6 @@ class ProdutoServiceTest {
             produtosResposta = produtoService.listarProduto();
         } catch (Exception e) {
             fail("Erro ao listar Produtos: " + (e.getMessage() != null ? e.getMessage() : e.getCause()));
-
         }
 
         assertEquals(produtos.size(), produtosResposta.size(), "A quantidade de produtos retornado é diferente do esperado");
@@ -136,9 +137,9 @@ class ProdutoServiceTest {
             produtosResposta = produtoService.listarProdutoIsAtivos();
         } catch (Exception e) {
             fail("Erro ao listar Produtos: " + (e.getMessage() != null ? e.getMessage() : e.getCause()));
-            return;
         }
 
+        assertNotNull(produtosResposta, "Os produtos encontrados não podem ser nulo");
         assertEquals(produtos.size(), produtosResposta.size(), "A quantidade de produtos retornado é diferente do esperado");
 
         Mockito.when(produtoRepository.findByIsAtivoTrue()).thenReturn(new ArrayList<>());
@@ -159,15 +160,15 @@ class ProdutoServiceTest {
                 });
 
         Produto produto = produtos.get(0);
-        Produto produtoResposta;
+        Produto produtoResposta = null;
 
         try {
             produtoResposta = produtoService.buscarPorId(produto.getId());
         } catch (Exception e) {
             fail("Erro ao buscar Produto: " + (e.getMessage() != null ? e.getMessage() : e.getCause()));
-            return;
         }
 
+        assertNotNull(produtoResposta, "O produto encontrado não pode ser nulo");
         assertEquals(produto, produtoResposta, "O produto encontrado está incorreto");
 
         Mockito.when(produtoRepository.findById(Mockito.anyInt())).thenReturn(Optional.empty());
@@ -183,15 +184,15 @@ class ProdutoServiceTest {
         Mockito.when(produtoRepository.save(Mockito.any())).thenReturn(produto);
         Mockito.when(marcaService.buscarPorNomeMarca(Mockito.any())).thenReturn(marcas.get(0));
         Mockito.when(subtipoService.buscarPorNomeSubtipo(Mockito.any())).thenReturn(subtipos.get(0));
-        Produto produtoResposta;
+        Produto produtoResposta = null;
 
         try {
             produtoResposta = produtoService.criarProduto(produto, marcas.get(0).getNome(), subtipos.get(0).getNome());
         } catch (Exception e) {
             fail("Erro ao criar Produto: " + (e.getMessage() != null ? e.getMessage() : e.getCause()));
-            return;
         }
 
+        assertNotNull(produtoResposta, "O produto criado não pode ser nulo");
         assertEquals(produto.getNome(), produtoResposta.getNome(), "Nome alterado na criação");
         assertEquals(marcas.get(0).getNome(), produtoResposta.getMarca().getNome(), "Nome da marca alterado na criação");
         assertEquals(subtipos.get(0).getNome(), produtoResposta.getSubtipo().getNome(), "Nome do subtipo alterado na criação");
@@ -226,10 +227,10 @@ class ProdutoServiceTest {
         try {
             produtoResposta = produtoService.atualizarProduto(2, produtoResposta);
         } catch (Exception e) {
-            fail("Erro ao criar Produto: " + (e.getMessage() != null ? e.getMessage() : e.getCause()));
-            return;
+            fail("Erro ao atualizar Produto: " + (e.getMessage() != null ? e.getMessage() : e.getCause()));
         }
 
+        assertNotNull(produtoResposta, "O produto atualizado não pode ser nulo");
         assertEquals(produto.getNome(), produtoResposta.getNome(), "O nome do produto não foi atualizado corretamente");
         assertEquals(marca, produtoResposta.getMarca(), "A marca do produto não foi atualizada corretamente");
         assertEquals(subtipo, produtoResposta.getSubtipo(), "O subtipo do produto não foi atualizado corretamente");
@@ -255,7 +256,7 @@ class ProdutoServiceTest {
                     );
             List<Produto> produtos = produtoService.buscarPorTermo("Neve", "");
 
-
+            assertNotNull(produtos, "Os produtos encontrados não podem ser nulo");
             assertEquals(4, produtos.size(), "O número de produtos retornados não é o esperado");
             assertTrue(produtos.stream().anyMatch(p -> p.getNome().equals("Neve gelada")), "Produto esperado não encontrado");
             assertTrue(produtos.stream().anyMatch(p -> p.getNome().equals("Neve quente")), "Produto esperado não encontrado");
@@ -266,7 +267,7 @@ class ProdutoServiceTest {
                     );
             produtos = produtoService.buscarPorTermo("", marca.getNome());
 
-
+            assertNotNull(produtos, "Os produtos encontrados não podem ser nulo");
             assertEquals(4, produtos.size(), "O número de produtos retornados não é o esperado");
             assertTrue(produtos.stream().allMatch(p -> p.getMarca().equals(marca)), "Produto com marca inesperada encontrado");
 
@@ -277,7 +278,7 @@ class ProdutoServiceTest {
                     );
             produtos = produtoService.buscarPorTermo("Gelo", marca.getNome());
 
-
+            assertNotNull(produtos, "Os produtos encontrados não podem ser nulo");
             assertEquals(6, produtos.size(), "O número de produtos retornados não é o esperado");
         } catch (Exception e) {
             fail("Erro ao buscar Produtos: " + (e.getMessage() != null ? e.getMessage() : e.getCause()));
@@ -287,16 +288,16 @@ class ProdutoServiceTest {
     @Test
     @DisplayName("Busca por nome corretamente")
     void buscarPorNomeProduto() {
-        Produto produto;
+        Produto produto = null;
 
         try {
             Mockito.when(produtoRepository.findByNomeIgnoreCase(Mockito.anyString())).thenReturn(produtos.get(4));
             produto = produtoService.buscarPorNomeProduto("Neve Gelada");
         } catch (Exception e) {
             fail("Erro ao buscar Produtos: " + (e.getMessage() != null ? e.getMessage() : e.getCause()));
-            return;
         }
 
+        assertNotNull(produto, "O produto encontrado não pode ser nulo");
         assertNotNull(produto, "Produto não encontrado");
         assertEquals(produtos.get(4).getNome(), produto.getNome(), "Nome do produto retornado não é o esperado");
 
@@ -315,20 +316,24 @@ class ProdutoServiceTest {
                     .thenReturn(
                             this.produtos.stream().filter(p -> p.getNome().toLowerCase().contains("neve")).toList()
                     );
-            List<Produto> produtosNome = produtoService.buscarPorFiltroTipoOuNome("Neve", "");
-            assertEquals(4, produtosNome.size(), "Cenário 1 falhou: Número de produtos retornados por nome incorreto");
-            assertTrue(produtosNome.stream().anyMatch(p -> p.getNome().equals("Neve gelada")), "Cenário 1 falhou: Produto esperado não encontrado");
-            assertTrue(produtosNome.stream().anyMatch(p -> p.getNome().equals("Neve quente")), "Cenário 1 falhou: Produto esperado não encontrado");
+            List<Produto> produtosResposta = produtoService.buscarPorFiltroTipoOuNome("Neve", "");
+
+            assertNotNull(produtosResposta, "Os produtos encontrados não podem ser nulo");
+            assertEquals(4, produtosResposta.size(), "Cenário 1 falhou: Número de produtos retornados por nome incorreto");
+            assertTrue(produtosResposta.stream().anyMatch(p -> p.getNome().equals("Neve gelada")), "Cenário 1 falhou: Produto esperado não encontrado");
+            assertTrue(produtosResposta.stream().anyMatch(p -> p.getNome().equals("Neve quente")), "Cenário 1 falhou: Produto esperado não encontrado");
 
             // Cenário 2: Buscar produtos por tipo contendo o termo
             Mockito.when(produtoRepository.findByNomeIgnoreCaseContainingOrSubtipo_TipoPai_NomeIgnoreCaseContaining(Mockito.anyString(), Mockito.anyString()))
                     .thenReturn(
                             this.produtos.stream().filter(p -> p.getSubtipo().getNome().toLowerCase().contains("quente")).toList()
                     );
-            List<Produto> produtosTipo = produtoService.buscarPorFiltroTipoOuNome("", "Quente");
-            assertEquals(4, produtosTipo.size(), "Cenário 2 falhou: Número de produtos retornados por tipo incorreto");
-            assertTrue(produtosTipo.stream().anyMatch(p -> p.getNome().equals("Gelo quentinho")), "Cenário 2 falhou: Produto esperado não encontrado");
-            assertTrue(produtosTipo.stream().anyMatch(p -> p.getNome().equals("Gelo quente")), "Cenário 2 falhou: Produto esperado não encontrado");
+            produtosResposta = produtoService.buscarPorFiltroTipoOuNome("", "Quente");
+
+            assertNotNull(produtosResposta, "Os produtos encontrados não podem ser nulo");
+            assertEquals(4, produtosResposta.size(), "Cenário 2 falhou: Número de produtos retornados por tipo incorreto");
+            assertTrue(produtosResposta.stream().anyMatch(p -> p.getNome().equals("Gelo quentinho")), "Cenário 2 falhou: Produto esperado não encontrado");
+            assertTrue(produtosResposta.stream().anyMatch(p -> p.getNome().equals("Gelo quente")), "Cenário 2 falhou: Produto esperado não encontrado");
 
             // Cenário 3: Buscar produtos por nome e tipo contendo o termo
             Mockito.when(produtoRepository.findByNomeIgnoreCaseContainingOrSubtipo_TipoPai_NomeIgnoreCaseContaining(Mockito.anyString(), Mockito.anyString()))
@@ -336,11 +341,13 @@ class ProdutoServiceTest {
                             this.produtos.stream().filter(p -> p.getSubtipo().getNome().toLowerCase().contains("quente") ||
                                     p.getNome().toLowerCase().contains("neve")).toList()
                     );
-            List<Produto> produtosNomeETipo = produtoService.buscarPorFiltroTipoOuNome("Neve", "Quente");
-            assertEquals(6, produtosNomeETipo.size(), "Cenário 3 falhou: Número de produtos retornados por nome e tipo incorreto");
-            assertTrue(produtosNomeETipo.stream().anyMatch(p -> p.getNome().equals("Neve gelada")), "Cenário 3 falhou: Produto esperado não encontrado");
-            assertTrue(produtosNomeETipo.stream().anyMatch(p -> p.getNome().equals("Neve quente")), "Cenário 3 falhou: Produto esperado não encontrado");
-            assertTrue(produtosNomeETipo.stream().anyMatch(p -> p.getNome().equals("Gelo quente")), "Cenário 3 falhou: Produto esperado não encontrado");
+            produtosResposta = produtoService.buscarPorFiltroTipoOuNome("Neve", "Quente");
+
+            assertNotNull(produtosResposta, "Os produtos encontrados não podem ser nulo");
+            assertEquals(6, produtosResposta.size(), "Cenário 3 falhou: Número de produtos retornados por nome e tipo incorreto");
+            assertTrue(produtosResposta.stream().anyMatch(p -> p.getNome().equals("Neve gelada")), "Cenário 3 falhou: Produto esperado não encontrado");
+            assertTrue(produtosResposta.stream().anyMatch(p -> p.getNome().equals("Neve quente")), "Cenário 3 falhou: Produto esperado não encontrado");
+            assertTrue(produtosResposta.stream().anyMatch(p -> p.getNome().equals("Gelo quente")), "Cenário 3 falhou: Produto esperado não encontrado");
 
         } catch (Exception e) {
             fail("Erro ao buscar Produtos: " + (e.getMessage() != null ? e.getMessage() : e.getCause()));
@@ -360,16 +367,16 @@ class ProdutoServiceTest {
                         )
         );
 
-        List<Produto> populares;
+        List<Produto> populares = null;
 
         try {
             populares = produtoService.popular();
 
         } catch (Exception e) {
             fail("Erro ao buscar Produtos Populares: " + (e.getMessage() != null ? e.getMessage() : e.getCause()));
-            return;
         }
 
+        assertNotNull(populares, "Os produtos encontrados não podem ser nulo");
         assertTrue(populares.size() <= 5, "Deve retornar no máximo 5 produtos.");
         assertTrue(populares.stream().allMatch(Produto::getIsAtivo), "Todos os produtos devem estar ativos.");
     }

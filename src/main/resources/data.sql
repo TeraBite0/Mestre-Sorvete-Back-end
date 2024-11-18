@@ -166,7 +166,7 @@ VALUES ('josue@gmail.com', '$2a$10$0/TKTGxdREbWaWjWYhwf6e9P1fPOAMMNqEnZgOG95jnSk
 
 INSERT INTO VENDAS
         (DATA_COMPRA_VEND)
-VALUES  ('2024-10-13'),
+VALUES  ('2024-10-13T15:45:20'),
         ('2024-10-05'),
         ('2024-10-06'),
         ('2024-10-08'),

@@ -200,7 +200,12 @@ class MarcaServiceTest {
         Integer id = 1;
         when(marcaRepository.existsById(id)).thenReturn(true);
 
-        marcaService.deletarMarca(id);
+        try{
+            marcaService.deletarMarca(id);
+        } catch (Exception e) {
+            fail("Erro ao buscar marca com nome não existente: " + (e.getMessage() != null ? e.getMessage() : e.getCause()));
+            return;
+        }
 
         verify(marcaRepository).existsById(id);
         verify(marcaRepository).deleteById(id);

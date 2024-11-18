@@ -34,10 +34,7 @@ public class MarcaService {
 
         Marca marca = marcaRepository.findByNomeIgnoreCase(nomeMarca);
 
-        if (marca == null){
-            marca = criarMarca(new Marca(null, nomeMarca));
-            return marca;
-        }
+        if (marca == null) marca = criarMarca(new Marca(null, nomeMarca));
 
         return marca;
     }

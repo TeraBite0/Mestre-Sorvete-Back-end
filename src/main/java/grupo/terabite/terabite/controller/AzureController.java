@@ -1,5 +1,6 @@
 package grupo.terabite.terabite.controller;
 
+import grupo.terabite.terabite.dto.autenticacao.dto.AzureTokenDto;
 import grupo.terabite.terabite.service.api.AzureService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -23,7 +24,7 @@ public class AzureController {
             @ApiResponse(responseCode = "200", description = "Operação bem-sucedida,Token gerado e retornado"),
             @ApiResponse(responseCode = "401", description = "Erro de requisição, Não autorizado")
     })
-    public ResponseEntity<String> gerarTokenSas() {
-        return ResponseEntity.ok(azureService.gerarTokenSAS());
+    public ResponseEntity<AzureTokenDto> gerarTokenSas() {
+        return ResponseEntity.ok(AzureTokenDto.builder().SasToken(azureService.gerarTokenSAS()).build());
     }
 }

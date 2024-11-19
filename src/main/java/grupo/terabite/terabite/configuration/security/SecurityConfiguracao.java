@@ -60,7 +60,7 @@ public class SecurityConfiguracao {
             new AntPathRequestMatcher("/produtos/populares"),
             new AntPathRequestMatcher("/produtos/isAtivos"),
             new AntPathRequestMatcher("/notificacoes"),
-            new AntPathRequestMatcher("/exportcsv")
+            new AntPathRequestMatcher("/exportcsv"),
     };
 
     @Bean

@@ -19,9 +19,8 @@ public class SubtipoService {
 
     public List<Subtipo> listarSubtipo() {
         List<Subtipo> subtipos = subtipoRepository.findAll();
-        if (subtipos.isEmpty()) {
-            throw new ResponseStatusException(HttpStatusCode.valueOf(204));
-        }
+        if (subtipos.isEmpty()) throw new ResponseStatusException(HttpStatusCode.valueOf(204));
+
         return subtipos;
     }
 

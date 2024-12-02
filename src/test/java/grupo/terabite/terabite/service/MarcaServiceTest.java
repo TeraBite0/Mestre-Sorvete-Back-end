@@ -71,7 +71,7 @@ class MarcaServiceTest {
 
     @Test
     @DisplayName("Quando buscar por ID inexistente, deve lançar ResponseStatusException com status 404 (NOT_FOUND)")
-    void deveLancarExecaoQuandoNaoEncontrarMarcaPorID() {
+    void deveLancarExcecaoQuandoNaoEncontrarMarcaPorID() {
         ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> marcaService.buscarPorId(2));
         assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode(), "O status HTTP esperado é 404 (NOT_FOUND)");
     }
@@ -96,8 +96,8 @@ class MarcaServiceTest {
     }
 
     @Test
-    @DisplayName("Quando buscar por marca isBlanck, deve lançar exeção 400 (BAD_REQUEST)")
-    void deveLancarExecaoQuandoPassarNomeVazio(){
+    @DisplayName("Quando buscar por marca isBlanck, deve lançar exceção 400 (BAD_REQUEST)")
+    void deveLancarExcecaoQuandoPassarNomeVazio(){
         ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> marcaService.buscarPorNomeMarca(" "));
         assertEquals(HttpStatus.BAD_REQUEST, exception.getStatusCode(), "O status HTTP esperado é 400 (BAD_REQUEST)");
     }
@@ -160,8 +160,8 @@ class MarcaServiceTest {
     }
 
     @Test
-    @DisplayName("Quando passar um Id que não existe no banco de dados para atualizar a marca, deve lançar exeção 404 (NOT_FOUND)")
-    void deveLancarExecaoQuandoNaoExistirMarcaPorIdPassadoMetodoAtualizarMarca(){
+    @DisplayName("Quando passar um Id que não existe no banco de dados para atualizar a marca, deve lançar exceção 404 (NOT_FOUND)")
+    void deveLancarExcecaoQuandoNaoExistirMarcaPorIdPassadoMetodoAtualizarMarca(){
         Marca marca = new Marca();
         ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> marcaService.atualizarMarca(50,marca));
         assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode(), "O status HTTP esperado é 404 (NOT FOUND)");
@@ -185,8 +185,8 @@ class MarcaServiceTest {
     }
 
     @Test
-    @DisplayName("Quando passar um Id que não existe no banco de dados para deletar a marca, deve lançar exeção 404 (NOT_FOUND)")
-    void deveLancarExecaoQuandoNaoExistirMarcaPorIdPassadoNoMetodoDeletar(){
+    @DisplayName("Quando passar um Id que não existe no banco de dados para deletar a marca, deve lançar exceção 404 (NOT_FOUND)")
+    void deveLancarExcecaoQuandoNaoExistirMarcaPorIdPassadoNoMetodoDeletar(){
         ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> marcaService.deletarMarca(50));
         assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode(), "O status HTTP esperado é 404 (NOT FOUND)");
     }

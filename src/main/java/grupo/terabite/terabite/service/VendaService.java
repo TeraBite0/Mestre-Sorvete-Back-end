@@ -7,7 +7,7 @@ import grupo.terabite.terabite.repository.VendaProdutoRepository;
 import grupo.terabite.terabite.repository.VendaRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatusCode;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -15,7 +15,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -28,18 +27,13 @@ public class VendaService {
 
     public List<Venda> listarVenda() {
         List<Venda> vendas = vendaRepository.findAllByOrderByDataCompraDesc();
-        if (vendas.isEmpty()) {
-            throw new ResponseStatusException(HttpStatusCode.valueOf(204));
-        }
+        if (vendas.isEmpty()) throw new ResponseStatusException(HttpStatus.NO_CONTENT);
+
         return vendas;
     }
 
     public Venda buscarVendaPorId(Integer id) {
-        Optional<Venda> vendasOpt = vendaRepository.findById(id);
-        if (vendasOpt.isEmpty()) {
-            throw new ResponseStatusException(HttpStatusCode.valueOf(404));
-        }
-        return vendasOpt.get();
+        return vendaRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NO_CONTENT));
     }
 
     public Venda criarVenda(List<VendaProduto> vendaProdutos) {
@@ -50,13 +44,13 @@ public class VendaService {
             vp.setVenda(venda);
             Integer qtdEmEstoqueProduto = loteService.produtoEmEstoque(vp.getProduto().getId());
 
-            if (vp.getQtdProdutosVendido() < 0 || !vp.getProduto().getIsAtivo()) {
+            if (vp.getQtdProdutosVendido() < 0 || Boolean.TRUE.equals(!vp.getProduto().getIsAtivo())) {
                 String message = "Venda inválida, Produto inativo";
                 if (qtdEmEstoqueProduto < vp.getQtdProdutosVendido()) {
                     message = "Produto fora de estoque";
                 }
-                vendaRepository.deleteById(venda.getId());
-                throw new ResponseStatusException(HttpStatusCode.valueOf(400), message);
+                vendaRepository.deleteById(novaVenda.getId());
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, message);
             }
 
             if (qtdEmEstoqueProduto - vp.getQtdProdutosVendido() < 1) {
@@ -76,16 +70,16 @@ public class VendaService {
     }
 
     public Venda atualizarVenda(Integer id, List<VendaProduto> vendaProdutos) {
-        Venda venda = vendaRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatusCode.valueOf(404)));
+        Venda venda = vendaRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         vendaProdutoRepository.deleteByVendaId(id);
 
         for (VendaProduto vp : vendaProdutos) {
             vp.setVenda(venda);
 
-            if (vp.getQtdProdutosVendido() < 0 || !vp.getProduto().getIsAtivo()) { // Validação da venda (falta validar se o protudo existe em estoque)
+            if (vp.getQtdProdutosVendido() < 0 || Boolean.TRUE.equals(!vp.getProduto().getIsAtivo())) { // Validação da venda (falta validar se o protudo existe em estoque)
                 vendaRepository.deleteById(venda.getId());
-                throw new ResponseStatusException(HttpStatusCode.valueOf(400));
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
             }
         }
 
@@ -94,11 +88,7 @@ public class VendaService {
 
     @Transactional
     public void deletarVenda(Integer id) {
-        Venda venda = vendaRepository.findById(id).orElse(null);
-
-        if (venda == null) {
-            throw new ResponseStatusException(HttpStatusCode.valueOf(404));
-        }
+        if (!vendaRepository.existsById(id)) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         vendaProdutoRepository.deleteByVendaId(id);
         vendaRepository.deleteById(id);
     }

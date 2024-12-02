@@ -50,9 +50,7 @@ public class PerdaService {
     }
 
     public void deletarPerda(Integer id) {
-        if (!perdaRepository.existsById(id)) {
-            throw new ResponseStatusException(HttpStatusCode.valueOf(404));
-        }
+        if (!perdaRepository.existsById(id)) throw new ResponseStatusException(HttpStatusCode.valueOf(404));
         perdaRepository.deleteById(id);
     }
 }

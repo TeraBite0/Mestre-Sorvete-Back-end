@@ -59,7 +59,7 @@ class SubtipoServiceTest {
 
     @Test
     @DisplayName("Quando o banco de dados não possui subtipos, o serviço deve lançar ResponseStatusException com status 204 (NO_CONTENT)")
-    void deveLancarExecaoListarSubtipo() {
+    void deveLancarExcecaoListarSubtipo() {
         when(subtipoRepository.findAll()).thenReturn(Collections.emptyList());
 
         ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> subtipoService.listarSubtipo());
@@ -83,8 +83,8 @@ class SubtipoServiceTest {
     }
 
     @Test
-    @DisplayName("Quando buscar por ID inexistente, deve lançar exeção 204 (NOT_FOUND)")
-    void deveLancarExecaoBuscarPorId() {
+    @DisplayName("Quando buscar subtipo por ID inexistente, deve lançar exceção 204 (NO_CONTENT)")
+    void deveLancarExcecaoBuscarSubtipoPorId() {
         when(subtipoRepository.findById(Mockito.anyInt())).thenReturn(Optional.empty());
 
         ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> subtipoService.buscarPorId(2));
@@ -92,8 +92,8 @@ class SubtipoServiceTest {
     }
 
     @Test
-    @DisplayName("Quando buscar por Id existente, deve retornar o subtipo correspondente")
-    void deveRetornarBuscarPorId() {
+    @DisplayName("Quando buscar subtipo por Id existente, deve retornar o subtipo correspondente")
+    void deveRetornarBuscarSubtipoPorId() {
         Subtipo subtipoExistente = subtipos.get(0);
         when(subtipoRepository.findById(1)).thenReturn(Optional.of(subtipoExistente));
 
@@ -112,8 +112,8 @@ class SubtipoServiceTest {
     }
 
     @Test
-    @DisplayName("Qunado buscar por subtipo ignore case não existente, deve lançar exeção 404 (NOT_FOUND)")
-    void deveLancarExecaoBuscarPorNomeIgnoreCaseSubtipo() {
+    @DisplayName("Qunado buscar por subtipo ignore case não existente, deve lançar exceção 404 (NOT_FOUND)")
+    void deveLancarExcecaoBuscarPorNomeIgnoreCaseSubtipo() {
         ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> subtipoService.buscarPorNomeSubtipo(" "));
         assertEquals(HttpStatus.BAD_REQUEST, exception.getStatusCode(), "O status HTTP esperado é 400 (BAD_REQUEST)");
     }

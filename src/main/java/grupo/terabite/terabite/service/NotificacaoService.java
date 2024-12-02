@@ -39,6 +39,12 @@ public class NotificacaoService {
     }
 
     public Notificacao criarNotificacao(Notificacao novaNotificacao) {
+
+        // Validação de duplicatas
+        if(!notificacaoRepository.findByEmailAndProdutoId(novaNotificacao.getEmail(), novaNotificacao.getProduto().getId()).isEmpty()){
+            throw new ResponseStatusException(HttpStatusCode.valueOf(409));
+        }
+
         return notificacaoRepository.save(novaNotificacao);
     }
 

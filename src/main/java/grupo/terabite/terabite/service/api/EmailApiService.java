@@ -29,6 +29,9 @@ public class EmailApiService {
     final Session session;
 
     public void enviarAlertaDeProdutos(List<Notificacao> notificacoes) {
+        if(notificacoes.isEmpty()){
+            return;
+        }
         montarEmailsDeAlerta(notificacoes);
     }
 
@@ -38,7 +41,8 @@ public class EmailApiService {
         Notificacao n = notificacoes.get(notificacoes.size() - 1);
         String destinatario = n.getEmail();
         String assunto = String.format("Produto %s disponível!", n.getProduto().getNome());
-        String body = "";
+        String body = "Olá amante de sorvete!,\nO produto %s chegou em estoque!\nVocê pediu e ele chegou! \n \n<img src='https://terabite.blob.core.windows.net/terabite-container/%d' alt='Produto'/>\n\nCorra e garanta o seu! \n"
+                .formatted(notificacoes.get(0).getProduto().getNome(), notificacoes.get(0).getProduto().getId());
 
         enviarEmail(destinatario, assunto, body);
         notificacoes.remove(notificacoes.size() - 1);
@@ -72,7 +76,7 @@ public class EmailApiService {
 
     public Message construirEmail(String destinatario, String assunto, String bodyText) {
         Message message = new MimeMessage(session);
-        String headerPath = "email/header.png";
+        //String headerPath = "email/header.png";
         String footerPath = "email/footer.png";
 
         try {
@@ -82,25 +86,27 @@ public class EmailApiService {
 
             message.setSubject(assunto);
 
-            MimeBodyPart header = new MimeBodyPart();
-            InputStream imageStreamHeader = EmailApiService.class.getClassLoader().getResourceAsStream(headerPath);
+            // MimeBodyPart header = new MimeBodyPart();
+            //InputStream imageStreamHeader = EmailApiService.class.getClassLoader().getResourceAsStream(headerPath);
 
             MimeBodyPart footer = new MimeBodyPart();
             InputStream imageStreamFooter = EmailApiService.class.getClassLoader().getResourceAsStream(footerPath);
 
-            if (imageStreamHeader == null || imageStreamFooter == null) {
+            if (imageStreamFooter == null) {
                 throw new FileNotFoundException("Imagem não encontrada no classpath.");
             }
 
-            File headerFile = Files.createTempFile("header", ".png").toFile();
+            //File headerFile = Files.createTempFile("header", ".png").toFile();
             File footerFile = Files.createTempFile("footer", ".png").toFile();
 
-            Files.copy(imageStreamHeader, headerFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            //Files.copy(imageStreamHeader, headerFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
             Files.copy(imageStreamFooter, footerFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 
+            /*
             header.attachFile(headerFile);
             header.setContentID("<header>");
             header.setDisposition(MimeBodyPart.INLINE);
+            */
 
             footer.attachFile(footerFile);
             footer.setContentID("<footer>");
@@ -119,14 +125,14 @@ public class EmailApiService {
 
             Multipart fullBody = new MimeMultipart("alternative");
             fullBody.addBodyPart(text);
-            fullBody.addBodyPart(header);
+            //fullBody.addBodyPart(header);
             fullBody.addBodyPart(footer);
             fullBody.addBodyPart(body);
 
             message.setContent(fullBody);
 
             // Excluindo arquivos temporarios
-            headerFile.deleteOnExit();
+            //headerFile.deleteOnExit();
             footerFile.deleteOnExit();
 
         } catch (Exception e) {

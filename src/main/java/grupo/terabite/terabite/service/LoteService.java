@@ -45,6 +45,7 @@ public class LoteService {
         if (!p.getEmEstoque()) { // atualiza o status de estoque do produto apenas se necessário
             p.setEmEstoque(true);
             produtoService.atualizarProduto(p.getId(), p);
+            notificacaoService.notificarProdutoEmEstoque(p);
         }
 
         return loteRepository.save(novoLote);

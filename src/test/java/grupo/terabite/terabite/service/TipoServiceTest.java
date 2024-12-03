@@ -46,7 +46,7 @@ class TipoServiceTest {
 
     @Test
     @DisplayName("Quando o banco de dados não possui tipos, o serviço deve lançar ResponseStatusException com status 204 (NO_CONTENT)")
-    void deveLancarExecaoListarTipo() {
+    void deveLancarExcecaoListarTipo() {
         when(tipoRepository.findAll()).thenReturn(Collections.emptyList());
 
         ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> tipoService.listarTipo());
@@ -70,8 +70,8 @@ class TipoServiceTest {
     }
 
     @Test
-    @DisplayName("Quando buscar por Id inexistente, deve lançar exeção 204 (NOT_FOUND)")
-    void deveLancarExecaoBuscarPorId() {
+    @DisplayName("Quando buscar por Id inexistente, deve lançar exceção 204 (NO_CONTENT)")
+    void deveLancarExcecaoBuscarTipoPorId() {
         when(tipoRepository.findById(Mockito.anyInt())).thenReturn(Optional.empty());
 
         ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> tipoService.buscarPorId(2));
@@ -80,7 +80,7 @@ class TipoServiceTest {
 
     @Test
     @DisplayName("Quando buscar por Id existente, deve retornar o tipo correspondente")
-    void deveRetornarBuscarPorId() {
+    void deveRetornarBuscarTipoPorId() {
         Tipo tipoExistente = tipos.get(0);
         when(tipoRepository.findById(1)).thenReturn(Optional.of(tipoExistente));
 
@@ -98,8 +98,8 @@ class TipoServiceTest {
     }
 
     @Test
-    @DisplayName("Qunado buscar por tipo ignore case não existente, deve lançar exeção 404 (NOT_FOUND)")
-    void deveLancarExecaoBuscarPorNomeIgnoreCaseTipo() {
+    @DisplayName("Qunado buscar por tipo ignore case não existente, deve lançar exceção 404 (NOT_FOUND)")
+    void deveLancarExcecaoBuscarPorNomeIgnoreCaseTipo() {
         ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> tipoService.buscarPorNomeTipo(" "));
         assertEquals(HttpStatus.BAD_REQUEST, exception.getStatusCode(), "O status HTTP esperado é 400 (BAD_REQUEST)");
     }

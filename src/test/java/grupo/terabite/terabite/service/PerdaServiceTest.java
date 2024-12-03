@@ -40,18 +40,12 @@ class PerdaServiceTest {
     @Mock
     private LoteService loteService;
 
-    public List<Marca> marcas;
-
-    public List<Tipo> tipos;
-
-    public List<Subtipo> subtipos;
-
-    public List<Produto> produtos;
-
-    public List<Lote> lotes;
-
-    public List<Perda> perdasEsperadas;
-
+    List<Marca> marcas;
+    List<Tipo> tipos;
+    List<Subtipo> subtipos;
+    List<Produto> produtos;
+    List<Lote> lotes;
+    List<Perda> perdasEsperadas;
 
     @BeforeEach
     protected void setup() {
@@ -91,10 +85,10 @@ class PerdaServiceTest {
         );
 
         lotes = List.of(
-                new Lote(1, LocalDate.parse("2024-10-02"), LocalDate.parse("2024-10-05"), LocalDate.parse("2025-05-20"), 50, 150.00, produtos.get(0)),
-                new Lote(1, LocalDate.parse("2024-10-02"), LocalDate.parse("2024-10-05"), LocalDate.parse("2025-05-20"), 50, 150.00, produtos.get(0)),
-                new Lote(1, LocalDate.parse("2024-10-02"), LocalDate.parse("2024-10-05"), LocalDate.parse("2025-05-20"), 50, 150.00, produtos.get(0)),
-                new Lote(1, LocalDate.parse("2024-10-02"), LocalDate.parse("2024-10-05"), LocalDate.parse("2025-05-20"), 50, 150.00, produtos.get(0))
+                new Lote(1,  LocalDate.of(2024, 10, 15),  LocalDate.of(2024, 10, 15),  LocalDate.of(2024, 10, 15), 50, 150.00, produtos.get(0)),
+                new Lote(1,  LocalDate.of(2024, 10, 15),  LocalDate.of(2024, 10, 15),  LocalDate.of(2024, 10, 15), 50, 150.00, produtos.get(0)),
+                new Lote(1,  LocalDate.of(2024, 10, 15),  LocalDate.of(2024, 10, 15),  LocalDate.of(2024, 10, 15), 50, 150.00, produtos.get(0)),
+                new Lote(1,  LocalDate.of(2024, 10, 15),  LocalDate.of(2024, 10, 15),  LocalDate.of(2024, 10, 15), 50, 150.00, produtos.get(0))
         );
     }
 
@@ -126,7 +120,7 @@ class PerdaServiceTest {
 
     @Test
     @DisplayName("Quando buscar por ID inexistente, deve lançar ResponseStatusException com status 404 (NOT_FOUND)")
-    void deveLancarExecaoQuandoNaoEncontrarPerdaPorID() {
+    void deveLancarExcecaoQuandoNaoEncontrarPerdaPorID() {
         ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> perdaService.buscarPerdaPorId(10));
         assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode(), "O status HTTP esperado é 404 (NOT_FOUND)");
     }
@@ -179,8 +173,8 @@ class PerdaServiceTest {
     }
 
     @Test
-    @DisplayName("Quando passar um Id que não existe no banco de dados para atualizar a perda, deve lançar exeção 404 (NOT_FOUND)")
-    void deveLancarExecaoQuandoNaoExistirPerdaPorIdPassadoMetodoAtualizarPerda(){
+    @DisplayName("Quando passar um Id que não existe no banco de dados para atualizar a perda, deve lançar exceção 404 (NOT_FOUND)")
+    void deveLancarExcecaoQuandoNaoExistirPerdaPorIdPassadoMetodoAtualizarPerda(){
         ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> perdaService.atualizarPerda(50,perdasEsperadas.get(0)));
         assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode(), "O status HTTP esperado é 404 (NOT FOUND)");
     }
@@ -211,8 +205,8 @@ class PerdaServiceTest {
     }
 
     @Test
-    @DisplayName("Quando passar um Id que não existe no banco de dados para deletar a perda, deve lançar exeção 404 (NOT_FOUND)")
-    void deveLancarExecaoQuandoNaoExistirPerdaPorIdPassadoNoMetodoDeletar(){
+    @DisplayName("Quando passar um Id que não existe no banco de dados para deletar a perda, deve lançar exceção 404 (NOT_FOUND)")
+    void deveLancarExcecaoQuandoNaoExistirPerdaPorIdPassadoNoMetodoDeletar(){
         ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> perdaService.deletarPerda(50));
         assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode(), "O status HTTP esperado é 404 (NOT FOUND)");
     }

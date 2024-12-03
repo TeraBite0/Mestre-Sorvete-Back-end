@@ -156,7 +156,7 @@ INSERT INTO USUARIO
         (EMAIL_USUARIO, SENHA_USUARIO)
 VALUES ('josue@gmail.com', '$2a$10$0/TKTGxdREbWaWjWYhwf6e9P1fPOAMMNqEnZgOG95jnSkHSfkkIrC');
 
-/*
+
 
 INSERT INTO PERDA
         (FK_ID_PROD_PERD, DT_PERDA_PERD, QTD_PRODUTO_PERD)
@@ -165,12 +165,14 @@ VALUES  (2, '2024-10-05', 2),
         (6, '2024-05-13', 5),
         (9, '2024-07-26', 4),
         (30, '2024-06-30', 2);
-
+/*
+    Comentar de volta quando terminar
+*/
 INSERT INTO VENDAS
         (DATA_COMPRA_VEND)
 VALUES  ('2024-10-13T15:45:20'),
-        ('2024-10-05'),
-        ('2024-10-06'),
+        ('2024-12-03T15:45:20'),
+        ('2024-12-03T15:45:20'),
         ('2024-10-08'),
         ('2024-10-09'),
         ('2024-10-10'),
@@ -246,4 +248,3 @@ VALUES  ('2024-10-02', '2024-10-05', '2025-05-20', 50, 150.00, 1),
         ('2024-10-02', '2024-10-05', '2025-05-20', 50, 150.00, 62),
         ('2024-10-02', '2024-10-05', '2025-05-20', 50, 150.00, 110);
 
-*/

@@ -46,31 +46,33 @@ public class Escritor {
             writer.write("%s;%s\n".formatted(LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy - HH:mm:ss")), "Santo André"));
 
             Double valorTotal = 0.0;
-            writer.write("Valor total de todos os lotes\n");
-            writer.write("%.2f\n".formatted(calcularTotalDeLites(valorTotal)));
+            writer.write("Valor total de todos os lotes;Total de venda de todos os produtos\n");
+            writer.write("%.2f;%.2f\n".formatted(calcularTotalDeLotes(valorTotal), calcularTotalVendido(valorTotal)));
 
-            writer.write("Total de venda de todos os produtos\n");
-            writer.write("%.2f\n".formatted(calcularTotalVendido(valorTotal)));
 
-            //TODO: Finalizar
             writer.write("Vendas de Hoje\n");
-            writer.write("Total de venda do dia atual\n");
-            writer.write("%.2f\n".formatted(calcularTotalDeVendasDoDia(valorTotal)));
-
+            Double totalDeVendasDodia = 0.0;
             writer.write("Data das vendas;Nome do produto;Valor unitário;Quantidade comprada;Valor total das vendas de cada produto\n");
             for (int i = 0; i < listVendas.getTamanho(); i++) {
                 LocalDateTime data = listVendas.getElemento(i).getDataCompra();
                 if(data.toLocalDate().equals(LocalDate.now())){
                     for (int j = 0; j < listVendaProdutos.getTamanho(); j++) {
-                        writer.write("%s;%s;%.2f;%s\n".formatted(
-                                data,
-                                listVendaProdutos.getElemento(i).getProduto().getNome(),
-                                listVendaProdutos.getElemento(i).getProduto().getPreco(),
-                                listVendaProdutos.getElemento(i).getQtdProdutosVendido(),
-                                calcularTotalDeVendasDeCadaProduto(valorTotal)));
+                        if(listVendaProdutos.getElemento(j).getVenda().getDataCompra().equals(listVendas.getElemento(i).getDataCompra())){
+                            writer.write("%s;%s;%.2f;%s;%.2f\n".formatted(
+                                    data,
+                                    listVendaProdutos.getElemento(j).getProduto().getNome(),
+                                    listVendaProdutos.getElemento(j).getProduto().getPreco(),
+                                    listVendaProdutos.getElemento(j).getQtdProdutosVendido(),
+                                    listVendaProdutos.getElemento(j).getQtdProdutosVendido() * listVendaProdutos.getElemento(j).getProduto().getPreco()));
+                            totalDeVendasDodia += listVendaProdutos.getElemento(j).getQtdProdutosVendido() * listVendaProdutos.getElemento(j).getProduto().getPreco();
+                        }
                     }
                 }
             }
+
+            writer.write("Total de venda do dia atual\n");
+            writer.write("%.2f\n".formatted(totalDeVendasDodia));
+
             writer.write("Historico de todos os produtos cadastrados\n");
             writer.write("Código do Produto;Nome do Produto;Preço (R$);Em Estoque;Categoria/Subtipo;Marca;Status produto ativo;Valor do lote;Quantidade de lote comprado;Total de venda desse produto\n");
             for (int i = 0; i < listProtudos.getTamanho(); i++) {
@@ -101,7 +103,7 @@ public class Escritor {
         produtoRepository.findAll().stream().forEach(produto -> {listProtudos.adiciona(produto);});
     }
 
-    public Double calcularTotalDeLites(Double soma){
+    public Double calcularTotalDeLotes(Double soma){
         PilhaObj<Double> pilha = new PilhaObj<>(listEstoques.getTamanho());
 
         for (int i = 0; i < listEstoques.getTamanho(); i++) pilha.push(listEstoques.getElemento(i).getValorLote());
@@ -117,20 +119,6 @@ public class Escritor {
             fila.insert(listVendaProdutos.getElemento(i).getQtdProdutosVendido() * listEstoques.getElemento(i).getProduto().getPreco());
         }
         for (int i = 0; i < fila.getTamanho(); i++) soma += fila.poll();
-
-        return soma;
-    }
-
-    // TODO: Fazer calculo
-    public Double calcularTotalDeVendasDoDia(Double soma){
-        PilhaObj<Double> pilha = new PilhaObj<>(listEstoques.getTamanho());
-
-        return soma;
-    }
-
-    // TODO: Fazer calculo
-    public Double calcularTotalDeVendasDeCadaProduto(Double soma){
-        FilaObj<Double> fila = new FilaObj<>(listVendaProdutos.getTamanho());
 
         return soma;
     }

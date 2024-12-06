@@ -1,29 +1,14 @@
 Data e hora;Cidade
-03/12/2024 - 13:41:46;Santo André
-Valor total de todos os lotes
-3300,00
-Total de venda de todos os produtos
-1340,00
-Vendas do dia Hoje
-Data das vendas;Nome do produto;Valor unitário;Quantidade comprada;Valor total da venda
-2024-12-03T15:45:20;Biscoitos;10,00;20
-2024-12-03T15:45:20;Biscoitos;10,00;20
-2024-12-03T15:45:20;Biscoitos;10,00;20
-2024-12-03T15:45:20;Biscoitos;10,00;20
-2024-12-03T15:45:20;Biscoitos;10,00;20
-2024-12-03T15:45:20;Biscoitos;10,00;20
-2024-12-03T15:45:20;Biscoitos;10,00;20
-2024-12-03T15:45:20;Biscoitos;10,00;20
-2024-12-03T15:45:20;Biscoitos;10,00;20
-2024-12-03T15:45:20;premium: chocolate trufado;10,00;40
-2024-12-03T15:45:20;premium: chocolate trufado;10,00;40
-2024-12-03T15:45:20;premium: chocolate trufado;10,00;40
-2024-12-03T15:45:20;premium: chocolate trufado;10,00;40
-2024-12-03T15:45:20;premium: chocolate trufado;10,00;40
-2024-12-03T15:45:20;premium: chocolate trufado;10,00;40
-2024-12-03T15:45:20;premium: chocolate trufado;10,00;40
-2024-12-03T15:45:20;premium: chocolate trufado;10,00;40
-2024-12-03T15:45:20;premium: chocolate trufado;10,00;40
+06/12/2024 - 14:45:45;Santo André
+Valor total de todos os lotes;Total de venda de todos os produtos
+3300,00;1340,00
+Vendas de Hoje
+Data das vendas;Nome do produto;Valor unitário;Quantidade comprada;Valor total das vendas de cada produto
+2024-12-06T15:45:20;premium: chocolate trufado;10,00;40;400,00
+2024-12-06T15:45:20;avelã;10,00;10;100,00
+2024-12-06T15:50:20;premium: frutas vermelha;10,00;34;340,00
+Total de venda do dia atual
+840,00
 Historico de todos os produtos cadastrados
 Código do Produto;Nome do Produto;Preço (R$);Em Estoque;Categoria/Subtipo;Marca;Status produto ativo;Valor do lote;Quantidade de lote comprado;Total de venda desse produto
 1;Nescolak;10,00;false;Extrusado;Senhor Sorvete;true;150,00;50;300,00

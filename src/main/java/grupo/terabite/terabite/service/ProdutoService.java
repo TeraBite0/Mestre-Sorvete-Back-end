@@ -12,6 +12,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -75,13 +76,13 @@ public class ProdutoService {
     }
 
     public List<Produto> popular() {
-        LocalDate mesPassado = LocalDate.now().minusMonths(1);
-        List<ProdutoQuantidadeDTO> produtoQuantidadeDTO = vendaProdutoRepository.qtdVendidosPorMesEAno(mesPassado.getMonthValue(), mesPassado.getYear());
+        LocalDate mesPassado = LocalDate.now().minusMonths(2);
+        List<ProdutoQuantidadeDTO> produtoQuantidadeDTO = Optional.of(vendaProdutoRepository.qtdVendidosPorMesEAno(mesPassado.getMonthValue(), mesPassado.getYear()))
+                .filter(list -> !list.isEmpty())
+                .orElseThrow(() -> new IllegalStateException("Não tem produtos vendidos nesse mês ainda"));
         List<Produto> populares = new ArrayList<>();
-        for(int i = 0; populares.size() < 5 || i == produtoQuantidadeDTO.size() - 1; i++) {
-            if (produtoQuantidadeDTO.get(i).getProduto().getIsAtivo()) {
-                populares.add(produtoQuantidadeDTO.get(i).getProduto());
-            }
+        for(int i = 0; i < 5; i++) {
+            populares.add(produtoQuantidadeDTO.get(i).getProduto());
         }
         return populares;
     }

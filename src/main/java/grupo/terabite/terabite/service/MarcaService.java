@@ -47,7 +47,7 @@ public class MarcaService {
     public Marca atualizarMarca(Integer id, Marca atualizarMarca) {
         if (!marcaRepository.existsById(id)) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 
-        atualizarMarca.setId(null);
+        atualizarMarca.setId(id);
         return marcaRepository.save(atualizarMarca);
     }
 

@@ -354,18 +354,17 @@ class ProdutoServiceTest {
         }
     }
 
+
+
     @Test
-    @DisplayName("Lista todos por populares corretamente")
-    void popular() {
+    @DisplayName("Lista no máximo 5 produtos mais populares quando existirem 5 ou mais produtos registrados")
+    void listaPopularesQuandoExistiremCincoOuMaisProdutos() {
         Mockito.when(vendaProdutoRepository.qtdVendidosPorMesEAno(Mockito.any(), Mockito.any())).thenReturn(
                 List.of( new ProdutoQuantidadeDTO(produtos.get(0),  10L),
-                        new ProdutoQuantidadeDTO(produtos.get(2), 9L),
-                        new ProdutoQuantidadeDTO(produtos.get(4), 7L),
+                        new ProdutoQuantidadeDTO(produtos.get(5), 9L),
                         new ProdutoQuantidadeDTO(produtos.get(1), 6L),
                         new ProdutoQuantidadeDTO(produtos.get(6), 5L),
-                        new ProdutoQuantidadeDTO(produtos.get(7), 5L)
-                        )
-        );
+                        new ProdutoQuantidadeDTO(produtos.get(7), 5L)));
 
         List<Produto> populares = null;
 
@@ -377,7 +376,28 @@ class ProdutoServiceTest {
         }
 
         assertNotNull(populares, "Os produtos encontrados não podem ser nulo");
-        assertTrue(populares.size() <= 5, "Deve retornar no máximo 5 produtos.");
+        assertTrue(populares.size() >= 5, "Deve retornar no máximo 5 produtos.");
+        assertTrue(populares.stream().allMatch(Produto::getIsAtivo), "Todos os produtos devem estar ativos.");
+    }
+
+    @Test
+    @DisplayName("Lista menos de 5 produtos mais populares quando existirem menos de 5 produtos registrados")
+    void listaPopularesQuandoExistiremMenosDeCincoProdutos() {
+        Mockito.when(vendaProdutoRepository.qtdVendidosPorMesEAno(Mockito.any(), Mockito.any())).thenReturn(
+                List.of( new ProdutoQuantidadeDTO(produtos.get(0),  10L),
+                        new ProdutoQuantidadeDTO(produtos.get(1), 9L)));
+
+        List<Produto> populares = null;
+
+        try {
+            populares = produtoService.popular();
+
+        } catch (Exception e) {
+            fail("Erro ao buscar Produtos Populares: " + (e.getMessage() != null ? e.getMessage() : e.getCause()));
+        }
+
+        assertNotNull(populares, "Os produtos encontrados não podem ser nulo");
+        assertTrue(populares.size() < 5, "Deve retornar menos que 5 produtos.");
         assertTrue(populares.stream().allMatch(Produto::getIsAtivo), "Todos os produtos devem estar ativos.");
     }
 }

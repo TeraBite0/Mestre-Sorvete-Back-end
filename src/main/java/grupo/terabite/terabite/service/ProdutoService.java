@@ -77,7 +77,7 @@ public class ProdutoService {
 
     public List<Produto> popular() {
         List<Produto> populares = new ArrayList<>();
-        LocalDate mesPassado = LocalDate.now().minusMonths(1);
+        LocalDate mesPassado = LocalDate.now().minusMonths(2);
         List<ProdutoQuantidadeDTO> produtoQuantidadeDTO = Optional.of(vendaProdutoRepository.qtdVendidosPorMesEAno(mesPassado.getMonthValue(), mesPassado.getYear()))
                 .filter(list -> !list.isEmpty())
                 .orElseThrow(() -> new IllegalStateException("Não tem produtos vendidos nesse mês ainda"));

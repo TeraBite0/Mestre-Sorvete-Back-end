@@ -378,6 +378,5 @@ class ProdutoServiceTest {
 
         assertNotNull(populares, "Os produtos encontrados não podem ser nulo");
         assertTrue(populares.size() <= 5, "Deve retornar no máximo 5 produtos.");
-        assertTrue(populares.stream().allMatch(Produto::getIsAtivo), "Todos os produtos devem estar ativos.");
     }
 }

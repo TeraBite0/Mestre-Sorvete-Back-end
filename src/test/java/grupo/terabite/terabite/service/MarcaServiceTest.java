@@ -107,6 +107,7 @@ class MarcaServiceTest {
     void deveCriarNovaMarcaQuandoBuscarPorNomeNaoExistente(){
         String nomeMarca = "Nova Marca";
         when(marcaRepository.findByNomeIgnoreCase(nomeMarca)).thenReturn(null);
+        when(marcaRepository.save(any())).thenReturn(new Marca(100, nomeMarca));
 
         Marca marca;
         try{
@@ -116,7 +117,8 @@ class MarcaServiceTest {
             return;
         }
 
-        assertNull(marca);
+        assertNotNull(marca);
+        assertEquals(nomeMarca, marca.getNome(), "O nome da marca retornada não está correto");
     }
 
     @Test

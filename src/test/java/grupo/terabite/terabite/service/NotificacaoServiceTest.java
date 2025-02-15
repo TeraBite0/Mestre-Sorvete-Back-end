@@ -3,7 +3,6 @@ package grupo.terabite.terabite.service;
 import grupo.terabite.terabite.entity.Notificacao;
 import grupo.terabite.terabite.entity.Produto;
 import grupo.terabite.terabite.repository.NotificacaoRepository;
-import grupo.terabite.terabite.repository.ProdutoRepository;
 import grupo.terabite.terabite.service.api.EmailApiService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -20,6 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("Notificações")
@@ -119,5 +120,15 @@ class NotificacaoServiceTest {
         RuntimeException exception = assertThrows(RuntimeException.class, () -> notificacaoService.notificarProdutoEmEstoque(produtos.get(2)), "Não deve ser possivel notificar um produto inativo");
         assertThrows(RuntimeException.class, () -> notificacaoService.notificarProdutoEmEstoque(produtos.get(3)), "Não deve ser possivel notificar um produto inativo");
         assertEquals("Erro ao notificar, produto inapto para notificar", exception.getMessage(), "Mensagem de erro, diferente do esperado");
+    }
+
+    @Test
+    @DisplayName("Não cria notificação duplicadas")
+    public void registrarNotificaçãoDuplicada(){
+        Mockito.when(notificacaoRepository.findByEmailAndProdutoId(Mockito.anyString(), Mockito.anyInt())).thenReturn(List.of(notificacoes.get(0)));
+
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> notificacaoService.criarNotificacao(notificacoes.get(0)), "Deve ser retornado erro ao criar notificação já ativa");
+        assertEquals(HttpStatusCode.valueOf(409), exception.getStatusCode(), "A resposta da exception de duplicados está incorreta");
+        Mockito.verify(notificacaoRepository, Mockito.never()).save(Mockito.any(Notificacao.class));
     }
 }

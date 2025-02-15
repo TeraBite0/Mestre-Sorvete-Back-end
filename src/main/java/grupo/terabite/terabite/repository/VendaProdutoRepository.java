@@ -23,6 +23,6 @@ public interface VendaProdutoRepository extends JpaRepository<VendaProduto, Inte
     List<VendaProduto> procurarVendasPorMesEAno(@Param("mes") Integer mes, @Param("ano") Integer ano);
 
 
-    @Query("SELECT new grupo.terabite.terabite.dto.internal.ProdutoQuantidadeDTO(vp.produto, SUM(vp.qtdProdutosVendido)) FROM VendaProduto vp WHERE MONTH(vp.venda.dataCompra) = :mes AND YEAR(vp.venda.dataCompra) = :ano GROUP BY vp.produto")
+    @Query("SELECT new grupo.terabite.terabite.dto.internal.ProdutoQuantidadeDTO(vp.produto, SUM(vp.qtdProdutosVendido)) FROM VendaProduto vp WHERE MONTH(vp.venda.dataCompra) = :mes AND YEAR(vp.venda.dataCompra) = :ano AND vp.produto.isAtivo = true GROUP BY vp.produto")
     List<ProdutoQuantidadeDTO> qtdVendidosPorMesEAno(@Param("mes") Integer mes, @Param("ano") Integer ano);
 }

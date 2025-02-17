@@ -38,22 +38,22 @@ public class VendaService {
 
     public Venda criarVenda(List<VendaProduto> vendaProdutos) {
         Venda novaVenda = new Venda(LocalDateTime.now());
-
         Venda venda = vendaRepository.save(novaVenda);
+
         for (VendaProduto vp : vendaProdutos) {
             vp.setVenda(venda);
             Integer qtdEmEstoqueProduto = loteService.produtoEmEstoque(vp.getProduto().getId());
+            Integer qtdProdutosVendido = vp.getQtdProdutosVendido();
 
-            if (vp.getQtdProdutosVendido() < 0 || Boolean.TRUE.equals(!vp.getProduto().getIsAtivo())) {
-                String message = "Venda inválida, Produto inativo";
-                if (qtdEmEstoqueProduto < vp.getQtdProdutosVendido()) {
-                    message = "Produto fora de estoque";
-                }
-                vendaRepository.deleteById(novaVenda.getId());
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, message);
+            if (Boolean.FALSE.equals(vp.getProduto().getIsAtivo())) {
+                validarDadosDaVenda("Venda inválida, Produto inativo", novaVenda.getId());
             }
 
-            if (qtdEmEstoqueProduto - vp.getQtdProdutosVendido() < 1) {
+            if (qtdEmEstoqueProduto < qtdProdutosVendido) {
+                validarDadosDaVenda("Produto fora de estoque", novaVenda.getId());
+            }
+
+            if (qtdEmEstoqueProduto - qtdProdutosVendido < 1) {
                 Produto p = produtoService.buscarPorId(vp.getProduto().getId());
                 p.setEmEstoque(false);
                 produtoService.atualizarProduto(vp.getProduto().getId(), p);
@@ -63,7 +63,6 @@ public class VendaService {
         vendaProdutoRepository.saveAll(vendaProdutos);
         return venda;
     }
-
 
     public List<VendaProduto> buscarProdutosPorVenda(Integer vendaId) {
         return vendaProdutoRepository.findByVendaId(vendaId);
@@ -98,5 +97,10 @@ public class VendaService {
         LocalDateTime endOfDay = data.atTime(LocalTime.MAX);
 
         return vendaRepository.findByDataCompraBetween(startOfDay, endOfDay);
+    }
+
+    public void validarDadosDaVenda(String message, Integer idProduto){
+        vendaRepository.deleteById(idProduto);
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, message);
     }
 }

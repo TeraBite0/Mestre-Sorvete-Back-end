@@ -20,8 +20,6 @@ import java.util.Scanner;
 
 @Service
 public class EmailApiService {
-    final String adminname = System.getenv("EMAIL_SUPORTE");
-    final String adminpassword = System.getenv("SENHA_APP_SUPORTE");
     final String username = System.getenv("EMAIL_BENEFICIARIO");
     final String password = System.getenv("SENHA_APP_EMAIL");
     final Properties props;
@@ -32,21 +30,16 @@ public class EmailApiService {
         if(notificacoes.isEmpty()){
             return;
         }
-        montarEmailsDeAlerta(notificacoes);
+        notificacoes.forEach((this::montarEmailsDeAlerta));
     }
 
-    private void montarEmailsDeAlerta(List<Notificacao> notificacoes) {
-        if (notificacoes.isEmpty()) return;
-
-        Notificacao n = notificacoes.get(notificacoes.size() - 1);
-        String destinatario = n.getEmail();
-        String assunto = String.format("Produto %s disponível!", n.getProduto().getNome());
+    private void montarEmailsDeAlerta(Notificacao notificacao) {
+        String destinatario = notificacao.getEmail();
+        String assunto = String.format("Produto %s disponível!", notificacao.getProduto().getNome());
         String body = "Olá amante de sorvete!,\nO produto %s chegou em estoque!\nVocê pediu e ele chegou! \n \n<img src='https://terabite.blob.core.windows.net/terabite-container/%d' alt='Produto'/>\n\nCorra e garanta o seu! \n"
-                .formatted(notificacoes.get(0).getProduto().getNome(), notificacoes.get(0).getProduto().getId());
+                .formatted(notificacao.getProduto().getNome(), notificacao.getProduto().getId());
 
         enviarEmail(destinatario, assunto, body);
-        notificacoes.remove(notificacoes.size() - 1);
-        montarEmailsDeAlerta(notificacoes);
     }
 
     public EmailApiService() {

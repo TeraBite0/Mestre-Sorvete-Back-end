@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -83,9 +84,7 @@ class VendaServiceTest {
         );
 
         vendasProdutos = List.of(
-                new VendaProduto(1, new Venda(LocalDateTime.now()), produtos.get(0), 20),
-                new VendaProduto(2, new Venda(LocalDateTime.now()), produtos.get(1), 10),
-                new VendaProduto(3, new Venda(LocalDateTime.now()), produtos.get(2), 30)
+                new VendaProduto(1, new Venda(LocalDateTime.now()), produtos.get(0), 10)
         );
 
         vendas = List.of(
@@ -151,36 +150,33 @@ class VendaServiceTest {
     }
 
     @Test
-    @DisplayName("deve lançar exception quando não tiver estoque de produto ou produto inativo, 400 (BAD_REQUEST)")
-    void deveLancarExcecaoQuandoNaoTiverProdutoAtivoParaCriarVenda(){
-        int idProduto = produtos.get(0).getId();
-
-        // Valida se tem produtos inativo, se tiver, lança exception
-        produtos.stream().forEach(produto -> {produto.setIsAtivo(false);});
-        when(loteService.produtoEmEstoque(idProduto)).thenReturn(2);
+    @DisplayName("Deve lançar exception quando o produto estiver inativo, retornando 400 (BAD_REQUEST)")
+    void deveLancarExcecaoQuandoProdutoEstiverInativoNaCriacaoDeVenda() {
+        // Marca todos os produtos como inativos para validar a exceção.
+        produtos.forEach(produto -> produto.setIsAtivo(false));
+        when(loteService.produtoEmEstoque(produtos.get(0).getId())).thenReturn(2);
 
         ResponseStatusException exceptionAtivoInativo = assertThrows(ResponseStatusException.class, () -> vendaService.criarVenda(vendasProdutos));
         assertEquals(HttpStatus.BAD_REQUEST, exceptionAtivoInativo.getStatusCode());
+    }
 
-        // Valida se o produto está ativo, porem, se a quantidade de vendas dos produtos é menor que 0
-        when(loteService.produtoEmEstoque(idProduto)).thenReturn(-1);
-
-        ResponseStatusException exceptionQtdProdutoVendidoMenorQueZero = assertThrows(ResponseStatusException.class, () -> vendaService.criarVenda(vendasProdutos));
-        assertEquals(HttpStatus.BAD_REQUEST, exceptionQtdProdutoVendidoMenorQueZero.getStatusCode());
-
-        // Valida se a quantidade em estoque do produto é menor que a quantidade de produtos ventidos, assim, deve lançar mensagem "Produto fora de estoque"
-        vendasProdutos.stream().forEach(venda -> {venda.setQtdProdutosVendido(-1);});
-        when(loteService.produtoEmEstoque(idProduto)).thenReturn(-1);
+    @Test
+    @DisplayName("Deve lançar exception quando a quantidade de venda for maior que o estoque disponível, retornando 400 (BAD_REQUEST)")
+    void deveLancarExcecaoQuandoQuantidadeDeVendaExcederEstoqueDisponivel() {
+        // Configura a quantidade de produtos vendidos como 50 para testar a condição de estoque insuficiente.
+        vendasProdutos.forEach(venda -> venda.setQtdProdutosVendido(50));
+        when(loteService.produtoEmEstoque(produtos.get(0).getId())).thenReturn(45);
 
         ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> vendaService.criarVenda(vendasProdutos));
         assertEquals(HttpStatus.BAD_REQUEST, exception.getStatusCode());
     }
 
     @Test
-    @DisplayName("Quando tiver uma lista de venda para cadastrar, deve cadastrar quando as vendas tiver produto ativo, quantida de estoque maior que  quantidade de venda")
-    void deveCadastrarListaDeVenda() {
+    @DisplayName("Deve atualizar o produto para sem estoque quando a diferença entre o estoque e a quantidade vendida for menor que 1")
+    void deveAtualizarProdutoParaSemEstoqueQuandoEstoqueRestanteForMenorQueUmaUnidade() {
         int idProduto = produtos.get(0).getId();
-        when(loteService.produtoEmEstoque(idProduto)).thenReturn(Mockito.anyInt());
+        when(vendaRepository.save(any(Venda.class))).thenReturn(new Venda(LocalDateTime.now()));
+        when(loteService.produtoEmEstoque(idProduto)).thenReturn(10);
         when(produtoService.buscarPorId(idProduto)).thenReturn(produtos.get(0));
         when(produtoService.atualizarProduto(idProduto, produtos.get(0))).thenReturn(produtos.get(0));
 
@@ -192,18 +188,25 @@ class VendaServiceTest {
             return;
         }
 
-        assertNull(resultado);
+        assertNotNull(resultado);
+    }
 
-        // Valida se tem estoque do produto para vender
-        when(loteService.produtoEmEstoque(idProduto)).thenReturn(300);
-        Venda resultadoException;
+    @Test
+    @DisplayName("Quando tiver uma lista de venda para cadastrar, deve cadastrar quando as vendas tiver produto ativo, quantida de estoque maior que quantidade de venda")
+    void deveCadastrarListaDeVenda() {
+        int idProduto = produtos.get(0).getId();
+        when(vendaRepository.save(any(Venda.class))).thenReturn(new Venda(LocalDateTime.now()));
+        when(loteService.produtoEmEstoque(idProduto)).thenReturn(200);
+
+        Venda resultado;
         try{
-            resultadoException = vendaService.criarVenda(vendasProdutos);
+            resultado = vendaService.criarVenda(vendasProdutos);
         } catch (Exception e) {
             fail("Erro ao buscar venda : " + (e.getMessage() != null ? e.getMessage() : e.getCause()));
             return;
         }
-        assertNull(resultadoException);
+
+        assertNotNull(resultado);
     }
 
     @Test

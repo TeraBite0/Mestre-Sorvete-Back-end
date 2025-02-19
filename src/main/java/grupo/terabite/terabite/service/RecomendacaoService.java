@@ -17,8 +17,8 @@ public class RecomendacaoService {
     private final ProdutoService produtoService;
     private final RecomendacaoRepository recomendacaoRepository;
 
-    public Produto alterarRecomendacaoDoDia(Integer produtoNovoId) {
-        Produto produtoNovo = produtoService.buscarPorId(produtoNovoId); // valida se o produto é inexistente por id
+    public Recomendacao alterarRecomendacaoDoDia(Recomendacao recomendacao) {
+        Produto produtoNovo = produtoService.buscarPorId(recomendacao.getProduto().getId()); // valida se o produto é inexistente por id
         LocalDate hoje = LocalDate.now();
         Recomendacao recomendacaoDoDia = recomendacaoRepository.findByDtRecomendacao(hoje);
 
@@ -28,8 +28,9 @@ public class RecomendacaoService {
         }
 
         recomendacaoDoDia.setProduto(produtoNovo);
+        recomendacaoDoDia.setTexto(recomendacao.getTexto());
         recomendacaoRepository.save(recomendacaoDoDia);
-        return recomendacaoDoDia.getProduto();
+        return recomendacaoDoDia;
     }
 
     public Recomendacao recomendacaoDoDia() {

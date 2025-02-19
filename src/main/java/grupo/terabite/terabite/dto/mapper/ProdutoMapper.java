@@ -3,6 +3,7 @@ package grupo.terabite.terabite.dto.mapper;
 import grupo.terabite.terabite.dto.create.ProdutoCreateDTO;
 import grupo.terabite.terabite.dto.response.*;
 import grupo.terabite.terabite.dto.update.ProdutoUpdateDTO;
+import grupo.terabite.terabite.dto.update.RecomendacaoUpdateDTO;
 import grupo.terabite.terabite.entity.*;
 import grupo.terabite.terabite.service.MarcaService;
 import grupo.terabite.terabite.service.SubtipoService;
@@ -70,6 +71,14 @@ public class ProdutoMapper {
         return RecomendacaoResponseDTO.builder()
                 .texto(entity.getTexto())
                 .produto(toDetalhe(entity.getProduto()))
+                .build();
+    }
+
+    public static Recomendacao toRecomendacao(RecomendacaoUpdateDTO entity) {
+        if (entity == null) return null;
+
+        return Recomendacao.builder()
+                .produto(toCriarProduto(entity.getProduto()))
                 .build();
     }
 }

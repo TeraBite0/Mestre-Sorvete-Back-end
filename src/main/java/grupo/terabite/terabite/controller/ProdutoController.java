@@ -7,6 +7,7 @@ import grupo.terabite.terabite.dto.response.ProdutoPopularesReponseDto;
 import grupo.terabite.terabite.dto.response.ProdutoResponseDTO;
 import grupo.terabite.terabite.dto.response.RecomendacaoResponseDTO;
 import grupo.terabite.terabite.dto.update.ProdutoUpdateDTO;
+import grupo.terabite.terabite.dto.update.RecomendacaoUpdateDTO;
 import grupo.terabite.terabite.entity.Produto;
 import grupo.terabite.terabite.service.MarcaService;
 import grupo.terabite.terabite.service.ProdutoService;
@@ -163,8 +164,8 @@ public class ProdutoController {
             @ApiResponse(responseCode = "401", description = "Erro de requisição, Não autorizado"),
     })
     @PutMapping("/recomendacao-do-dia/{produtoNovoId}")
-    public ResponseEntity<ProdutoResponseDTO> alterarRecomendacaoDoDia(@PathVariable @Valid Integer produtoNovoId) {
-        return ResponseEntity.ok(ProdutoMapper.toDetalhe(recomendacaoService.alterarRecomendacaoDoDia(produtoNovoId)));
+    public ResponseEntity<RecomendacaoResponseDTO> alterarRecomendacaoDoDia(@PathVariable @Valid RecomendacaoUpdateDTO recomendacaoDTO) {
+        return ResponseEntity.ok(ProdutoMapper.toRecomendacaoResponseDTO(recomendacaoService.alterarRecomendacaoDoDia(ProdutoMapper.toRecomendacao(recomendacaoDTO))));
     }
 
     @Operation(summary = "Busca os sorvetes mais populares no momento", description = "Retorna os 10 produtos mais populares que teve mais venda no momento")

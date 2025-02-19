@@ -1,5 +1,6 @@
 package grupo.terabite.terabite.dto.create;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
@@ -20,4 +21,7 @@ public class ProdutoCreateDTO {
 
     @NotNull
     private Double preco;
+
+    private Boolean temLactose;
+    private Boolean temGlutem;
 }

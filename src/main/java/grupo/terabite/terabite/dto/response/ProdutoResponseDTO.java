@@ -20,4 +20,8 @@ public class ProdutoResponseDTO {
     private SubtipoResponseDTO subtipo;
 
     private MarcaResponseDTO marca;
+
+    private Boolean temLactose;
+
+    private Boolean temGlutem;
 }

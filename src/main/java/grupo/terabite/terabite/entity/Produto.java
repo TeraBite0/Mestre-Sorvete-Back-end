@@ -36,4 +36,10 @@ public class Produto {
 
     @Column(name = "EM_ESTOQUE_PROD")
     private Boolean emEstoque;
+
+    @Column(name = "TEM_LACTOSE_PROD")
+    private Boolean temLactose = false;
+
+    @Column(name = "TEM_GLUTEM_PROD")
+    private Boolean temGlutem = false;
 }

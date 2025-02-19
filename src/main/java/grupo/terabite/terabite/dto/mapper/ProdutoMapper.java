@@ -28,6 +28,8 @@ public class ProdutoMapper {
                 .preco(produto.getPreco())
                 .isAtivo(produto.getIsAtivo())
                 .emEstoque(produto.getEmEstoque())
+                .temGlutem(produto.getTemGlutem())
+                .temLactose(produto.getTemLactose())
                 .marca(MarcaResponseDTO.builder()
                         .id(marca.getId())
                         .nome(marca.getNome())
@@ -49,6 +51,8 @@ public class ProdutoMapper {
         return Produto.builder()
                 .nome(entity.getNome())
                 .preco(entity.getPreco())
+                .temGlutem(entity.getTemGlutem())
+                .temLactose(entity.getTemLactose())
                 .build();
     }
 
@@ -61,6 +65,8 @@ public class ProdutoMapper {
                 .isAtivo(entity.getIsAtivo())
                 .subtipo(subtipoService.buscarPorId(entity.getSubtipoId()))
                 .marca(marcaService.buscarPorId(entity.getMarcaId()))
+                .temLactose(entity.getTemLactose())
+                .temGlutem(entity.getTemGlutem())
                 .build();
     }
 }

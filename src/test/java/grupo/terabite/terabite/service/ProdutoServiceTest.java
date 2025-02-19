@@ -70,14 +70,14 @@ class ProdutoServiceTest {
         );
 
         produtos = List.of(
-                new Produto(1, "Gelo gelado", subtipos.get(0), marcas.get(1), 9.0, true, false),
-                new Produto(2, "Gelo geladinho", subtipos.get(0), marcas.get(0), 6.0, true, false),
-                new Produto(3, "Gelo quente", subtipos.get(2), marcas.get(1), 8.0, false, true),
-                new Produto(4, "Gelo quentinho", subtipos.get(2), marcas.get(0), 10.0, false, true),
-                new Produto(5, "Neve gelada", subtipos.get(1), marcas.get(1), 12.0, true, true),
-                new Produto(6, "Neve geladinha", subtipos.get(1), marcas.get(0), 10.0, true, true),
-                new Produto(7, "Neve quente", subtipos.get(2), marcas.get(1), 10.5, true, true),
-                new Produto(8, "Neve quentinha", subtipos.get(2), marcas.get(0), 6.5, true, true)
+                new Produto(1, "Gelo gelado", subtipos.get(0), marcas.get(1), 9.0, true, false, false, false),
+                new Produto(2, "Gelo geladinho", subtipos.get(0), marcas.get(0), 6.0, true, false, false, false),
+                new Produto(3, "Gelo quente", subtipos.get(2), marcas.get(1), 8.0, false, true, false, false),
+                new Produto(4, "Gelo quentinho", subtipos.get(2), marcas.get(0), 10.0, false, true, false, false),
+                new Produto(5, "Neve gelada", subtipos.get(1), marcas.get(1), 12.0, true, true, false, false),
+                new Produto(6, "Neve geladinha", subtipos.get(1), marcas.get(0), 10.0, true, true, false, false),
+                new Produto(7, "Neve quente", subtipos.get(2), marcas.get(1), 10.5, true, true, false, false),
+                new Produto(8, "Neve quentinha", subtipos.get(2), marcas.get(0), 6.5, true, true, false, false)
         );
 
         vendas = List.of(
@@ -180,7 +180,7 @@ class ProdutoServiceTest {
     @Test
     @DisplayName("Cria corretamente")
     void criarProduto() {
-        Produto produto = new Produto(100, "Gelo esquecido", subtipos.get(0), marcas.get(0), 5.0, null, null);
+        Produto produto = new Produto(100, "Gelo esquecido", subtipos.get(0), marcas.get(0), 5.0, null, null, false, false);
         Mockito.when(produtoRepository.save(Mockito.any())).thenReturn(produto);
         Mockito.when(marcaService.buscarPorNomeMarca(Mockito.any())).thenReturn(marcas.get(0));
         Mockito.when(subtipoService.buscarPorNomeSubtipo(Mockito.any())).thenReturn(subtipos.get(0));

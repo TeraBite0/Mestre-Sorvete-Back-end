@@ -71,10 +71,10 @@ class PerdaServiceTest {
         );
 
         produtos = List.of(
-                new Produto(1, "Gelo gelado", subtipos.get(0), marcas.get(0), 7.0, true, true),
-                new Produto(2, "Gelo geladinho", subtipos.get(1), marcas.get(1), 7.0, true, true),
-                new Produto(3, "Gelo quentinho", subtipos.get(2), marcas.get(2), 10.0, false, true),
-                new Produto(4, "Gelo quente", subtipos.get(3), marcas.get(3), 10.0, true, false));
+                new Produto(1, "Gelo gelado", subtipos.get(0), marcas.get(0), 7.0, true, true, false, false),
+                new Produto(2, "Gelo geladinho", subtipos.get(1), marcas.get(1), 7.0, true, true, false, false),
+                new Produto(3, "Gelo quentinho", subtipos.get(2), marcas.get(2), 10.0, false, true, false, false),
+                new Produto(4, "Gelo quente", subtipos.get(3), marcas.get(3), 10.0, true, false, false, false));
 
         perdasEsperadas = List.of(
                 new Perda(1, 2, LocalDate.now(), produtos.get(0)),

@@ -5,6 +5,7 @@ import grupo.terabite.terabite.dto.mapper.ProdutoMapper;
 import grupo.terabite.terabite.dto.mapper.ProdutoPopularesMapper;
 import grupo.terabite.terabite.dto.response.ProdutoPopularesReponseDto;
 import grupo.terabite.terabite.dto.response.ProdutoResponseDTO;
+import grupo.terabite.terabite.dto.response.RecomendacaoResponseDTO;
 import grupo.terabite.terabite.dto.update.ProdutoUpdateDTO;
 import grupo.terabite.terabite.entity.Produto;
 import grupo.terabite.terabite.service.MarcaService;
@@ -151,8 +152,8 @@ public class ProdutoController {
             @ApiResponse(responseCode = "204", description = "Operação sucedida, nenhum produto cadastrado")
     })
     @GetMapping("/recomendacao-do-dia")
-    public ResponseEntity<ProdutoResponseDTO> recomendacaoDoDia() {
-        return ResponseEntity.ok(ProdutoMapper.toDetalhe(recomendacaoService.recomendacaoDoDia()));
+    public ResponseEntity<RecomendacaoResponseDTO> recomendacaoDoDia() {
+        return ResponseEntity.ok(ProdutoMapper.toRecomendacaoResponseDTO(recomendacaoService.recomendacaoDoDia()));
     }
 
     @Operation(summary = "Atualiza o produto da recomendação do dia atual", description = "Retorna o produto que representa a recomendação do dia atualizado")

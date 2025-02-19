@@ -1,15 +1,9 @@
 package grupo.terabite.terabite.dto.mapper;
 
 import grupo.terabite.terabite.dto.create.ProdutoCreateDTO;
-import grupo.terabite.terabite.dto.response.MarcaResponseDTO;
-import grupo.terabite.terabite.dto.response.ProdutoResponseDTO;
-import grupo.terabite.terabite.dto.response.SubtipoResponseDTO;
-import grupo.terabite.terabite.dto.response.TipoResponseDTO;
+import grupo.terabite.terabite.dto.response.*;
 import grupo.terabite.terabite.dto.update.ProdutoUpdateDTO;
-import grupo.terabite.terabite.entity.Marca;
-import grupo.terabite.terabite.entity.Produto;
-import grupo.terabite.terabite.entity.Subtipo;
-import grupo.terabite.terabite.entity.Tipo;
+import grupo.terabite.terabite.entity.*;
 import grupo.terabite.terabite.service.MarcaService;
 import grupo.terabite.terabite.service.SubtipoService;
 
@@ -67,6 +61,15 @@ public class ProdutoMapper {
                 .marca(marcaService.buscarPorId(entity.getMarcaId()))
                 .temLactose(entity.getTemLactose())
                 .temGlutem(entity.getTemGlutem())
+                .build();
+    }
+
+    public static RecomendacaoResponseDTO toRecomendacaoResponseDTO(Recomendacao entity){
+        if (entity == null) return null;
+
+        return RecomendacaoResponseDTO.builder()
+                .texto(entity.getTexto())
+                .produto(toDetalhe(entity.getProduto()))
                 .build();
     }
 }

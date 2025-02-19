@@ -32,7 +32,7 @@ public class RecomendacaoService {
         return recomendacaoDoDia.getProduto();
     }
 
-    public Produto recomendacaoDoDia() {
+    public Recomendacao recomendacaoDoDia() {
         LocalDate hoje = LocalDate.now();
         Recomendacao recomendacaoDoDia = recomendacaoRepository.findByDtRecomendacao(hoje);
         List<Recomendacao> recomendacoes = recomendacaoRepository.findAll();
@@ -44,7 +44,7 @@ public class RecomendacaoService {
             recomendacaoRepository.save(recomendacaoDoDia);
             excluirDadosAntigos();
         }
-        return recomendacaoDoDia.getProduto();
+        return recomendacaoDoDia;
     }
 
     private Produto gerarRecomendacaoDoDia(List<Recomendacao> recomendacoes) {

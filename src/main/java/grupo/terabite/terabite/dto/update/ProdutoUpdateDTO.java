@@ -24,7 +24,9 @@ public class ProdutoUpdateDTO {
     @NotNull
     private Integer marcaId;
 
+    @NotNull
     private Boolean temLactose;
 
+    @NotNull
     private Boolean temGlutem;
 }

@@ -24,6 +24,9 @@ public class Recomendacao {
     @Column(name = "DATA_RECO")
     private LocalDate dtRecomendacao;
 
+    @Column(name = "TEXTO_RECO")
+    private String texto;
+
     public Recomendacao(Produto produto, LocalDate dtRecomendacao) {
         this.produto = produto;
         this.dtRecomendacao = dtRecomendacao;

@@ -12,7 +12,9 @@ public class RecomendacaoResponseDTO {
 
     private Integer id;
 
-    private Produto produto;
+    private ProdutoResponseDTO produto;
 
     private LocalDate dtRecomendacao;
+
+    private String texto;
 }

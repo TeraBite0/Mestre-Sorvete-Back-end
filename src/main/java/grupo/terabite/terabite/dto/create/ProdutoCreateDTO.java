@@ -22,6 +22,9 @@ public class ProdutoCreateDTO {
     @NotNull
     private Double preco;
 
+    @NotNull
     private Boolean temLactose;
+
+    @NotNull
     private Boolean temGlutem;
 }

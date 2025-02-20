@@ -38,7 +38,7 @@ VALUES ('Senhor Sorvete'),
        ('Mr Mix');
 
 INSERT INTO PRODUTO
-        (NOME_PROD, PRECO_PROD, FK_ID_SUBT_PROD, FK_ID_MARCA_PROD, IS_ATIVO_PROD, EM_ESTOQUE_PROD, TEM_LACTOSE_PROD, TEM_GLUTEM_PROD)
+        (NOME_PROD, PRECO_PROD, FK_ID_SUBT_PROD, FK_ID_MARCA_PROD, IS_ATIVO_PROD, EM_ESTOQUE_PROD, TEM_LACTOSE_PROD, TEM_GLUTEN_PROD)
 VALUES
     ('Nescolak', 10.00, 1, 1, 'true', 'false', 'false', 'false'),
     ('cookies', 10.00, 1, 1, 'true', 'false', 'false', 'false'),

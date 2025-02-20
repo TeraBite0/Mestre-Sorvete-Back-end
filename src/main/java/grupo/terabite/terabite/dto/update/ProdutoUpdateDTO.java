@@ -28,5 +28,5 @@ public class ProdutoUpdateDTO {
     private Boolean temLactose;
 
     @NotNull
-    private Boolean temGlutem;
+    private Boolean temGluten;
 }

@@ -40,6 +40,6 @@ public class Produto {
     @Column(name = "TEM_LACTOSE_PROD")
     private Boolean temLactose = false;
 
-    @Column(name = "TEM_GLUTEM_PROD")
-    private Boolean temGlutem = false;
+    @Column(name = "TEM_GLUTEN_PROD")
+    private Boolean temGluten = false;
 }

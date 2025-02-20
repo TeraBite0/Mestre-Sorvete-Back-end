@@ -23,5 +23,5 @@ public class ProdutoResponseDTO {
 
     private Boolean temLactose;
 
-    private Boolean temGlutem;
+    private Boolean temGluten;
 }

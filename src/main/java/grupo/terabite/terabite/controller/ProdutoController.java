@@ -50,7 +50,7 @@ public class ProdutoController {
         return ResponseEntity.ok(produtos.stream().map(ProdutoMapper::toDetalhe).toList());
     }
 
-    @Operation(summary = "Lista todos produtos que estão ativos", description = "Retorna uma lista com todos os produtos que estão ativos")
+    @Operation(summary = "Lista todos produtos que estão ativos em ordem alfabética", description = "Retorna uma lista com todos os produtos que estão ativos em ordem alfabética")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Operação bem-sucedida, produtos listados"),
             @ApiResponse(responseCode = "204", description = "Operação bem-sucedida, sem produtos"),

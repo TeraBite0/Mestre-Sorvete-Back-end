@@ -129,7 +129,7 @@ class ProdutoServiceTest {
     @Test
     @DisplayName("Lista todos produtos ativos")
     void listarProdutoIsAtivos() {
-        Mockito.when(produtoRepository.findByIsAtivoTrue()).thenReturn(produtos.stream().filter(Produto::getIsAtivo).toList());
+        Mockito.when(produtoRepository.findByIsAtivoTrueOrderByNome()).thenReturn(produtos.stream().filter(Produto::getIsAtivo).toList());
         produtos = produtos.stream().filter(Produto::getIsAtivo).toList();
         List<Produto> produtosResposta = new ArrayList<>();
 
@@ -142,7 +142,7 @@ class ProdutoServiceTest {
         assertNotNull(produtosResposta, "Os produtos encontrados não podem ser nulo");
         assertEquals(produtos.size(), produtosResposta.size(), "A quantidade de produtos retornado é diferente do esperado");
 
-        Mockito.when(produtoRepository.findByIsAtivoTrue()).thenReturn(new ArrayList<>());
+        Mockito.when(produtoRepository.findByIsAtivoTrueOrderByNome()).thenReturn(new ArrayList<>());
 
         ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> produtoService.listarProdutoIsAtivos(), "Nenhum produto deveria ser listado");
         assertEquals(HttpStatusCode.valueOf(204), exception.getStatusCode(), "O status da resposta não é o correto");

@@ -28,7 +28,7 @@ public class ProdutoService {
     }
 
     public List<Produto> listarProdutoIsAtivos() {
-        List<Produto> produtos = produtoRepository.findByIsAtivoTrue();
+        List<Produto> produtos = produtoRepository.findByIsAtivoTrueOrderByNome();
         if(produtos.isEmpty()){
             throw new ResponseStatusException(HttpStatusCode.valueOf(204));
         }

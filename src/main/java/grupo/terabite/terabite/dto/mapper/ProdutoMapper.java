@@ -58,8 +58,8 @@ public class ProdutoMapper {
                 .nome(entity.getNome())
                 .preco(entity.getPreco())
                 .isAtivo(entity.getIsAtivo())
-                .subtipo(subtipoService.buscarPorId(entity.getSubtipoId()))
-                .marca(marcaService.buscarPorId(entity.getMarcaId()))
+                .subtipo(subtipoService.buscarPorNomeSubtipo(entity.getNomeSubtipo()))
+                .marca(marcaService.buscarPorNomeMarca(entity.getNomeMarca()))
                 .temLactose(entity.getTemLactose())
                 .temGlutem(entity.getTemGlutem())
                 .build();

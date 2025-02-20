@@ -18,11 +18,11 @@ public class ProdutoUpdateDTO {
     @NotNull
     private Boolean isAtivo;
 
-    @NotNull
-    private Integer subtipoId;
+    @NotBlank
+    private String nomeSubtipo;
 
-    @NotNull
-    private Integer marcaId;
+    @NotBlank
+    private String nomeMarca;
 
     @NotNull
     private Boolean temLactose;

@@ -63,7 +63,21 @@ public class ProdutoService {
         return produtoRepository.save(produto);
     }
 
-    public Produto atualizarProduto(Integer id, Produto produtoAtualizado) {
+    public Produto atualizarProduto(Integer id, Produto produtoAtualizado, String nomeMarca, String nomeSubtipo) {
+        Produto produtoAntigo = produtoRepository.findById(id).orElse(null);
+        if (produtoAntigo == null) {
+            throw new ResponseStatusException(HttpStatusCode.valueOf(404));
+        }
+        produtoAtualizado.setId(id);
+        if (produtoAtualizado.getEmEstoque() == null) {
+            produtoAtualizado.setEmEstoque(produtoAntigo.getEmEstoque());
+        }
+        produtoAtualizado.setMarca(marcaService.buscarPorNomeMarca(nomeMarca));
+        produtoAtualizado.setSubtipo((subtipoService.buscarPorNomeSubtipo(nomeSubtipo)));
+        return produtoRepository.save(produtoAtualizado);
+    }
+
+    protected Produto atualizarProduto(Integer id, Produto produtoAtualizado){
         Produto produtoAntigo = produtoRepository.findById(id).orElse(null);
         if (produtoAntigo == null) {
             throw new ResponseStatusException(HttpStatusCode.valueOf(404));

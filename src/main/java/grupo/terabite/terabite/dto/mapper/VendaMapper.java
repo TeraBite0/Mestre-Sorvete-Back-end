@@ -9,7 +9,6 @@ import grupo.terabite.terabite.entity.VendaProduto;
 import grupo.terabite.terabite.service.ProdutoService;
 import grupo.terabite.terabite.service.VendaService;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +21,7 @@ public class VendaMapper {
 
         for (VendaProduto vp : produtos) {
             vendaProdutosDTO.add(VendaProdutoResponseDTO.builder()
-                    .produto(ProdutoMapper.toDetalhe(vp.getProduto()))
+                    .produto(ProdutoMapper.toResponseDto(vp.getProduto()))
                     .qtdVendida(vp.getQtdProdutosVendido())
                     .build());
         }

@@ -16,7 +16,7 @@ public class PerdaMapper {
 
         return PerdaResponseDTO.builder()
                 .id(perda.getId())
-                .produto(ProdutoMapper.toDetalhe(produto))
+                .produto(ProdutoMapper.toResponseDto(produto))
                 .qtdProduto(perda.getQtdProduto())
                 .build();
     }

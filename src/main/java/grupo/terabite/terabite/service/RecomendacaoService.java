@@ -1,10 +1,14 @@
 package grupo.terabite.terabite.service;
 
 import grupo.terabite.terabite.entity.Produto;
+import grupo.terabite.terabite.entity.Recomendacao;
 import grupo.terabite.terabite.entity.RecomendacaoDia;
 import grupo.terabite.terabite.repository.RecomendacaoDiaRepository;
+import grupo.terabite.terabite.repository.RecomendacaoRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -12,10 +16,48 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class RecomendacaoDiaService {
+public class RecomendacaoService {
 
     private final ProdutoService produtoService;
     private final RecomendacaoDiaRepository recomendacaoDiaRepository;
+    private final RecomendacaoRepository recomendacaoRepository;
+
+    public List<Recomendacao> listarRecomendacoes(){
+        List<Recomendacao> recomendacoes = recomendacaoRepository.findAll();
+
+        if(recomendacoes.isEmpty()){
+            throw new ResponseStatusException(HttpStatusCode.valueOf(204));
+        }
+
+        return recomendacoes;
+    }
+
+    public Recomendacao criarRecomendacao(Recomendacao recomendacao){
+        if(!recomendacaoRepository.findByProdutoId(recomendacao.getProduto().getId()).isEmpty()){
+            throw new ResponseStatusException(HttpStatusCode.valueOf(409));
+        }
+
+        return recomendacaoRepository.save(recomendacao);
+    }
+
+    public Recomendacao atualizarRecomendacao(Integer id, Recomendacao recomendacao){
+        if(!recomendacaoRepository.existsById(id)){
+            throw new ResponseStatusException(HttpStatusCode.valueOf(404));
+        } else if(!recomendacaoRepository.findByProdutoId(recomendacao.getProduto().getId()).isEmpty()){
+            throw new ResponseStatusException(HttpStatusCode.valueOf(409));
+        }
+
+        recomendacao.setId(id);
+        return recomendacaoRepository.save(recomendacao);
+    }
+
+    public void excluirRecomendacao(Integer id){
+        if(!recomendacaoRepository.existsById(id)){
+            throw new ResponseStatusException(HttpStatusCode.valueOf(404));
+        }
+
+        recomendacaoRepository.deleteById(id);
+    }
 
     public RecomendacaoDia alterarRecomendacaoDoDia(RecomendacaoDia recomendacaoDia) {
         Produto produtoNovo = produtoService.buscarPorId(recomendacaoDia.getProduto().getId()); // valida se o produto é inexistente por id
@@ -80,7 +122,7 @@ public class RecomendacaoDiaService {
     }
 
     private void excluirDadosAntigos() {
-        LocalDate dtLimite = LocalDate.now().minusDays(7); // <- qtd de dias que definem uma recomendação antida
+        LocalDate dtLimite = LocalDate.now().minusDays(7); // <- qtd de dias que definem uma recomendação antiga
         List<RecomendacaoDia> recomendacoes = recomendacaoDiaRepository.findByDtRecomendacaoBefore(dtLimite);
         for (RecomendacaoDia r : recomendacoes) {
             recomendacaoDiaRepository.deleteById(r.getId());

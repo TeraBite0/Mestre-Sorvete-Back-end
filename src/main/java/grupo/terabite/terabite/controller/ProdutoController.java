@@ -3,15 +3,18 @@ package grupo.terabite.terabite.controller;
 import grupo.terabite.terabite.dto.create.ProdutoCreateDTO;
 import grupo.terabite.terabite.dto.mapper.ProdutoMapper;
 import grupo.terabite.terabite.dto.mapper.ProdutoPopularesMapper;
+import grupo.terabite.terabite.dto.mapper.RecomendacaoMapper;
 import grupo.terabite.terabite.dto.response.ProdutoPopularesReponseDto;
 import grupo.terabite.terabite.dto.response.ProdutoResponseDTO;
 import grupo.terabite.terabite.dto.response.RecomendacaoDiaResponseDTO;
+import grupo.terabite.terabite.dto.response.RecomendacaoResponseDTO;
 import grupo.terabite.terabite.dto.update.ProdutoUpdateDTO;
 import grupo.terabite.terabite.dto.update.RecomendacaoDiaUpdateDTO;
+import grupo.terabite.terabite.dto.update.RecomendacaoUpdateDTO;
 import grupo.terabite.terabite.entity.Produto;
 import grupo.terabite.terabite.service.MarcaService;
 import grupo.terabite.terabite.service.ProdutoService;
-import grupo.terabite.terabite.service.RecomendacaoDiaService;
+import grupo.terabite.terabite.service.RecomendacaoService;
 import grupo.terabite.terabite.service.SubtipoService;
 import grupo.terabite.terabite.service.api.HgApiService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -32,7 +35,7 @@ import java.util.List;
 public class ProdutoController {
 
     private final ProdutoService produtoService;
-    private final RecomendacaoDiaService recomendacaoDiaService;
+    private final RecomendacaoService recomendacaoService;
     private final SubtipoService subtipoService;
     private final MarcaService marcaService;
     private final HgApiService weatherService;
@@ -47,7 +50,7 @@ public class ProdutoController {
     public ResponseEntity<List<ProdutoResponseDTO>> listarTodos() {
         List<Produto> produtos = produtoService.listarProduto();
         if (produtos.isEmpty()) return ResponseEntity.noContent().build();
-        return ResponseEntity.ok(produtos.stream().map(ProdutoMapper::toDetalhe).toList());
+        return ResponseEntity.ok(produtos.stream().map(ProdutoMapper::toResponseDto).toList());
     }
 
     @Operation(summary = "Lista todos produtos que estão ativos em ordem alfabética", description = "Retorna uma lista com todos os produtos que estão ativos em ordem alfabética")
@@ -60,7 +63,7 @@ public class ProdutoController {
     public ResponseEntity<List<ProdutoResponseDTO>> listarTodosIsAtivo() {
         List<Produto> produtos = produtoService.listarProdutoIsAtivos();
         if (produtos.isEmpty()) return ResponseEntity.noContent().build();
-        return ResponseEntity.ok(produtos.stream().map(ProdutoMapper::toDetalhe).toList());
+        return ResponseEntity.ok(produtos.stream().map(ProdutoMapper::toResponseDto).toList());
     }
 
     @Operation(summary = "Busca um produto pelo ID", description = "Retorna um produto com base no seu ID")
@@ -72,7 +75,7 @@ public class ProdutoController {
     })
     @GetMapping("/{id}")
     public ResponseEntity<ProdutoResponseDTO> buscarPorId(@PathVariable Integer id) {
-        return ResponseEntity.ok(ProdutoMapper.toDetalhe(produtoService.buscarPorId(id)));
+        return ResponseEntity.ok(ProdutoMapper.toResponseDto(produtoService.buscarPorId(id)));
     }
 
     @Operation(summary = "Busca produtos, com base no nome ou tipo", description = "Retorna todos os produtos conforme nome ou tipo passados. Parâmetros: nomeProduto (Opcional), nomeTipo (Opcional)")
@@ -87,7 +90,7 @@ public class ProdutoController {
     public ResponseEntity<List<ProdutoResponseDTO>> listarComFiltroTipoOuNome(@RequestParam(required = false) String termo) {
         List<Produto> produtos = produtoService.buscarPorFiltroTipoOuNome(termo, termo);
         if (produtos.isEmpty()) throw new ResponseStatusException(HttpStatusCode.valueOf(204));
-        return ResponseEntity.ok(produtos.stream().map(ProdutoMapper::toDetalhe).toList());
+        return ResponseEntity.ok(produtos.stream().map(ProdutoMapper::toResponseDto).toList());
     }
 
     @Operation(summary = "Lista produtos, com base no termo passado", description = "Retorna todos os produtos conforme nome e/ou marca passados. Parâmetros: nomeProduto (Opcional), nomeMarca (Opcional)")
@@ -102,7 +105,7 @@ public class ProdutoController {
     public ResponseEntity<List<ProdutoResponseDTO>> pesquisarPorNomeProuduto(@RequestParam @Valid String termo) {
         List<Produto> produtos = produtoService.buscarPorTermo(termo, termo);
         if (produtos.isEmpty()) throw new ResponseStatusException(HttpStatusCode.valueOf(204));
-        return ResponseEntity.ok(produtos.stream().map(ProdutoMapper::toDetalhe).toList());
+        return ResponseEntity.ok(produtos.stream().map(ProdutoMapper::toResponseDto).toList());
     }
 
     @Operation(summary = "Busca um produto pelo nome com IgnoreCase", description = "Retorna um produto com base no seu nome passado como variável")
@@ -114,7 +117,7 @@ public class ProdutoController {
     })
     @GetMapping("/nome/{nome}")
     public ResponseEntity<ProdutoResponseDTO> buscarPorNome(@PathVariable String nome) {
-        return ResponseEntity.ok(ProdutoMapper.toDetalhe(produtoService.buscarPorNomeProduto(nome)));
+        return ResponseEntity.ok(ProdutoMapper.toResponseDto(produtoService.buscarPorNomeProduto(nome)));
     }
 
     @Operation(summary = "Cria um produto", description = "Retorna o produto criado caso sucesso na criação")
@@ -127,9 +130,9 @@ public class ProdutoController {
     @PostMapping
     public ResponseEntity<ProdutoResponseDTO> criar(@RequestBody @Valid ProdutoCreateDTO produtoCreateDTO) {
         return ResponseEntity.created(null).body(
-                ProdutoMapper.toDetalhe(
+                ProdutoMapper.toResponseDto(
                         produtoService.criarProduto(
-                                ProdutoMapper.toCriarProduto(produtoCreateDTO),
+                                ProdutoMapper.toCreateProduto(produtoCreateDTO),
                                 produtoCreateDTO.getNomeMarca(),
                                 produtoCreateDTO.getNomeSubtipo())));
     }
@@ -144,7 +147,7 @@ public class ProdutoController {
     })
     @PutMapping("/{id}")
     public ResponseEntity<ProdutoResponseDTO> atualizarProduto(@PathVariable Integer id, @RequestBody @Valid ProdutoUpdateDTO produtoUpdateDTO) {
-        return ResponseEntity.ok(ProdutoMapper.toDetalhe(produtoService.atualizarProduto(id, ProdutoMapper.toAtualizar(produtoUpdateDTO, subtipoService, marcaService), produtoUpdateDTO.getNomeMarca(), produtoUpdateDTO.getNomeSubtipo())));
+        return ResponseEntity.ok(ProdutoMapper.toResponseDto(produtoService.atualizarProduto(id, ProdutoMapper.toAtualizar(produtoUpdateDTO, subtipoService, marcaService), produtoUpdateDTO.getNomeMarca(), produtoUpdateDTO.getNomeSubtipo())));
     }
 
     @Operation(summary = "Busca a recomendação do dia atual", description = "Retorna o produto aleatório que representa a recomendação do dia")
@@ -154,7 +157,28 @@ public class ProdutoController {
     })
     @GetMapping("/recomendacao-do-dia")
     public ResponseEntity<RecomendacaoDiaResponseDTO> recomendacaoDoDia() {
-        return ResponseEntity.ok(ProdutoMapper.toRecomendacaoResponseDTO(recomendacaoDiaService.recomendacaoDoDia()));
+        return ResponseEntity.ok(RecomendacaoMapper.toRecomendacaoDiaResponseDTO(recomendacaoService.recomendacaoDoDia()));
+    }
+
+    @Operation(summary = "Lista as recomendações", description = "Retorna a lista de produtos recomendados")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Retornado as recomendações"),
+            @ApiResponse(responseCode = "204", description = "Operação sucedida, sem recomendações")
+    })
+    @GetMapping("/recomendacao")
+    public ResponseEntity<List<RecomendacaoResponseDTO>> recomendacao() {
+        return ResponseEntity.ok(recomendacaoService.listarRecomendacoes().stream().map(RecomendacaoMapper::toRecomendacaoResponseDto).toList());
+    }
+
+    @Operation(summary = "Atualiza o produto de uma recomendação", description = "Retorna o produto recomendado")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Altera e retorna o produto recomendado"),
+            @ApiResponse(responseCode = "404", description = "Produto inexistente"),
+            @ApiResponse(responseCode = "401", description = "Erro de requisição, Não autorizado"),
+    })
+    @PutMapping("/recomendacao/{id}")
+    public ResponseEntity<RecomendacaoResponseDTO> alterarRecomendacao(@PathVariable Integer id, @RequestBody @Valid RecomendacaoUpdateDTO recomendacaoDTO) {
+        return ResponseEntity.ok(RecomendacaoMapper.toRecomendacaoResponseDto(recomendacaoService.atualizarRecomendacao(id, RecomendacaoMapper.toRecomendacao(recomendacaoDTO, produtoService))));
     }
 
     @Operation(summary = "Atualiza o produto da recomendação do dia atual", description = "Retorna o produto que representa a recomendação do dia atualizado")
@@ -163,9 +187,9 @@ public class ProdutoController {
             @ApiResponse(responseCode = "404", description = "Produto inexistente"),
             @ApiResponse(responseCode = "401", description = "Erro de requisição, Não autorizado"),
     })
-    @PutMapping("/recomendacao-do-dia/{produtoNovoId}")
-    public ResponseEntity<RecomendacaoDiaResponseDTO> alterarRecomendacaoDoDia(@PathVariable @Valid RecomendacaoDiaUpdateDTO recomendacaoDTO) {
-        return ResponseEntity.ok(ProdutoMapper.toRecomendacaoResponseDTO(recomendacaoDiaService.alterarRecomendacaoDoDia(ProdutoMapper.toRecomendacao(recomendacaoDTO))));
+    @PutMapping("/recomendacao-do-dia/")
+    public ResponseEntity<RecomendacaoDiaResponseDTO> alterarRecomendacaoDoDia(@RequestBody @Valid RecomendacaoDiaUpdateDTO recomendacaoDTO) {
+        return ResponseEntity.ok(RecomendacaoMapper.toRecomendacaoDiaResponseDTO(recomendacaoService.alterarRecomendacaoDoDia(RecomendacaoMapper.toRecomendacaoDia(recomendacaoDTO, produtoService))));
     }
 
     @Operation(summary = "Busca os sorvetes mais populares no momento", description = "Retorna os 10 produtos mais populares que teve mais venda no momento")

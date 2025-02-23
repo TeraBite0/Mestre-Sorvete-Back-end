@@ -3,14 +3,13 @@ package grupo.terabite.terabite.dto.mapper;
 import grupo.terabite.terabite.dto.create.ProdutoCreateDTO;
 import grupo.terabite.terabite.dto.response.*;
 import grupo.terabite.terabite.dto.update.ProdutoUpdateDTO;
-import grupo.terabite.terabite.dto.update.RecomendacaoDiaUpdateDTO;
 import grupo.terabite.terabite.entity.*;
 import grupo.terabite.terabite.service.MarcaService;
 import grupo.terabite.terabite.service.SubtipoService;
 
 public class ProdutoMapper {
 
-    public static ProdutoResponseDTO toDetalhe(Produto produto) {
+    public static ProdutoResponseDTO toResponseDto(Produto produto) {
         if (produto == null) return null;
 
         Marca marca = produto.getMarca();
@@ -40,7 +39,7 @@ public class ProdutoMapper {
                 .build();
     }
 
-    public static Produto toCriarProduto(ProdutoCreateDTO entity) {
+    public static Produto toCreateProduto(ProdutoCreateDTO entity) {
         if (entity == null) return null;
 
         return Produto.builder()
@@ -62,23 +61,6 @@ public class ProdutoMapper {
                 .marca(marcaService.buscarPorNomeMarca(entity.getNomeMarca()))
                 .temLactose(entity.getTemLactose())
                 .temGluten(entity.getTemGluten())
-                .build();
-    }
-
-    public static RecomendacaoDiaResponseDTO toRecomendacaoResponseDTO(RecomendacaoDia entity){
-        if (entity == null) return null;
-
-        return RecomendacaoDiaResponseDTO.builder()
-                .texto(entity.getTexto())
-                .produto(toDetalhe(entity.getProduto()))
-                .build();
-    }
-
-    public static RecomendacaoDia toRecomendacao(RecomendacaoDiaUpdateDTO entity) {
-        if (entity == null) return null;
-
-        return RecomendacaoDia.builder()
-                .produto(toCriarProduto(entity.getProduto()))
                 .build();
     }
 }

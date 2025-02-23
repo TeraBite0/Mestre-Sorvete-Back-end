@@ -15,7 +15,7 @@ public class NotificacaoMapper {
         return NotificacaoResponseDTO.builder()
                 .id(notificacao.getId())
                 .email(notificacao.getEmail())
-                .produtoResponseDTO(ProdutoMapper.toDetalhe(produto))
+                .produtoResponseDTO(ProdutoMapper.toResponseDto(produto))
                 .build();
     }
 

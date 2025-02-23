@@ -1,5 +1,6 @@
 package grupo.terabite.terabite.dto.mapper;
 
+import grupo.terabite.terabite.dto.create.MarcaCreateDTO;
 import grupo.terabite.terabite.dto.response.MarcaResponseDTO;
 import grupo.terabite.terabite.entity.Marca;
 
@@ -7,6 +8,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MarcaMapper {
+
+    public static MarcaResponseDTO toResponseDto(Marca entity){
+        if(entity == null) return null;
+
+        return MarcaResponseDTO.builder()
+                .id(entity.getId())
+                .nome(entity.getNome())
+                .build();
+    }
 
     public static List<MarcaResponseDTO> toListResposeDto(List<Marca> marcas){
         if(marcas == null){
@@ -25,5 +35,13 @@ public class MarcaMapper {
         }
 
         return marcasDto;
+    }
+
+    public static Marca toCreateMarca(MarcaCreateDTO entity){
+        if(entity == null) return null;
+
+        return Marca.builder()
+                .nome(entity.getNome())
+                .build();
     }
 }

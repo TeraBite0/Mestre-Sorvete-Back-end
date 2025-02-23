@@ -1,5 +1,6 @@
 package grupo.terabite.terabite.controller;
 
+import grupo.terabite.terabite.dto.create.MarcaCreateDTO;
 import grupo.terabite.terabite.dto.mapper.MarcaMapper;
 import grupo.terabite.terabite.dto.response.MarcaResponseDTO;
 import grupo.terabite.terabite.entity.Marca;
@@ -7,12 +8,11 @@ import grupo.terabite.terabite.service.MarcaService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -38,5 +38,15 @@ public class MarcaController {
         }
 
         return ResponseEntity.ok(MarcaMapper.toListResposeDto(marcas));
+    }
+
+    @Operation(summary = "Registra uma marca", description = "Retorna a marca registrada")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Marca criada com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Parâmetros inválidos")
+    })
+    @PostMapping
+    public ResponseEntity<MarcaResponseDTO> criarMarca(@RequestBody @Valid MarcaCreateDTO marcaCreateDTO) {
+        return ResponseEntity.created(null).body(MarcaMapper.toResponseDto(MarcaMapper.toCreateMarca(marcaCreateDTO)));
     }
 }

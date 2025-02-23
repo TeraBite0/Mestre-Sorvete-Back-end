@@ -8,7 +8,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class RecomendacaoUpdateDTO {
+public class RecomendacaoDiaUpdateDTO {
 
     @NotNull
     private ProdutoCreateDTO produto;

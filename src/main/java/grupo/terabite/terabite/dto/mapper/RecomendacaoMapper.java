@@ -24,6 +24,7 @@ public class RecomendacaoMapper {
 
         return RecomendacaoDia.builder()
                 .produto(produtoService.buscarPorId(entity.getProdutoId()))
+                .texto(entity.getTexto())
                 .build();
     }
 

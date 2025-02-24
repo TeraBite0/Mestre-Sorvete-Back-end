@@ -251,5 +251,5 @@ VALUES  ('2024-10-02', '2024-10-05', '2025-05-20', 50, 150.00, 1),
 
 INSERT INTO RECOMENDACAO_DIA
        (FK_ID_PROD_RECO_DIA, DATA_RECO_DIA, TEXTO_RECO_DIA)
-VALUES (1, '2025-02-23', 'O sorvete de Nescolak é uma delícia cremosa que combina o sabor intenso do achocolatado com a textura suave do sorvete. Ele possui uma base de creme gelado, delicadamente misturado com o inconfundível sabor do Nesquik')
+VALUES (1, '2025-02-24', 'O sorvete de Nescolak é uma delícia cremosa que combina o sabor intenso do achocolatado com a textura suave do sorvete. Ele possui uma base de creme gelado, delicadamente misturado com o inconfundível sabor do Nesquik')
 

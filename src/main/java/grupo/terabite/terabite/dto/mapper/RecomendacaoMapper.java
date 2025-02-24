@@ -1,28 +1,28 @@
 package grupo.terabite.terabite.dto.mapper;
 
-import grupo.terabite.terabite.dto.response.RecomendacaoDiaResponseDTO;
+import grupo.terabite.terabite.dto.response.DestaqueResponseDTO;
 import grupo.terabite.terabite.dto.response.RecomendacaoResponseDTO;
-import grupo.terabite.terabite.dto.update.RecomendacaoDiaUpdateDTO;
+import grupo.terabite.terabite.dto.update.DestaqueUpdateDTO;
 import grupo.terabite.terabite.dto.update.RecomendacaoUpdateDTO;
 import grupo.terabite.terabite.entity.Recomendacao;
-import grupo.terabite.terabite.entity.RecomendacaoDia;
+import grupo.terabite.terabite.entity.Destaque;
 import grupo.terabite.terabite.service.ProdutoService;
 
 public class RecomendacaoMapper {
 
-    public static RecomendacaoDiaResponseDTO toRecomendacaoDiaResponseDTO(RecomendacaoDia entity){
+    public static DestaqueResponseDTO toDestaqueResponseDTO(Destaque entity){
         if (entity == null) return null;
 
-        return RecomendacaoDiaResponseDTO.builder()
+        return DestaqueResponseDTO.builder()
                 .texto(entity.getTexto())
                 .produto(ProdutoMapper.toResponseDto(entity.getProduto()))
                 .build();
     }
 
-    public static RecomendacaoDia toRecomendacaoDia(RecomendacaoDiaUpdateDTO entity, ProdutoService produtoService) {
+    public static Destaque toDestaque(DestaqueUpdateDTO entity, ProdutoService produtoService) {
         if (entity == null) return null;
 
-        return RecomendacaoDia.builder()
+        return Destaque.builder()
                 .produto(produtoService.buscarPorId(entity.getProdutoId()))
                 .texto(entity.getTexto())
                 .build();

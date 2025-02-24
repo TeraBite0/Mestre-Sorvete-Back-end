@@ -2,8 +2,8 @@ package grupo.terabite.terabite.service;
 
 import grupo.terabite.terabite.entity.Produto;
 import grupo.terabite.terabite.entity.Recomendacao;
-import grupo.terabite.terabite.entity.RecomendacaoDia;
-import grupo.terabite.terabite.repository.RecomendacaoDiaRepository;
+import grupo.terabite.terabite.entity.Destaque;
+import grupo.terabite.terabite.repository.DestaqueRepository;
 import grupo.terabite.terabite.repository.RecomendacaoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatusCode;
@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 public class RecomendacaoService {
 
     private final ProdutoService produtoService;
-    private final RecomendacaoDiaRepository recomendacaoDiaRepository;
+    private final DestaqueRepository destaqueRepository;
     private final RecomendacaoRepository recomendacaoRepository;
 
     public List<Recomendacao> listarRecomendacoes(){
@@ -59,38 +59,38 @@ public class RecomendacaoService {
         recomendacaoRepository.deleteById(id);
     }
 
-    public RecomendacaoDia alterarRecomendacaoDoDia(RecomendacaoDia recomendacaoDia) {
-        Produto produtoNovo = produtoService.buscarPorId(recomendacaoDia.getProduto().getId()); // valida se o produto é inexistente por id
+    public Destaque alterarRecomendacaoDoDia(Destaque destaque) {
+        Produto produtoNovo = produtoService.buscarPorId(destaque.getProduto().getId()); // valida se o produto é inexistente por id
         LocalDate hoje = LocalDate.now();
-        RecomendacaoDia recomendacaoDoDia = recomendacaoDiaRepository.findByDtRecomendacao(hoje);
+        Destaque recomendacaoDoDia = destaqueRepository.findByDtRecomendacao(hoje);
 
         if (recomendacaoDoDia == null) { // valida se a recomendacao atual não foi gerada ainda
-            recomendacaoDoDia = new RecomendacaoDia();
+            recomendacaoDoDia = new Destaque();
             recomendacaoDoDia.setDtRecomendacao(hoje);
         }
 
         recomendacaoDoDia.setProduto(produtoNovo);
-        recomendacaoDoDia.setTexto(recomendacaoDia.getTexto());
-        recomendacaoDiaRepository.save(recomendacaoDoDia);
+        recomendacaoDoDia.setTexto(destaque.getTexto());
+        destaqueRepository.save(recomendacaoDoDia);
         return recomendacaoDoDia;
     }
 
-    public RecomendacaoDia recomendacaoDoDia() {
+    public Destaque recomendacaoDoDia() {
         LocalDate hoje = LocalDate.now();
-        RecomendacaoDia recomendacaoDoDia = recomendacaoDiaRepository.findByDtRecomendacao(hoje);
-        List<RecomendacaoDia> recomendacoes = recomendacaoDiaRepository.findAll();
+        Destaque recomendacaoDoDia = destaqueRepository.findByDtRecomendacao(hoje);
+        List<Destaque> recomendacoes = destaqueRepository.findAll();
         Produto produtoDoDia;
 
         if (recomendacaoDoDia == null) {
             produtoDoDia = gerarRecomendacaoDoDia(recomendacoes);
-            recomendacaoDoDia = new RecomendacaoDia(produtoDoDia, hoje);
-            recomendacaoDiaRepository.save(recomendacaoDoDia);
+            recomendacaoDoDia = new Destaque(produtoDoDia, hoje);
+            destaqueRepository.save(recomendacaoDoDia);
             excluirDadosAntigos();
         }
         return recomendacaoDoDia;
     }
 
-    private Produto gerarRecomendacaoDoDia(List<RecomendacaoDia> recomendacoes) {
+    private Produto gerarRecomendacaoDoDia(List<Destaque> recomendacoes) {
         List<Produto> produtos = produtoService.listarProduto().stream().filter(Produto::getIsAtivo).collect(Collectors.toList());
 
         if (recomendacoes.isEmpty() || produtos.size() >= recomendacoes.size()) {
@@ -103,7 +103,7 @@ public class RecomendacaoService {
                 produtoNovo = true;
                 produtoGerado = produtoAleatorio(produtos);
 
-                for (RecomendacaoDia r : recomendacoes) {
+                for (Destaque r : recomendacoes) {
                     if (r.getProduto().getId().equals(produtoGerado.getId())) {
                         produtoNovo = false;
                         break;
@@ -123,9 +123,9 @@ public class RecomendacaoService {
 
     private void excluirDadosAntigos() {
         LocalDate dtLimite = LocalDate.now().minusDays(7); // <- qtd de dias que definem uma recomendação antiga
-        List<RecomendacaoDia> recomendacoes = recomendacaoDiaRepository.findByDtRecomendacaoBefore(dtLimite);
-        for (RecomendacaoDia r : recomendacoes) {
-            recomendacaoDiaRepository.deleteById(r.getId());
+        List<Destaque> recomendacoes = destaqueRepository.findByDtRecomendacaoBefore(dtLimite);
+        for (Destaque r : recomendacoes) {
+            destaqueRepository.deleteById(r.getId());
         }
     }
 }

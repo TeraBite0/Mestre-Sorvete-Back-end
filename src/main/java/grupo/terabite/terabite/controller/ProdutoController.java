@@ -6,10 +6,10 @@ import grupo.terabite.terabite.dto.mapper.ProdutoPopularesMapper;
 import grupo.terabite.terabite.dto.mapper.RecomendacaoMapper;
 import grupo.terabite.terabite.dto.response.ProdutoPopularesReponseDto;
 import grupo.terabite.terabite.dto.response.ProdutoResponseDTO;
-import grupo.terabite.terabite.dto.response.RecomendacaoDiaResponseDTO;
+import grupo.terabite.terabite.dto.response.DestaqueResponseDTO;
 import grupo.terabite.terabite.dto.response.RecomendacaoResponseDTO;
 import grupo.terabite.terabite.dto.update.ProdutoUpdateDTO;
-import grupo.terabite.terabite.dto.update.RecomendacaoDiaUpdateDTO;
+import grupo.terabite.terabite.dto.update.DestaqueUpdateDTO;
 import grupo.terabite.terabite.dto.update.RecomendacaoUpdateDTO;
 import grupo.terabite.terabite.entity.Produto;
 import grupo.terabite.terabite.service.MarcaService;
@@ -150,14 +150,14 @@ public class ProdutoController {
         return ResponseEntity.ok(ProdutoMapper.toResponseDto(produtoService.atualizarProduto(id, ProdutoMapper.toAtualizar(produtoUpdateDTO, subtipoService, marcaService), produtoUpdateDTO.getNomeMarca(), produtoUpdateDTO.getNomeSubtipo())));
     }
 
-    @Operation(summary = "Busca a recomendação do dia atual", description = "Retorna o produto aleatório que representa a recomendação do dia")
+    @Operation(summary = "Busca o destaque atual", description = "Retorna o produto aleatório que representa o destaque")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Retorna o produto que é a recomendação do dia"),
+            @ApiResponse(responseCode = "200", description = "Retorna o produto que é o destaque"),
             @ApiResponse(responseCode = "204", description = "Operação sucedida, nenhum produto cadastrado")
     })
     @GetMapping("/recomendacao-do-dia")
-    public ResponseEntity<RecomendacaoDiaResponseDTO> recomendacaoDoDia() {
-        return ResponseEntity.ok(RecomendacaoMapper.toRecomendacaoDiaResponseDTO(recomendacaoService.recomendacaoDoDia()));
+    public ResponseEntity<DestaqueResponseDTO> destaque() {
+        return ResponseEntity.ok(RecomendacaoMapper.toDestaqueResponseDTO(recomendacaoService.recomendacaoDoDia()));
     }
 
     @Operation(summary = "Lista as recomendações", description = "Retorna a lista de produtos recomendados")
@@ -181,15 +181,15 @@ public class ProdutoController {
         return ResponseEntity.ok(RecomendacaoMapper.toRecomendacaoResponseDto(recomendacaoService.atualizarRecomendacao(id, RecomendacaoMapper.toRecomendacao(recomendacaoDTO, produtoService))));
     }
 
-    @Operation(summary = "Atualiza o produto da recomendação do dia atual", description = "Retorna o produto que representa a recomendação do dia atualizado")
+    @Operation(summary = "Atualiza o produto do destaque atual", description = "Retorna o produto que representa o destaque atualizado")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Altera e retorna o produto que é a recomendação do dia"),
+            @ApiResponse(responseCode = "200", description = "Altera e retorna o produto que é o destaque"),
             @ApiResponse(responseCode = "404", description = "Produto inexistente"),
             @ApiResponse(responseCode = "401", description = "Erro de requisição, Não autorizado"),
     })
     @PutMapping("/recomendacao-do-dia/")
-    public ResponseEntity<RecomendacaoDiaResponseDTO> alterarRecomendacaoDoDia(@RequestBody @Valid RecomendacaoDiaUpdateDTO recomendacaoDTO) {
-        return ResponseEntity.ok(RecomendacaoMapper.toRecomendacaoDiaResponseDTO(recomendacaoService.alterarRecomendacaoDoDia(RecomendacaoMapper.toRecomendacaoDia(recomendacaoDTO, produtoService))));
+    public ResponseEntity<DestaqueResponseDTO> alterarRecomendacaoDoDia(@RequestBody @Valid DestaqueUpdateDTO recomendacaoDTO) {
+        return ResponseEntity.ok(RecomendacaoMapper.toDestaqueResponseDTO(recomendacaoService.alterarRecomendacaoDoDia(RecomendacaoMapper.toDestaque(recomendacaoDTO, produtoService))));
     }
 
     @Operation(summary = "Busca os sorvetes mais populares no momento", description = "Retorna os 10 produtos mais populares que teve mais venda no momento")

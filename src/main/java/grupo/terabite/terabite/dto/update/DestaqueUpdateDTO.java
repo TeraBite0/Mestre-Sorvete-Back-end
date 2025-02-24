@@ -7,7 +7,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class RecomendacaoDiaUpdateDTO {
+public class DestaqueUpdateDTO {
 
     @NotNull
     private Integer produtoId;

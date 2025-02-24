@@ -7,7 +7,7 @@ import java.time.LocalDate;
 
 @Data
 @Builder
-public class RecomendacaoDiaResponseDTO {
+public class DestaqueResponseDTO {
 
     private Integer id;
 

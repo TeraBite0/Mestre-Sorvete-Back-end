@@ -10,25 +10,25 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "RECOMENDACAO_DIA")
-public class RecomendacaoDia {
+@Table(name = "DESTAQUE")
+public class Destaque {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID_RECO_DIA")
+    @Column(name = "ID_DEST")
     private Integer id;
 
     @OneToOne
-    @JoinColumn(name = "FK_ID_PROD_RECO_DIA",referencedColumnName = "ID_PROD")
+    @JoinColumn(name = "FK_ID_PROD_DEST",referencedColumnName = "ID_PROD")
     private Produto produto;
 
-    @Column(name = "DATA_RECO_DIA")
+    @Column(name = "DATA_DEST")
     private LocalDate dtRecomendacao;
 
-    @Column(name = "TEXTO_RECO_DIA")
+    @Column(name = "TEXTO_DEST")
     private String texto;
 
-    public RecomendacaoDia(Produto produto, LocalDate dtRecomendacao) {
+    public Destaque(Produto produto, LocalDate dtRecomendacao) {
         this.produto = produto;
         this.dtRecomendacao = dtRecomendacao;
     }

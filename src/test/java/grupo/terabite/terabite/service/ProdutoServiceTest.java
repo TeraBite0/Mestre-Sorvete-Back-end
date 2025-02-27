@@ -250,7 +250,7 @@ class ProdutoServiceTest {
         Marca marca = marcas.get(0);
 
         try {
-            Mockito.when(produtoRepository.findByNomeContainingIgnoreCaseOrMarca_NomeContainingIgnoreCase(Mockito.anyString(), Mockito.anyString()))
+            Mockito.when(produtoRepository.findByNomeContainingIgnoreCaseOrMarca_NomeContainingIgnoreCaseOrderByNome(Mockito.anyString(), Mockito.anyString()))
                     .thenReturn(
                             this.produtos.stream().filter(p -> p.getNome().toLowerCase().contains("neve")).toList()
                     );
@@ -261,7 +261,7 @@ class ProdutoServiceTest {
             assertTrue(produtos.stream().anyMatch(p -> p.getNome().equals("Neve gelada")), "Produto esperado não encontrado");
             assertTrue(produtos.stream().anyMatch(p -> p.getNome().equals("Neve quente")), "Produto esperado não encontrado");
 
-            Mockito.when(produtoRepository.findByNomeContainingIgnoreCaseOrMarca_NomeContainingIgnoreCase(Mockito.anyString(), Mockito.anyString()))
+            Mockito.when(produtoRepository.findByNomeContainingIgnoreCaseOrMarca_NomeContainingIgnoreCaseOrderByNome(Mockito.anyString(), Mockito.anyString()))
                     .thenReturn(
                             this.produtos.stream().filter(p -> p.getMarca().getNome().toLowerCase().contains(marca.getNome().toLowerCase())).toList()
                     );
@@ -271,7 +271,7 @@ class ProdutoServiceTest {
             assertEquals(4, produtos.size(), "O número de produtos retornados não é o esperado");
             assertTrue(produtos.stream().allMatch(p -> p.getMarca().equals(marca)), "Produto com marca inesperada encontrado");
 
-            Mockito.when(produtoRepository.findByNomeContainingIgnoreCaseOrMarca_NomeContainingIgnoreCase(Mockito.anyString(), Mockito.anyString()))
+            Mockito.when(produtoRepository.findByNomeContainingIgnoreCaseOrMarca_NomeContainingIgnoreCaseOrderByNome(Mockito.anyString(), Mockito.anyString()))
                     .thenReturn(
                             this.produtos.stream().filter(p -> p.getNome().toLowerCase().contains("neve") ||
                                     p.getMarca().getNome().toLowerCase().contains(marca.getNome().toLowerCase())).toList()
@@ -291,7 +291,7 @@ class ProdutoServiceTest {
         Produto produto = null;
 
         try {
-            Mockito.when(produtoRepository.findByNomeIgnoreCase(Mockito.anyString())).thenReturn(produtos.get(4));
+            Mockito.when(produtoRepository.findByNomeIgnoreCaseOrderByNome(Mockito.anyString())).thenReturn(produtos.get(4));
             produto = produtoService.buscarPorNomeProduto("Neve Gelada");
         } catch (Exception e) {
             fail("Erro ao buscar Produtos: " + (e.getMessage() != null ? e.getMessage() : e.getCause()));
@@ -301,7 +301,7 @@ class ProdutoServiceTest {
         assertNotNull(produto, "Produto não encontrado");
         assertEquals(produtos.get(4).getNome(), produto.getNome(), "Nome do produto retornado não é o esperado");
 
-        Mockito.when(produtoRepository.findByNomeIgnoreCase(Mockito.any())).thenReturn(null);
+        Mockito.when(produtoRepository.findByNomeIgnoreCaseOrderByNome(Mockito.any())).thenReturn(null);
         ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> produtoService.buscarPorNomeProduto(null), "Nenhum produto deve ser encontrado com nome null");
 
         assertEquals(404, exception.getStatusCode().value(), "Status da exceção não corresponde ao esperado");
@@ -312,7 +312,7 @@ class ProdutoServiceTest {
     void buscarPorFiltroTipoOuNome() {
         try {
             // Cenário 1: Buscar produtos por nome contendo o termo
-            Mockito.when(produtoRepository.findByNomeIgnoreCaseContainingOrSubtipo_TipoPai_NomeIgnoreCaseContaining(Mockito.anyString(), Mockito.anyString()))
+            Mockito.when(produtoRepository.findByNomeIgnoreCaseContainingOrSubtipo_TipoPai_NomeIgnoreCaseContainingOrderByNome(Mockito.anyString(), Mockito.anyString()))
                     .thenReturn(
                             this.produtos.stream().filter(p -> p.getNome().toLowerCase().contains("neve")).toList()
                     );
@@ -324,7 +324,7 @@ class ProdutoServiceTest {
             assertTrue(produtosResposta.stream().anyMatch(p -> p.getNome().equals("Neve quente")), "Cenário 1 falhou: Produto esperado não encontrado");
 
             // Cenário 2: Buscar produtos por tipo contendo o termo
-            Mockito.when(produtoRepository.findByNomeIgnoreCaseContainingOrSubtipo_TipoPai_NomeIgnoreCaseContaining(Mockito.anyString(), Mockito.anyString()))
+            Mockito.when(produtoRepository.findByNomeIgnoreCaseContainingOrSubtipo_TipoPai_NomeIgnoreCaseContainingOrderByNome(Mockito.anyString(), Mockito.anyString()))
                     .thenReturn(
                             this.produtos.stream().filter(p -> p.getSubtipo().getNome().toLowerCase().contains("quente")).toList()
                     );
@@ -336,7 +336,7 @@ class ProdutoServiceTest {
             assertTrue(produtosResposta.stream().anyMatch(p -> p.getNome().equals("Gelo quente")), "Cenário 2 falhou: Produto esperado não encontrado");
 
             // Cenário 3: Buscar produtos por nome e tipo contendo o termo
-            Mockito.when(produtoRepository.findByNomeIgnoreCaseContainingOrSubtipo_TipoPai_NomeIgnoreCaseContaining(Mockito.anyString(), Mockito.anyString()))
+            Mockito.when(produtoRepository.findByNomeIgnoreCaseContainingOrSubtipo_TipoPai_NomeIgnoreCaseContainingOrderByNome(Mockito.anyString(), Mockito.anyString()))
                     .thenReturn(
                             this.produtos.stream().filter(p -> p.getSubtipo().getNome().toLowerCase().contains("quente") ||
                                     p.getNome().toLowerCase().contains("neve")).toList()

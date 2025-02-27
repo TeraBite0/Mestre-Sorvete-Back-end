@@ -36,7 +36,7 @@ public class ProdutoService {
     }
 
     public List<Produto> buscarPorTermo(String termo, String marca) {
-        List<Produto> produtos = produtoRepository.findByNomeContainingIgnoreCaseOrMarca_NomeContainingIgnoreCase(termo, marca);
+        List<Produto> produtos = produtoRepository.findByNomeContainingIgnoreCaseOrMarca_NomeContainingIgnoreCaseOrderByNome(termo, marca);
         return produtos;
     }
 
@@ -45,14 +45,14 @@ public class ProdutoService {
     }
 
     public Produto buscarPorNomeProduto(String nomeProduto) {
-        if (produtoRepository.findByNomeIgnoreCase(nomeProduto) == null) {
+        if (produtoRepository.findByNomeIgnoreCaseOrderByNome(nomeProduto) == null) {
             throw new ResponseStatusException(HttpStatusCode.valueOf(404));
         }
-        return produtoRepository.findByNomeIgnoreCase(nomeProduto);
+        return produtoRepository.findByNomeIgnoreCaseOrderByNome(nomeProduto);
     }
 
     public List<Produto> buscarPorFiltroTipoOuNome(String nome, String tipo) {
-        return produtoRepository.findByNomeIgnoreCaseContainingOrSubtipo_TipoPai_NomeIgnoreCaseContaining(nome, tipo);
+        return produtoRepository.findByNomeIgnoreCaseContainingOrSubtipo_TipoPai_NomeIgnoreCaseContainingOrderByNome(nome, tipo);
     }
 
     public Produto criarProduto(Produto produto, String nomeMarca, String nomeSubtipo) {

@@ -9,11 +9,11 @@ import java.util.List;
 @Repository
 public interface ProdutoRepository extends JpaRepository<Produto, Integer> {
 
-    Produto findByNomeIgnoreCase(String nome);
+    Produto findByNomeIgnoreCaseOrderByNome(String nome);
 
     List<Produto> findByIsAtivoTrueOrderByNome();
 
-    List<Produto> findByNomeContainingIgnoreCaseOrMarca_NomeContainingIgnoreCase(String termo, String termoMarca);
+    List<Produto> findByNomeContainingIgnoreCaseOrMarca_NomeContainingIgnoreCaseOrderByNome(String termo, String termoMarca);
 
-    List<Produto> findByNomeIgnoreCaseContainingOrSubtipo_TipoPai_NomeIgnoreCaseContaining(String termo, String termoTipo);
+    List<Produto> findByNomeIgnoreCaseContainingOrSubtipo_TipoPai_NomeIgnoreCaseContainingOrderByNome(String termo, String termoTipo);
 }

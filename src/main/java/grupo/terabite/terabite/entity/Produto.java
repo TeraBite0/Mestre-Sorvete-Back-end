@@ -35,11 +35,11 @@ public class Produto {
     private Boolean isAtivo = true;
 
 
-//    @Column(name = "QTD_ESTOQUE_PROD")
-//    private Integer qtdEstoque;
-//
-//    @Column(name = "DISPONIVEL_PROD")
-//    private Boolean emEstoque;
+    @Column(name = "QTD_CAIXA_ESTOQUE_PROD")
+    private Integer qtdCaixasEstoque;
+
+    @Column(name = "DISPONIVEL_PROD")
+    private Boolean disponivel;
 
     @Column(name = "TEM_LACTOSE_PROD")
     private Boolean temLactose = false;

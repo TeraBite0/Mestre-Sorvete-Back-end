@@ -61,14 +61,14 @@ class ProdutoServiceTest {
         );
 
         produtos = List.of(
-                new Produto(1, "Gelo gelado", subtipos.get(0), marcas.get(1), 9.0, true, false, false),
-                new Produto(2, "Gelo geladinho", subtipos.get(0), marcas.get(0), 6.0, true, false, false),
-                new Produto(3, "Gelo quente", subtipos.get(2), marcas.get(1), 8.0, false, false, false),
-                new Produto(4, "Gelo quentinho", subtipos.get(2), marcas.get(0), 10.0, false, false, false),
-                new Produto(5, "Neve gelada", subtipos.get(1), marcas.get(1), 12.0, true, false, false),
-                new Produto(6, "Neve geladinha", subtipos.get(1), marcas.get(0), 10.0, true, false, false),
-                new Produto(7, "Neve quente", subtipos.get(2), marcas.get(1), 10.5, true, false, false),
-                new Produto(8, "Neve quentinha", subtipos.get(2), marcas.get(0), 6.5, true, false, false)
+                new Produto(1,"Gelo gelado", subtipos.get(0), marcas.get(1), 9.0, true, 10, true, false, false),
+                new Produto(2, "Gelo geladinho", subtipos.get(0), marcas.get(0), 6.0, true, 10, true, false, false),
+                new Produto(3, "Gelo quente", subtipos.get(2), marcas.get(1), 8.0, true, 10, false, false, false),
+                new Produto(4, "Gelo quentinho", subtipos.get(2), marcas.get(0), 10.0, true, 10, false, false, false),
+                new Produto(5, "Neve gelada", subtipos.get(1), marcas.get(1), 12.0, true, 10, true, false, false),
+                new Produto(6, "Neve geladinha", subtipos.get(1), marcas.get(0), 10.0, true, 10, true, false, false),
+                new Produto(7, "Neve quente", subtipos.get(2), marcas.get(1), 10.5, true, 10, true, false, false),
+                new Produto(8, "Neve quentinha", subtipos.get(2), marcas.get(0), 6.5, true, 10, true, false, false)
         );
     }
 
@@ -147,7 +147,7 @@ class ProdutoServiceTest {
     @Test
     @DisplayName("Cria corretamente")
     void criarProduto() {
-        Produto produto = new Produto(100, "Gelo esquecido", subtipos.get(0), marcas.get(0), 5.0, null, false, false);
+        Produto produto = new Produto(100, "Gelo esquecido", subtipos.get(0), marcas.get(0), 5.0, true, null,null, false, false);
         Mockito.when(produtoRepository.save(Mockito.any())).thenReturn(produto);
         Mockito.when(marcaService.buscarPorNomeMarca(Mockito.any())).thenReturn(marcas.get(0));
         Mockito.when(subtipoService.buscarPorNomeSubtipo(Mockito.any())).thenReturn(subtipos.get(0));
@@ -169,8 +169,8 @@ class ProdutoServiceTest {
 
 
     @Test
-    @DisplayName("Atualiza corretamente")
-    void atualizarProduto() {
+    @DisplayName("Atualiza corretamente (interno)")
+    void atualizarProdutoProtected() {
         Produto produto = produtos.get(1);
         Marca marca = marcas.get(0);
         Subtipo subtipo = subtipos.get(0);
@@ -180,7 +180,7 @@ class ProdutoServiceTest {
         produto.setPreco(13.33);
         produto.setIsAtivo(false);
         Produto produtoResposta = produto;
-        //produtoResposta.setEmEstoque(null);
+        produtoResposta.setDisponivel(null);
 
         Mockito.when(produtoRepository.save(Mockito.any())).thenReturn(produto);
         Mockito.when(produtoRepository.findById(Mockito.anyInt()))
@@ -203,11 +203,56 @@ class ProdutoServiceTest {
         assertEquals(subtipo, produtoResposta.getSubtipo(), "O subtipo do produto não foi atualizado corretamente");
         assertEquals(produto.getPreco(), produtoResposta.getPreco(), "O preço do produto não foi atualizado corretamente");
         assertFalse(produtoResposta.getIsAtivo(), "O status de ativo do produto não foi atualizado corretamente");
-        //assertEquals(produto.getEmEstoque(), produtoResposta.getEmEstoque(), "O estoque não deveria ser atualizado");
+        assertEquals(produto.getDisponivel(), produtoResposta.getDisponivel(), "O estoque não deveria ser atualizado");
 
         Mockito.when(produtoRepository.findById(Mockito.anyInt())).thenReturn(Optional.empty());
 
         ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> produtoService.atualizarProduto(1, null), "Não deve ser possivel atualizar um produto passando um id inválido como argumento");
+        assertEquals(HttpStatusCode.valueOf(404), exception.getStatusCode(), "O código de erro HTTP está incorreto");
+    }
+
+    @Test
+    @DisplayName("Atualiza corretamente (externo)")
+    void atualizarProduto() {
+        Produto produto = produtos.get(1);
+        Marca marca = marcas.get(0);
+        Subtipo subtipo = subtipos.get(0);
+        produto.setNome("Neve geladinha atualizada");
+        produto.setMarca(marca);
+        produto.setSubtipo(subtipo);
+        produto.setPreco(13.33);
+        produto.setIsAtivo(false);
+        Produto produtoResposta = produto;
+        produtoResposta.setDisponivel(null);
+
+        Mockito.when(produtoRepository.save(Mockito.any())).thenReturn(produto);
+        Mockito.when(marcaService.buscarPorNomeMarca(marca.getNome())).thenReturn(marca);
+        Mockito.when(subtipoService.buscarPorNomeSubtipo(subtipo.getNome())).thenReturn(subtipo);
+        Mockito.when(produtoRepository.findById(Mockito.anyInt()))
+                .thenAnswer(invocation -> {
+                    Integer id = invocation.getArgument(0);
+                    return produtos.stream()
+                            .filter(vendaProduto -> vendaProduto.getId().equals(id))
+                            .findFirst();
+                });
+
+        try {
+            produtoResposta = produtoService.atualizarProduto(2, produtoResposta, marca.getNome(), subtipo.getNome());
+        } catch (Exception e) {
+            fail("Erro ao atualizar Produto: " + (e.getMessage() != null ? e.getMessage() : e.getCause()));
+        }
+
+        assertNotNull(produtoResposta, "O produto atualizado não pode ser nulo");
+        assertEquals(produto.getNome(), produtoResposta.getNome(), "O nome do produto não foi atualizado corretamente");
+        assertEquals(marca, produtoResposta.getMarca(), "A marca do produto não foi atualizada corretamente");
+        assertEquals(subtipo, produtoResposta.getSubtipo(), "O subtipo do produto não foi atualizado corretamente");
+        assertEquals(produto.getPreco(), produtoResposta.getPreco(), "O preço do produto não foi atualizado corretamente");
+        assertFalse(produtoResposta.getIsAtivo(), "O status de ativo do produto não foi atualizado corretamente");
+        assertEquals(produto.getDisponivel(), produtoResposta.getDisponivel(), "O estoque não deveria ser atualizado");
+
+        Mockito.when(produtoRepository.findById(Mockito.anyInt())).thenReturn(Optional.empty());
+
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> produtoService.atualizarProduto(1, null, "", ""), "Não deve ser possivel atualizar um produto passando um id inválido como argumento");
         assertEquals(HttpStatusCode.valueOf(404), exception.getStatusCode(), "O código de erro HTTP está incorreto");
     }
 

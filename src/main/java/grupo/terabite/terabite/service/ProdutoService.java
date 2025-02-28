@@ -51,9 +51,10 @@ public class ProdutoService {
 
     public Produto criarProduto(Produto produto, String nomeMarca, String nomeSubtipo) {
         produto.setMarca(marcaService.buscarPorNomeMarca(nomeMarca));
-        // produto.setEmEstoque(false);
         produto.setSubtipo((subtipoService.buscarPorNomeSubtipo(nomeSubtipo)));
         produto.setIsAtivo(true);
+        produto.setDisponivel(false);
+        produto.setQtdCaixasEstoque(0);
         return produtoRepository.save(produto);
     }
 
@@ -63,9 +64,6 @@ public class ProdutoService {
             throw new ResponseStatusException(HttpStatusCode.valueOf(404));
         }
         produtoAtualizado.setId(id);
-        //        if (produtoAtualizado.getEmEstoque() == null) {
-        //            produtoAtualizado.setEmEstoque(produtoAntigo.getEmEstoque());
-        //        }
         produtoAtualizado.setMarca(marcaService.buscarPorNomeMarca(nomeMarca));
         produtoAtualizado.setSubtipo((subtipoService.buscarPorNomeSubtipo(nomeSubtipo)));
         return produtoRepository.save(produtoAtualizado);
@@ -77,9 +75,6 @@ public class ProdutoService {
             throw new ResponseStatusException(HttpStatusCode.valueOf(404));
         }
         produtoAtualizado.setId(id);
-        //        if (produtoAtualizado.getEmEstoque() == null) {
-        //            produtoAtualizado.setEmEstoque(produtoAntigo.getEmEstoque());
-        //        }
         return produtoRepository.save(produtoAtualizado);
     }
 

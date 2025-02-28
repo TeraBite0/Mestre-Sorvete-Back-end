@@ -39,10 +39,10 @@ class NotificacaoServiceTest {
     @BeforeEach
     protected void setup() {
         this.produtos = List.of(
-                new Produto(1, "Gelo gelado", null, null, 10.00, true, false, false),
-                new Produto(2, "Gelo geladinho", null, null, 10.0, true, false, false),
-                new Produto(3, "Gelo quentinho", null, null, 10.0, false, false, false),
-                new Produto(4, "Gelo quente", null, null, 10.0, false, false, false));
+                new Produto(1, "Gelo gelado", null, null, 10.00, true, 1, true, false, false),
+                new Produto(2, "Gelo geladinho", null, null, 10.0, true, 1, true, false, false),
+                new Produto(3, "Gelo quentinho", null, null, 10.0, true, 0, false, false, false),
+                new Produto(4, "Gelo quente", null, null, 10.0, true, 1, false, false, false));
 
 
         this.notificacoes = List.of(

@@ -2,9 +2,8 @@ package grupo.terabite.terabite.service;
 
 import grupo.terabite.terabite.entity.*;
 import grupo.terabite.terabite.repository.LoteRepository;
-import grupo.terabite.terabite.repository.PerdaRepository;
-import grupo.terabite.terabite.repository.VendaProdutoRepository;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.annotations.Any;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -18,8 +17,8 @@ public class LoteService {
 
     private final LoteRepository loteRepository;
     private final ProdutoService produtoService;
-    private final VendaProdutoRepository vendaProdutoRepository;
-    private final PerdaRepository perdaRepository;
+    // private final VendaProdutoRepository vendaProdutoRepository;
+    // private final PerdaRepository perdaRepository;
     private final NotificacaoService notificacaoService;
 
     private List<Lote> listarLote() {
@@ -42,11 +41,11 @@ public class LoteService {
         novoLote.setId(null);
         Produto p = produtoService.buscarPorId(novoLote.getProduto().getId());
 
-        if (!p.getEmEstoque()) { // atualiza o status de estoque do produto apenas se necessário
-            p.setEmEstoque(true);
-            produtoService.atualizarProduto(p.getId(), p);
-            notificacaoService.notificarProdutoEmEstoque(p);
-        }
+        //        if (!p.getEmEstoque()) { // atualiza o status de estoque do produto apenas se necessário
+        //            p.setEmEstoque(true);
+        //            produtoService.atualizarProduto(p.getId(), p);
+        //            notificacaoService.notificarProdutoEmEstoque(p);
+        //        }
 
         return loteRepository.save(novoLote);
     }
@@ -60,7 +59,7 @@ public class LoteService {
 
         if (produtoEmEstoque(lote.getProduto().getId()) < 1) {
             Produto p = produtoService.buscarPorId(lote.getProduto().getId());
-            p.setEmEstoque(false);
+            // p.setEmEstoque(false);
             produtoService.atualizarProduto(p.getId(), p);
         }
 
@@ -75,23 +74,24 @@ public class LoteService {
     }
 
     public Integer produtoEmEstoque(Integer produtoId) {
-        Integer qtdEmEstoque = 0;
-        List<VendaProduto> vendaProdutos = vendaProdutoRepository.findByProdutoId(produtoId);
-        List<Lote> lotes = loteRepository.findByProdutoId(produtoId);
-        List<Perda> perdas = perdaRepository.findByProdutoId(produtoId);
-
-
-        for (Lote l : lotes) {
-            qtdEmEstoque += l.getQtdProdutoComprado();
-        }
-        for (VendaProduto v : vendaProdutos) {
-            qtdEmEstoque -= v.getQtdProdutosVendido();
-        }
-        for (Perda p : perdas) {
-            qtdEmEstoque -= p.getQtdProduto();
-        }
-
-        return qtdEmEstoque;
+        return null;
+//        Integer qtdEmEstoque = 0;
+//        List<VendaProduto> vendaProdutos = vendaProdutoRepository.findByProdutoId(produtoId);
+//        List<Lote> lotes = loteRepository.findByProdutoId(produtoId);
+//        List<Perda> perdas = perdaRepository.findByProdutoId(produtoId);
+//
+//
+//        for (Lote l : lotes) {
+//            qtdEmEstoque += l.getQtdProdutoComprado();
+//        }
+//        for (VendaProduto v : vendaProdutos) {
+//            qtdEmEstoque -= v.getQtdProdutosVendido();
+//        }
+//        for (Perda p : perdas) {
+//            qtdEmEstoque -= p.getQtdProduto();
+//        }
+//
+//        return qtdEmEstoque;
     }
 
     public List<Lote> buscarPorProdutoId(Integer id) {
@@ -102,41 +102,42 @@ public class LoteService {
         return lotes;
     }
 
-    public List<EstoqueProduto> estoque() {
-        List<Produto> produtos = produtoService.listarProduto();
-        List<Lote> lotes = loteRepository.findAll();
-        List<Perda> perdas = perdaRepository.findAll();
-        List<VendaProduto> vendas = vendaProdutoRepository.findAll();
-        List<EstoqueProduto> estoque = new ArrayList<>();
-
-        for (Produto p : produtos) {
-            Integer qtdEmEstoque = 0;
-            List<Lote> lotesDoProduto = lotes.stream()
-                    .filter(lote -> lote.getProduto().getId().equals(p.getId())).toList();
-            List<VendaProduto> vendasDoProduto = vendas.stream()
-                    .filter(venda -> venda.getProduto().getId().equals(p.getId())).toList();
-            List<Perda> perdasDoProduto = perdas.stream()
-                    .filter((perda -> perda.getProduto().getId().equals(p.getId()))).toList();
-
-            for (Lote l : lotesDoProduto) {
-                qtdEmEstoque += l.getQtdProdutoComprado();
-            }
-            for (VendaProduto v : vendasDoProduto) {
-                qtdEmEstoque -= v.getQtdProdutosVendido();
-            }
-            for (Perda pe : perdasDoProduto) {
-                qtdEmEstoque -= pe.getQtdProduto();
-            }
-
-            estoque.add(new EstoqueProduto(
-                    p.getId(),
-                    p.getNome(),
-                    p.getMarca().getNome(),
-                    p.getPreco(),
-                    qtdEmEstoque
-            ));
-        }
-
-        return estoque;
+    public List<Any> estoque() {
+        return null;
+//        List<Produto> produtos = produtoService.listarProduto();
+//        List<Lote> lotes = loteRepository.findAll();
+//        List<Perda> perdas = perdaRepository.findAll();
+//        List<VendaProduto> vendas = vendaProdutoRepository.findAll();
+//        List<EstoqueProduto> estoque = new ArrayList<>();
+//
+//        for (Produto p : produtos) {
+//            Integer qtdEmEstoque = 0;
+//            List<Lote> lotesDoProduto = lotes.stream()
+//                    .filter(lote -> lote.getProduto().getId().equals(p.getId())).toList();
+//            List<VendaProduto> vendasDoProduto = vendas.stream()
+//                    .filter(venda -> venda.getProduto().getId().equals(p.getId())).toList();
+//            List<Perda> perdasDoProduto = perdas.stream()
+//                    .filter((perda -> perda.getProduto().getId().equals(p.getId()))).toList();
+//
+//            for (Lote l : lotesDoProduto) {
+//                qtdEmEstoque += l.getQtdProdutoComprado();
+//            }
+//            for (VendaProduto v : vendasDoProduto) {
+//                qtdEmEstoque -= v.getQtdProdutosVendido();
+//            }
+//            for (Perda pe : perdasDoProduto) {
+//                qtdEmEstoque -= pe.getQtdProduto();
+//            }
+//
+//            estoque.add(new EstoqueProduto(
+//                    p.getId(),
+//                    p.getNome(),
+//                    p.getMarca().getNome(),
+//                    p.getPreco(),
+//                    qtdEmEstoque
+//            ));
+//        }
+//
+//        return estoque;
     }
 }

@@ -34,8 +34,12 @@ public class Produto {
     @Column(name = "IS_ATIVO_PROD")
     private Boolean isAtivo = true;
 
-    @Column(name = "EM_ESTOQUE_PROD")
-    private Boolean emEstoque;
+
+//    @Column(name = "QTD_ESTOQUE_PROD")
+//    private Integer qtdEstoque;
+//
+//    @Column(name = "DISPONIVEL_PROD")
+//    private Boolean emEstoque;
 
     @Column(name = "TEM_LACTOSE_PROD")
     private Boolean temLactose = false;

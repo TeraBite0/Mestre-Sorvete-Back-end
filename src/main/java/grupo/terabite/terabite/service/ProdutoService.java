@@ -1,18 +1,12 @@
 package grupo.terabite.terabite.service;
 
-import grupo.terabite.terabite.dto.internal.ProdutoQuantidadeDTO;
 import grupo.terabite.terabite.entity.Produto;
 import grupo.terabite.terabite.repository.ProdutoRepository;
-import grupo.terabite.terabite.repository.VendaProdutoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -21,7 +15,7 @@ public class ProdutoService {
     private final ProdutoRepository produtoRepository;
     private final MarcaService marcaService;
     private final SubtipoService subtipoService;
-    private final VendaProdutoRepository vendaProdutoRepository;
+    //private final VendaProdutoRepository vendaProdutoRepository;
 
     public List<Produto> listarProduto() {
         return produtoRepository.findAll();
@@ -57,7 +51,7 @@ public class ProdutoService {
 
     public Produto criarProduto(Produto produto, String nomeMarca, String nomeSubtipo) {
         produto.setMarca(marcaService.buscarPorNomeMarca(nomeMarca));
-        produto.setEmEstoque(false);
+        // produto.setEmEstoque(false);
         produto.setSubtipo((subtipoService.buscarPorNomeSubtipo(nomeSubtipo)));
         produto.setIsAtivo(true);
         return produtoRepository.save(produto);
@@ -69,9 +63,9 @@ public class ProdutoService {
             throw new ResponseStatusException(HttpStatusCode.valueOf(404));
         }
         produtoAtualizado.setId(id);
-        if (produtoAtualizado.getEmEstoque() == null) {
-            produtoAtualizado.setEmEstoque(produtoAntigo.getEmEstoque());
-        }
+        //        if (produtoAtualizado.getEmEstoque() == null) {
+        //            produtoAtualizado.setEmEstoque(produtoAntigo.getEmEstoque());
+        //        }
         produtoAtualizado.setMarca(marcaService.buscarPorNomeMarca(nomeMarca));
         produtoAtualizado.setSubtipo((subtipoService.buscarPorNomeSubtipo(nomeSubtipo)));
         return produtoRepository.save(produtoAtualizado);
@@ -83,30 +77,31 @@ public class ProdutoService {
             throw new ResponseStatusException(HttpStatusCode.valueOf(404));
         }
         produtoAtualizado.setId(id);
-        if (produtoAtualizado.getEmEstoque() == null) {
-            produtoAtualizado.setEmEstoque(produtoAntigo.getEmEstoque());
-        }
+        //        if (produtoAtualizado.getEmEstoque() == null) {
+        //            produtoAtualizado.setEmEstoque(produtoAntigo.getEmEstoque());
+        //        }
         return produtoRepository.save(produtoAtualizado);
     }
 
     public List<Produto> popular() {
-        List<Produto> populares = new ArrayList<>();
-        LocalDate mesPassado = LocalDate.now().minusMonths(2);
-        List<ProdutoQuantidadeDTO> produtoQuantidadeDTO = Optional.of(vendaProdutoRepository.qtdVendidosPorMesEAno(mesPassado.getMonthValue(), mesPassado.getYear()))
-                .filter(list -> !list.isEmpty())
-                .orElseThrow(() -> new IllegalStateException("Não tem produtos vendidos nesse mês ainda"));
-
-        int tamanhoDaListaProduto = produtoQuantidadeDTO.size();
-        if(tamanhoDaListaProduto < 5){
-            produtoQuantidadeDTO.forEach(produto ->{
-                populares.add(produto.getProduto());
-            });
-        } else {
-            produtoQuantidadeDTO.stream().limit(5).forEach(produto ->{
-                populares.add(produto.getProduto());
-            });
-        }
-
-        return populares;
+        return null;
+//        List<Produto> populares = new ArrayList<>();
+//        LocalDate mesPassado = LocalDate.now().minusMonths(2);
+//        List<ProdutoQuantidadeDTO> produtoQuantidadeDTO = Optional.of(vendaProdutoRepository.qtdVendidosPorMesEAno(mesPassado.getMonthValue(), mesPassado.getYear()))
+//                .filter(list -> !list.isEmpty())
+//                .orElseThrow(() -> new IllegalStateException("Não tem produtos vendidos nesse mês ainda"));
+//
+//        int tamanhoDaListaProduto = produtoQuantidadeDTO.size();
+//        if(tamanhoDaListaProduto < 5){
+//            produtoQuantidadeDTO.forEach(produto ->{
+//                populares.add(produto.getProduto());
+//            });
+//        } else {
+//            produtoQuantidadeDTO.stream().limit(5).forEach(produto ->{
+//                populares.add(produto.getProduto());
+//            });
+//        }
+//
+//        return populares;
     }
 }

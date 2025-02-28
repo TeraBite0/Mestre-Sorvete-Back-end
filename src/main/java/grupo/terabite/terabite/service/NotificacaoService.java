@@ -27,7 +27,7 @@ public class NotificacaoService {
     }
 
     public void notificarProdutoEmEstoque(Produto produto) {
-        if (produto.getEmEstoque() && produto.getIsAtivo()) {
+        if (/* produto.getEmEstoque() && */ produto.getIsAtivo()) {
 
             List<Notificacao> notificacoes = notificacaoRepository.findByProdutoId(produto.getId());
             if (!notificacoes.isEmpty()) {

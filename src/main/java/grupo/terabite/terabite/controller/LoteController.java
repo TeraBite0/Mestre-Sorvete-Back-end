@@ -1,19 +1,17 @@
 package grupo.terabite.terabite.controller;
 
 import grupo.terabite.terabite.dto.create.LoteCreateDTO;
-import grupo.terabite.terabite.dto.mapper.EstoqueProdutoMapper;
 import grupo.terabite.terabite.dto.mapper.LoteMapper;
-import grupo.terabite.terabite.dto.response.EstoqueProdutoResponseDTO;
 import grupo.terabite.terabite.dto.response.LoteResponseDTO;
 import grupo.terabite.terabite.dto.update.LoteUpdateDTO;
 import grupo.terabite.terabite.entity.Lote;
 import grupo.terabite.terabite.service.LoteService;
 import grupo.terabite.terabite.service.ProdutoService;
-import grupo.terabite.terabite.service.api.HgApiService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.annotations.Any;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,7 +25,6 @@ public class LoteController {
 
     private final LoteService loteService;
     private final ProdutoService produtoService;
-    private final HgApiService weatherService;
 
     @Operation(summary = "Lista todos produtos com informações de estoque", description = "Retorna todos os produtos com lotes registrados")
     @ApiResponses(value = {
@@ -36,8 +33,8 @@ public class LoteController {
             @ApiResponse(responseCode = "401", description = "Erro de requisição, Não autorizado")
     })
     @GetMapping
-    public ResponseEntity<List<EstoqueProdutoResponseDTO>> listarEstoque() {
-        return ResponseEntity.ok(loteService.estoque().stream().map(EstoqueProdutoMapper::toResponseDTO).toList());
+    public ResponseEntity<List<Any>> listarEstoque() {
+        return null; // ResponseEntity.ok(loteService.estoque().stream().map(EstoqueProdutoMapper::toResponseDTO).toList());
     }
 
     @Operation(summary = "Busca um lote pelo ID", description = "Retorna um lote com base no seu ID")

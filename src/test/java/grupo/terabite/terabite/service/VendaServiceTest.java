@@ -1,8 +1,6 @@
 package grupo.terabite.terabite.service;
 
 import grupo.terabite.terabite.entity.*;
-import grupo.terabite.terabite.repository.VendaProdutoRepository;
-import grupo.terabite.terabite.repository.VendaRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

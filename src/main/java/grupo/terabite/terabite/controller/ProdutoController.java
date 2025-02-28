@@ -4,19 +4,18 @@ import grupo.terabite.terabite.dto.create.ProdutoCreateDTO;
 import grupo.terabite.terabite.dto.mapper.ProdutoMapper;
 import grupo.terabite.terabite.dto.mapper.ProdutoPopularesMapper;
 import grupo.terabite.terabite.dto.mapper.RecomendacaoMapper;
+import grupo.terabite.terabite.dto.response.DestaqueResponseDTO;
 import grupo.terabite.terabite.dto.response.ProdutoPopularesReponseDto;
 import grupo.terabite.terabite.dto.response.ProdutoResponseDTO;
-import grupo.terabite.terabite.dto.response.DestaqueResponseDTO;
 import grupo.terabite.terabite.dto.response.RecomendacaoResponseDTO;
-import grupo.terabite.terabite.dto.update.ProdutoUpdateDTO;
 import grupo.terabite.terabite.dto.update.DestaqueUpdateDTO;
+import grupo.terabite.terabite.dto.update.ProdutoUpdateDTO;
 import grupo.terabite.terabite.dto.update.RecomendacaoUpdateDTO;
 import grupo.terabite.terabite.entity.Produto;
 import grupo.terabite.terabite.service.MarcaService;
 import grupo.terabite.terabite.service.ProdutoService;
 import grupo.terabite.terabite.service.RecomendacaoService;
 import grupo.terabite.terabite.service.SubtipoService;
-import grupo.terabite.terabite.service.api.HgApiService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -38,7 +37,6 @@ public class ProdutoController {
     private final RecomendacaoService recomendacaoService;
     private final SubtipoService subtipoService;
     private final MarcaService marcaService;
-    private final HgApiService weatherService;
 
     @Operation(summary = "Lista todos produtos", description = "Retorna uma lista com todos os produtos")
     @ApiResponses(value = {

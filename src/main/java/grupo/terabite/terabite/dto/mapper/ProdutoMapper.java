@@ -21,7 +21,7 @@ public class ProdutoMapper {
                 .nome(produto.getNome())
                 .preco(produto.getPreco())
                 .isAtivo(produto.getIsAtivo())
-                .emEstoque(produto.getEmEstoque())
+                //.emEstoque(produto.getEmEstoque())
                 .temGluten(produto.getTemGluten())
                 .temLactose(produto.getTemLactose())
                 .marca(MarcaResponseDTO.builder()

@@ -148,15 +148,7 @@ public class ProdutoController {
         return ResponseEntity.ok(ProdutoMapper.toResponseDto(produtoService.atualizarProduto(id, ProdutoMapper.toAtualizar(produtoUpdateDTO, subtipoService, marcaService), produtoUpdateDTO.getNomeMarca(), produtoUpdateDTO.getNomeSubtipo())));
     }
 
-    @Operation(summary = "Busca o destaque atual", description = "Retorna o produto aleatório que representa o destaque")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Retorna o produto que é o destaque"),
-            @ApiResponse(responseCode = "204", description = "Operação sucedida, nenhum produto cadastrado")
-    })
-    @GetMapping("/recomendacao-do-dia")
-    public ResponseEntity<DestaqueResponseDTO> destaque() {
-        return ResponseEntity.ok(RecomendacaoMapper.toDestaqueResponseDTO(recomendacaoService.recomendacaoDoDia()));
-    }
+//    RECOMENDAÇÃO E DESTAQUE
 
     @Operation(summary = "Lista as recomendações", description = "Retorna a lista de produtos recomendados")
     @ApiResponses(value = {
@@ -179,26 +171,24 @@ public class ProdutoController {
         return ResponseEntity.ok(RecomendacaoMapper.toRecomendacaoResponseDto(recomendacaoService.atualizarRecomendacao(id, RecomendacaoMapper.toRecomendacao(recomendacaoDTO, produtoService))));
     }
 
+    @Operation(summary = "Busca o destaque atual", description = "Retorna o produto aleatório que representa o destaque")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Retorna o produto que é o destaque"),
+            @ApiResponse(responseCode = "204", description = "Operação sucedida, nenhum produto cadastrado")
+    })
+    @GetMapping("/destaque")
+    public ResponseEntity<DestaqueResponseDTO> destaque() {
+        return ResponseEntity.ok(RecomendacaoMapper.toDestaqueResponseDTO(recomendacaoService.recomendacaoDoDia()));
+    }
+
     @Operation(summary = "Atualiza o produto do destaque atual", description = "Retorna o produto que representa o destaque atualizado")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Altera e retorna o produto que é o destaque"),
             @ApiResponse(responseCode = "404", description = "Produto inexistente"),
             @ApiResponse(responseCode = "401", description = "Erro de requisição, Não autorizado"),
     })
-    @PutMapping("/recomendacao-do-dia/")
-    public ResponseEntity<DestaqueResponseDTO> alterarRecomendacaoDoDia(@RequestBody @Valid DestaqueUpdateDTO recomendacaoDTO) {
+    @PutMapping("/destaque/")
+    public ResponseEntity<DestaqueResponseDTO> alterarDestaque(@RequestBody @Valid DestaqueUpdateDTO recomendacaoDTO) {
         return ResponseEntity.ok(RecomendacaoMapper.toDestaqueResponseDTO(recomendacaoService.alterarRecomendacaoDoDia(RecomendacaoMapper.toDestaque(recomendacaoDTO, produtoService))));
-    }
-
-    @Operation(summary = "Busca os sorvetes mais populares no momento", description = "Retorna os 10 produtos mais populares que teve mais venda no momento")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Retorna os produtos mais populares no momento"),
-            @ApiResponse(responseCode = "204", description = "Operação sucedida, nenhum produto cadastrado")
-    })
-    @GetMapping("/populares")
-    public ResponseEntity<List<ProdutoPopularesReponseDto>> populares() {
-        List<Produto> produtos = produtoService.popular();
-        if (produtos.isEmpty()) throw new ResponseStatusException(HttpStatusCode.valueOf(204));
-        return ResponseEntity.ok(produtos.stream().map(ProdutoPopularesMapper::toDetalheProdutoPopularDto).toList());
     }
 }

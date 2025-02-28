@@ -15,7 +15,6 @@ public class ProdutoService {
     private final ProdutoRepository produtoRepository;
     private final MarcaService marcaService;
     private final SubtipoService subtipoService;
-    //private final VendaProdutoRepository vendaProdutoRepository;
 
     public List<Produto> listarProduto() {
         return produtoRepository.findAll();
@@ -76,27 +75,5 @@ public class ProdutoService {
         }
         produtoAtualizado.setId(id);
         return produtoRepository.save(produtoAtualizado);
-    }
-
-    public List<Produto> popular() {
-        return null;
-//        List<Produto> populares = new ArrayList<>();
-//        LocalDate mesPassado = LocalDate.now().minusMonths(2);
-//        List<ProdutoQuantidadeDTO> produtoQuantidadeDTO = Optional.of(vendaProdutoRepository.qtdVendidosPorMesEAno(mesPassado.getMonthValue(), mesPassado.getYear()))
-//                .filter(list -> !list.isEmpty())
-//                .orElseThrow(() -> new IllegalStateException("Não tem produtos vendidos nesse mês ainda"));
-//
-//        int tamanhoDaListaProduto = produtoQuantidadeDTO.size();
-//        if(tamanhoDaListaProduto < 5){
-//            produtoQuantidadeDTO.forEach(produto ->{
-//                populares.add(produto.getProduto());
-//            });
-//        } else {
-//            produtoQuantidadeDTO.stream().limit(5).forEach(produto ->{
-//                populares.add(produto.getProduto());
-//            });
-//        }
-//
-//        return populares;
     }
 }

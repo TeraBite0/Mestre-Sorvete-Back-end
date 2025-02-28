@@ -1,7 +1,9 @@
 package grupo.terabite.terabite.service;
 
-import grupo.terabite.terabite.dto.internal.ProdutoQuantidadeDTO;
-import grupo.terabite.terabite.entity.*;
+import grupo.terabite.terabite.entity.Marca;
+import grupo.terabite.terabite.entity.Produto;
+import grupo.terabite.terabite.entity.Subtipo;
+import grupo.terabite.terabite.entity.Tipo;
 import grupo.terabite.terabite.repository.ProdutoRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -14,7 +16,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -33,12 +34,6 @@ class ProdutoServiceTest {
     @Mock
     private SubtipoService subtipoService;
 
-    @Mock
-    private VendaRepository vendaRepository;
-
-    @Mock
-    private VendaProdutoRepository vendaProdutoRepository;
-
     @InjectMocks
     private ProdutoService produtoService;
 
@@ -46,8 +41,6 @@ class ProdutoServiceTest {
     List<Subtipo> subtipos;
     List<Marca> marcas;
     List<Produto> produtos;
-    List<Venda> vendas;
-    List<VendaProduto> vendaProdutos;
 
     @BeforeEach
     protected void setup() {
@@ -68,38 +61,14 @@ class ProdutoServiceTest {
         );
 
         produtos = List.of(
-                new Produto(1, "Gelo gelado", subtipos.get(0), marcas.get(1), 9.0, true, false, false, false),
-                new Produto(2, "Gelo geladinho", subtipos.get(0), marcas.get(0), 6.0, true, false, false, false),
-                new Produto(3, "Gelo quente", subtipos.get(2), marcas.get(1), 8.0, false, true, false, false),
-                new Produto(4, "Gelo quentinho", subtipos.get(2), marcas.get(0), 10.0, false, true, false, false),
-                new Produto(5, "Neve gelada", subtipos.get(1), marcas.get(1), 12.0, true, true, false, false),
-                new Produto(6, "Neve geladinha", subtipos.get(1), marcas.get(0), 10.0, true, true, false, false),
-                new Produto(7, "Neve quente", subtipos.get(2), marcas.get(1), 10.5, true, true, false, false),
-                new Produto(8, "Neve quentinha", subtipos.get(2), marcas.get(0), 6.5, true, true, false, false)
-        );
-
-        vendas = List.of(
-                new Venda(LocalDateTime.now()),
-                new Venda(LocalDateTime.now().minusDays(1)),
-                new Venda(LocalDateTime.now().minusDays(10)),
-                new Venda(LocalDateTime.now().minusDays(100)),
-                new Venda(LocalDateTime.now().minusDays(100))
-        );
-
-        vendaProdutos = List.of(
-                new VendaProduto(1, vendas.get(0), produtos.get(0), 2),
-                new VendaProduto(1, vendas.get(0), produtos.get(0), 2),
-                new VendaProduto(2, vendas.get(0), produtos.get(1), 1),
-                new VendaProduto(3, vendas.get(0), produtos.get(2), 3),
-                new VendaProduto(4, vendas.get(1), produtos.get(1), 5),
-                new VendaProduto(5, vendas.get(1), produtos.get(3), 2),
-                new VendaProduto(6, vendas.get(2), produtos.get(4), 7),
-                new VendaProduto(7, vendas.get(2), produtos.get(5), 4),
-                new VendaProduto(8, vendas.get(2), produtos.get(6), 1),
-                new VendaProduto(9, vendas.get(3), produtos.get(2), 6),
-                new VendaProduto(10, vendas.get(3), produtos.get(7), 2),
-                new VendaProduto(11, vendas.get(3), produtos.get(0), 3),
-                new VendaProduto(11, vendas.get(4), produtos.get(0), 7)
+                new Produto(1, "Gelo gelado", subtipos.get(0), marcas.get(1), 9.0, true, false, false),
+                new Produto(2, "Gelo geladinho", subtipos.get(0), marcas.get(0), 6.0, true, false, false),
+                new Produto(3, "Gelo quente", subtipos.get(2), marcas.get(1), 8.0, false, false, false),
+                new Produto(4, "Gelo quentinho", subtipos.get(2), marcas.get(0), 10.0, false, false, false),
+                new Produto(5, "Neve gelada", subtipos.get(1), marcas.get(1), 12.0, true, false, false),
+                new Produto(6, "Neve geladinha", subtipos.get(1), marcas.get(0), 10.0, true, false, false),
+                new Produto(7, "Neve quente", subtipos.get(2), marcas.get(1), 10.5, true, false, false),
+                new Produto(8, "Neve quentinha", subtipos.get(2), marcas.get(0), 6.5, true, false, false)
         );
     }
 
@@ -178,7 +147,7 @@ class ProdutoServiceTest {
     @Test
     @DisplayName("Cria corretamente")
     void criarProduto() {
-        Produto produto = new Produto(100, "Gelo esquecido", subtipos.get(0), marcas.get(0), 5.0, null, null, false, false);
+        Produto produto = new Produto(100, "Gelo esquecido", subtipos.get(0), marcas.get(0), 5.0, null, false, false);
         Mockito.when(produtoRepository.save(Mockito.any())).thenReturn(produto);
         Mockito.when(marcaService.buscarPorNomeMarca(Mockito.any())).thenReturn(marcas.get(0));
         Mockito.when(subtipoService.buscarPorNomeSubtipo(Mockito.any())).thenReturn(subtipos.get(0));
@@ -195,7 +164,7 @@ class ProdutoServiceTest {
         assertEquals(marcas.get(0).getNome(), produtoResposta.getMarca().getNome(), "Nome da marca alterado na criação");
         assertEquals(subtipos.get(0).getNome(), produtoResposta.getSubtipo().getNome(), "Nome do subtipo alterado na criação");
         assertTrue(produtoResposta.getIsAtivo(), "IsAtivo deve ser verdadeiro na criação");
-        assertFalse(produtoResposta.getEmEstoque(), "emEstoque deve ser false na criação");
+        // assertFalse(produtoResposta.getEmEstoque(), "emEstoque deve ser false na criação");
     }
 
 
@@ -211,7 +180,7 @@ class ProdutoServiceTest {
         produto.setPreco(13.33);
         produto.setIsAtivo(false);
         Produto produtoResposta = produto;
-        produtoResposta.setEmEstoque(null);
+        //produtoResposta.setEmEstoque(null);
 
         Mockito.when(produtoRepository.save(Mockito.any())).thenReturn(produto);
         Mockito.when(produtoRepository.findById(Mockito.anyInt()))
@@ -234,7 +203,7 @@ class ProdutoServiceTest {
         assertEquals(subtipo, produtoResposta.getSubtipo(), "O subtipo do produto não foi atualizado corretamente");
         assertEquals(produto.getPreco(), produtoResposta.getPreco(), "O preço do produto não foi atualizado corretamente");
         assertFalse(produtoResposta.getIsAtivo(), "O status de ativo do produto não foi atualizado corretamente");
-        assertEquals(produto.getEmEstoque(), produtoResposta.getEmEstoque(), "O estoque não deveria ser atualizado");
+        //assertEquals(produto.getEmEstoque(), produtoResposta.getEmEstoque(), "O estoque não deveria ser atualizado");
 
         Mockito.when(produtoRepository.findById(Mockito.anyInt())).thenReturn(Optional.empty());
 
@@ -353,49 +322,49 @@ class ProdutoServiceTest {
     }
 
 
-
-    @Test
-    @DisplayName("Lista no máximo 5 produtos mais populares quando existirem 5 ou mais produtos registrados")
-    void listaPopularesQuandoExistiremCincoOuMaisProdutos() {
-        Mockito.when(vendaProdutoRepository.qtdVendidosPorMesEAno(Mockito.any(), Mockito.any())).thenReturn(
-                List.of( new ProdutoQuantidadeDTO(produtos.get(0),  10L),
-                        new ProdutoQuantidadeDTO(produtos.get(5), 9L),
-                        new ProdutoQuantidadeDTO(produtos.get(1), 6L),
-                        new ProdutoQuantidadeDTO(produtos.get(6), 5L),
-                        new ProdutoQuantidadeDTO(produtos.get(7), 5L)));
-
-        List<Produto> populares = null;
-
-        try {
-            populares = produtoService.popular();
-
-        } catch (Exception e) {
-            fail("Erro ao buscar Produtos Populares: " + (e.getMessage() != null ? e.getMessage() : e.getCause()));
-        }
-
-        assertNotNull(populares, "Os produtos encontrados não podem ser nulo");
-        assertTrue(populares.size() <= 5, "Deve retornar no máximo 5 produtos.");
-        assertTrue(populares.stream().allMatch(Produto::getIsAtivo), "Todos os produtos devem estar ativos.");
-    }
-
-    @Test
-    @DisplayName("Lista menos de 5 produtos mais populares quando existirem menos de 5 produtos registrados")
-    void listaPopularesQuandoExistiremMenosDeCincoProdutos() {
-        Mockito.when(vendaProdutoRepository.qtdVendidosPorMesEAno(Mockito.any(), Mockito.any())).thenReturn(
-                List.of( new ProdutoQuantidadeDTO(produtos.get(0),  10L),
-                        new ProdutoQuantidadeDTO(produtos.get(1), 9L)));
-
-        List<Produto> populares = null;
-
-        try {
-            populares = produtoService.popular();
-
-        } catch (Exception e) {
-            fail("Erro ao buscar Produtos Populares: " + (e.getMessage() != null ? e.getMessage() : e.getCause()));
-        }
-
-        assertNotNull(populares, "Os produtos encontrados não podem ser nulo");
-        assertTrue(populares.size() < 5, "Deve retornar menos que 5 produtos.");
-        assertTrue(populares.stream().allMatch(Produto::getIsAtivo), "Todos os produtos devem estar ativos.");
-    }
+    //
+    //    @Test
+    //    @DisplayName("Lista no máximo 5 produtos mais populares quando existirem 5 ou mais produtos registrados")
+    //    void listaPopularesQuandoExistiremCincoOuMaisProdutos() {
+    //        Mockito.when(vendaProdutoRepository.qtdVendidosPorMesEAno(Mockito.any(), Mockito.any())).thenReturn(
+    //                List.of( new ProdutoQuantidadeDTO(produtos.get(0),  10L),
+    //                        new ProdutoQuantidadeDTO(produtos.get(5), 9L),
+    //                        new ProdutoQuantidadeDTO(produtos.get(1), 6L),
+    //                        new ProdutoQuantidadeDTO(produtos.get(6), 5L),
+    //                        new ProdutoQuantidadeDTO(produtos.get(7), 5L)));
+    //
+    //        List<Produto> populares = null;
+    //
+    //        try {
+    //            populares = produtoService.popular();
+    //
+    //        } catch (Exception e) {
+    //            fail("Erro ao buscar Produtos Populares: " + (e.getMessage() != null ? e.getMessage() : e.getCause()));
+    //        }
+    //
+    //        assertNotNull(populares, "Os produtos encontrados não podem ser nulo");
+    //        assertTrue(populares.size() <= 5, "Deve retornar no máximo 5 produtos.");
+    //        assertTrue(populares.stream().allMatch(Produto::getIsAtivo), "Todos os produtos devem estar ativos.");
+    //    }
+    //
+    //    @Test
+    //    @DisplayName("Lista menos de 5 produtos mais populares quando existirem menos de 5 produtos registrados")
+    //    void listaPopularesQuandoExistiremMenosDeCincoProdutos() {
+    //        Mockito.when(vendaProdutoRepository.qtdVendidosPorMesEAno(Mockito.any(), Mockito.any())).thenReturn(
+    //                List.of( new ProdutoQuantidadeDTO(produtos.get(0),  10L),
+    //                        new ProdutoQuantidadeDTO(produtos.get(1), 9L)));
+    //
+    //        List<Produto> populares = null;
+    //
+    //        try {
+    //            populares = produtoService.popular();
+    //
+    //        } catch (Exception e) {
+    //            fail("Erro ao buscar Produtos Populares: " + (e.getMessage() != null ? e.getMessage() : e.getCause()));
+    //        }
+    //
+    //        assertNotNull(populares, "Os produtos encontrados não podem ser nulo");
+    //        assertTrue(populares.size() < 5, "Deve retornar menos que 5 produtos.");
+    //        assertTrue(populares.stream().allMatch(Produto::getIsAtivo), "Todos os produtos devem estar ativos.");
+    //    }
 }

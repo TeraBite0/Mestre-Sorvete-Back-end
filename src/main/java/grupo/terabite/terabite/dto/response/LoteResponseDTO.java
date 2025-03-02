@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @Builder
@@ -11,15 +12,19 @@ public class LoteResponseDTO {
 
     private Integer id;
 
-    private LocalDate dtPedido;
+    private String fornecedor;
 
     private LocalDate dtEntrega;
 
     private LocalDate dtVencimento;
 
-    private Integer qtdProdutoComprado;
+    private LocalDate dtPedido;
 
     private Double valorLote;
 
-    private ProdutoResponseDTO produto;
+    private String status;
+
+    private String observacao;
+
+    private List<LoteProdutoResponseDTO> loteProdutos;
 }

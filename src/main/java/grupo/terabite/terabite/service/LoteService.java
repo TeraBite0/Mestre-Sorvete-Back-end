@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -17,8 +16,6 @@ public class LoteService {
 
     private final LoteRepository loteRepository;
     private final ProdutoService produtoService;
-    // private final VendaProdutoRepository vendaProdutoRepository;
-    // private final PerdaRepository perdaRepository;
     private final NotificacaoService notificacaoService;
 
     private List<Lote> listarLote() {
@@ -39,7 +36,7 @@ public class LoteService {
 
     public Lote criarLote(Lote novoLote) {
         novoLote.setId(null);
-        Produto p = produtoService.buscarPorId(novoLote.getProduto().getId());
+        //Produto p = produtoService.buscarPorId(novoLote.getProduto().getId());
 
         //        if (!p.getEmEstoque()) { // atualiza o status de estoque do produto apenas se necessário
         //            p.setEmEstoque(true);
@@ -57,11 +54,11 @@ public class LoteService {
         lote.setId(id);
         Lote novoLote = loteRepository.save(lote);
 
-        if (produtoEmEstoque(lote.getProduto().getId()) < 1) {
-            Produto p = produtoService.buscarPorId(lote.getProduto().getId());
-            // p.setEmEstoque(false);
-            produtoService.atualizarProduto(p.getId(), p);
-        }
+//        if (produtoEmEstoque(lote.getProduto().getId()) < 1) {
+//            Produto p = produtoService.buscarPorId(lote.getProduto().getId());
+//            // p.setEmEstoque(false);
+//            produtoService.atualizarProduto(p.getId(), p);
+//        }
 
         return novoLote;
     }
@@ -95,11 +92,12 @@ public class LoteService {
     }
 
     public List<Lote> buscarPorProdutoId(Integer id) {
-        List<Lote> lotes = loteRepository.findByProdutoId(id);
-        if (lotes.isEmpty()) {
-            throw new ResponseStatusException(HttpStatusCode.valueOf(204));
-        }
-        return lotes;
+        return null;
+//        List<Lote> lotes = loteRepository.findByProdutoId(id);
+//        if (lotes.isEmpty()) {
+//            throw new ResponseStatusException(HttpStatusCode.valueOf(204));
+//        }
+//        return lotes;
     }
 
     public List<Any> estoque() {

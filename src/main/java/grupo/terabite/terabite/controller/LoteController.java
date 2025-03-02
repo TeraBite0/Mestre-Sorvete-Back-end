@@ -3,7 +3,7 @@ package grupo.terabite.terabite.controller;
 import grupo.terabite.terabite.dto.create.LoteCreateDTO;
 import grupo.terabite.terabite.dto.mapper.LoteMapper;
 import grupo.terabite.terabite.dto.response.LoteResponseDTO;
-import grupo.terabite.terabite.dto.update.LoteUpdateDTO;
+import grupo.terabite.terabite.dto.requisition.LoteRequisitionDTO;
 import grupo.terabite.terabite.entity.Lote;
 import grupo.terabite.terabite.service.LoteService;
 import grupo.terabite.terabite.service.ProdutoService;
@@ -67,7 +67,7 @@ public class LoteController {
             @ApiResponse(responseCode = "404", description = "Lote não encontrado")
     })
     @PutMapping("/{id}")
-    public ResponseEntity<LoteResponseDTO> atualizarLote(@PathVariable Integer id, @RequestBody LoteUpdateDTO loteAtualizado) {
+    public ResponseEntity<LoteResponseDTO> atualizarLote(@PathVariable Integer id, @RequestBody LoteRequisitionDTO loteAtualizado) {
         return ResponseEntity.ok(LoteMapper.toResponseDto(loteService.atualizarLote(id, LoteMapper.toEntity(loteAtualizado, produtoService))));
     }
 

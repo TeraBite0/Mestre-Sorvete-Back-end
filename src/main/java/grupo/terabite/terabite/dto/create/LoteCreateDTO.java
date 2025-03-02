@@ -13,9 +13,6 @@ import java.time.LocalDate;
 public class LoteCreateDTO {
 
     @NotNull
-    private Integer produtoId;
-
-    @NotNull
     private LocalDate dtCompra;
 
     @Future
@@ -23,10 +20,6 @@ public class LoteCreateDTO {
 
     @NotNull
     private LocalDate dtEntrega;
-
-    @NotNull
-    @Positive
-    private Integer qtdProdutoComprado;
 
     @NotNull
     @Positive

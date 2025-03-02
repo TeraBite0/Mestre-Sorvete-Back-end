@@ -2,6 +2,7 @@ package grupo.terabite.terabite.service;
 
 import grupo.terabite.terabite.entity.Subtipo;
 import grupo.terabite.terabite.entity.Tipo;
+import grupo.terabite.terabite.factory.DataFactory;
 import grupo.terabite.terabite.repository.SubtipoRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -25,7 +26,7 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("Subtipos")
-class SubtipoServiceTest {
+class SubtipoServiceTest extends DataFactory {
 
     @Mock
     private SubtipoRepository subtipoRepository;
@@ -35,27 +36,6 @@ class SubtipoServiceTest {
 
     @Mock
     private TipoService tipoService;
-
-    private List<Tipo> tipos;
-
-    private List<Subtipo> subtipos;
-
-    @BeforeEach
-    void setup(){
-        tipos = List.of(
-                new Tipo(1,"Cone"),
-                new Tipo(2,"Palheta"),
-                new Tipo(3,"Açai"),
-                new Tipo(4,"Açai Pequeno")
-        );
-
-        subtipos = List.of(
-                new Subtipo(1, tipos.get(0), "Palhetas"),
-                new Subtipo(2, tipos.get(1), "Extrusado sem cobertura"),
-                new Subtipo(3, tipos.get(2), "Torpedinhos"),
-                new Subtipo(4, tipos.get(3), "Infantil")
-        );
-    }
 
     @Test
     @DisplayName("Quando o banco de dados não possui subtipos, o serviço deve lançar ResponseStatusException com status 204 (NO_CONTENT)")

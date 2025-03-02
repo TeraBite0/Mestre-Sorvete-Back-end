@@ -4,6 +4,7 @@ import grupo.terabite.terabite.entity.Marca;
 import grupo.terabite.terabite.entity.Produto;
 import grupo.terabite.terabite.entity.Subtipo;
 import grupo.terabite.terabite.entity.Tipo;
+import grupo.terabite.terabite.factory.DataFactory;
 import grupo.terabite.terabite.repository.ProdutoRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -24,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("Produtos")
-class ProdutoServiceTest {
+class ProdutoServiceTest extends DataFactory {
     @Mock
     private ProdutoRepository produtoRepository;
 
@@ -36,41 +37,6 @@ class ProdutoServiceTest {
 
     @InjectMocks
     private ProdutoService produtoService;
-
-    List<Tipo> tipos;
-    List<Subtipo> subtipos;
-    List<Marca> marcas;
-    List<Produto> produtos;
-
-    @BeforeEach
-    protected void setup() {
-        tipos = List.of(
-                new Tipo(1, "Congelados"),
-                new Tipo(2, "Quente")
-        );
-
-        subtipos = List.of(
-                new Subtipo(1, tipos.get(0), "Super-congelado"),
-                new Subtipo(2, tipos.get(0), "Semi-congelado"),
-                new Subtipo(3, tipos.get(1), "Quente")
-        );
-
-        marcas = List.of(
-                new Marca(1, "Penguim"),
-                new Marca(2, "Urso polar")
-        );
-
-        produtos = List.of(
-                new Produto(1,"Gelo gelado", subtipos.get(0), marcas.get(1), 9.0, true, 10, true, false, false),
-                new Produto(2, "Gelo geladinho", subtipos.get(0), marcas.get(0), 6.0, true, 10, true, false, false),
-                new Produto(3, "Gelo quente", subtipos.get(2), marcas.get(1), 8.0, true, 10, false, false, false),
-                new Produto(4, "Gelo quentinho", subtipos.get(2), marcas.get(0), 10.0, true, 10, false, false, false),
-                new Produto(5, "Neve gelada", subtipos.get(1), marcas.get(1), 12.0, true, 10, true, false, false),
-                new Produto(6, "Neve geladinha", subtipos.get(1), marcas.get(0), 10.0, true, 10, true, false, false),
-                new Produto(7, "Neve quente", subtipos.get(2), marcas.get(1), 10.5, true, 10, true, false, false),
-                new Produto(8, "Neve quentinha", subtipos.get(2), marcas.get(0), 6.5, true, 10, true, false, false)
-        );
-    }
 
     @Test
     @DisplayName("Lista todos produtos")

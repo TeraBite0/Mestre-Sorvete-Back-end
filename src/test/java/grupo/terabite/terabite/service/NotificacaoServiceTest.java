@@ -2,6 +2,7 @@ package grupo.terabite.terabite.service;
 
 import grupo.terabite.terabite.entity.Notificacao;
 import grupo.terabite.terabite.entity.Produto;
+import grupo.terabite.terabite.factory.DataFactory;
 import grupo.terabite.terabite.repository.NotificacaoRepository;
 import grupo.terabite.terabite.service.api.EmailApiService;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("Notificações")
-class NotificacaoServiceTest {
+class NotificacaoServiceTest extends DataFactory {
 
     List<Produto> produtos;
     List<Notificacao> notificacoes;
@@ -32,23 +33,6 @@ class NotificacaoServiceTest {
     private EmailApiService emailApiService;
     @InjectMocks
     private NotificacaoService notificacaoService;
-
-    @BeforeEach
-    protected void setup() {
-        this.produtos = List.of(
-                new Produto(1, "Gelo gelado", null, null, 10.00, true, 1, true, false, false),
-                new Produto(2, "Gelo geladinho", null, null, 10.0, true, 1, true, false, false),
-                new Produto(3, "Gelo quentinho", null, null, 10.0, true, 0, false, false, false),
-                new Produto(4, "Gelo quente", null, null, 10.0, true, 1, false, false, false));
-
-
-        this.notificacoes = List.of(
-                new Notificacao(1, "test1@test.test", produtos.get(0)),
-                new Notificacao(2, "test2@test.test", produtos.get(0)),
-                new Notificacao(3, "test3@test.test", produtos.get(0)),
-                new Notificacao(4, "test4@test.test", produtos.get(1)),
-                new Notificacao(5, "test5@test.test", produtos.get(1)));
-    }
 
     @Test
     @DisplayName("Cria corretamente")

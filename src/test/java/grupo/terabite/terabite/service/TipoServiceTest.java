@@ -1,6 +1,7 @@
 package grupo.terabite.terabite.service;
 
 import grupo.terabite.terabite.entity.Tipo;
+import grupo.terabite.terabite.factory.DataFactory;
 import grupo.terabite.terabite.repository.TipoRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -24,7 +25,7 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("Tipos")
-class TipoServiceTest {
+class TipoServiceTest extends DataFactory {
 
     @Mock
     private TipoRepository tipoRepository;
@@ -33,16 +34,6 @@ class TipoServiceTest {
     private TipoService tipoService;
 
     private List<Tipo> tipos;
-
-    @BeforeEach
-    void setup(){
-        tipos = List.of(
-                new Tipo(1,"Cone"),
-                new Tipo(2,"Palheta"),
-                new Tipo(3,"Açai"),
-                new Tipo(4,"Açai Pequeno")
-        );
-    }
 
     @Test
     @DisplayName("Quando o banco de dados não possui tipos, o serviço deve lançar ResponseStatusException com status 204 (NO_CONTENT)")

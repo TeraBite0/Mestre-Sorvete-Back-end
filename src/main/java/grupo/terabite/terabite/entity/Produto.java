@@ -34,7 +34,6 @@ public class Produto {
     @Column(name = "IS_ATIVO_PROD")
     private Boolean isAtivo = true;
 
-
     @Column(name = "QTD_CAIXA_ESTOQUE_PROD")
     private Integer qtdCaixasEstoque;
 

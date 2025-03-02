@@ -1,6 +1,7 @@
 package grupo.terabite.terabite.service;
 
 import grupo.terabite.terabite.entity.Marca;
+import grupo.terabite.terabite.factory.DataFactory;
 import grupo.terabite.terabite.repository.MarcaRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -23,25 +24,13 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("Marca")
-class MarcaServiceTest {
+class MarcaServiceTest extends DataFactory {
 
     @Mock
     private MarcaRepository marcaRepository;
 
     @InjectMocks
     private MarcaService marcaService;
-
-    List<Marca> marcasEsperadas;
-
-    @BeforeEach
-    void setup(){
-        marcasEsperadas = List.of(
-                new Marca(1, "Senhor Sorvete"),
-                new Marca(2, "PimPinella"),
-                new Marca(3, "Gelone"),
-                new Marca(4, "Artegel")
-        );
-    }
 
     @Test
     @DisplayName("Quando o banco de dados não possui marcas, o serviço deve lançar ResponseStatusException com status 204 (NO_CONTENT)")
@@ -55,7 +44,7 @@ class MarcaServiceTest {
     @Test
     @DisplayName("Quando o banco de dados possui marcas, o serviço deve retornar a lista correta")
     void deveRetornarListaDeMarcasQuandoExistirem() {
-        when(marcaRepository.findAll()).thenReturn(marcasEsperadas);
+        when(marcaRepository.findAll()).thenReturn(marcas);
 
         List<Marca> marcasRetornadas;
 
@@ -66,7 +55,7 @@ class MarcaServiceTest {
             return;
         }
 
-        assertIterableEquals(marcasEsperadas, marcasRetornadas, "As listas retornadas não são iguais às esperadas");
+        assertIterableEquals(marcas, marcasRetornadas, "As listas retornadas não são iguais às esperadas");
     }
 
     @Test
@@ -79,7 +68,7 @@ class MarcaServiceTest {
     @Test
     @DisplayName("Quando buscar por Id existente, deve retornar a marca correspondente")
     void deveRetornarMarcaQuandoPassadoSeuId() {
-        Marca marca = marcasEsperadas.get(0);
+        Marca marca = marcas.get(0);
         when(marcaRepository.findById(1)).thenReturn(Optional.of(marca));
 
         Marca resultado;

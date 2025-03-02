@@ -33,8 +33,6 @@ class TipoServiceTest extends DataFactory {
     @InjectMocks
     private TipoService tipoService;
 
-    private List<Tipo> tipos;
-
     @Test
     @DisplayName("Quando o banco de dados não possui tipos, o serviço deve lançar ResponseStatusException com status 204 (NO_CONTENT)")
     void deveLancarExcecaoListarTipo() {
@@ -118,9 +116,9 @@ class TipoServiceTest extends DataFactory {
         Tipo tipo = tipos.get(0);
         when(tipoRepository.findByNomeIgnoreCase(Mockito.anyString())).thenReturn(tipo);
 
-        Tipo resultadoUpperCase = tipoService.buscarPorNomeTipo("PALHETAS");
-        Tipo resultadoLowerCase = tipoService.buscarPorNomeTipo("palhetas");
-        Tipo resultadoMixedCase = tipoService.buscarPorNomeTipo("PalHEtas");
+        Tipo resultadoUpperCase = tipoService.buscarPorNomeTipo("CONGELADOS");
+        Tipo resultadoLowerCase = tipoService.buscarPorNomeTipo("congelados");
+        Tipo resultadoMixedCase = tipoService.buscarPorNomeTipo("ConGElAdos");
 
         assertNotNull(resultadoUpperCase, "A tipo retornada com nome em UPPERCASE não deveria ser nula");
         assertEquals(tipo.getId(), resultadoUpperCase.getId(), "O ID do tipo retornada (UPPERCASE) não está correto");

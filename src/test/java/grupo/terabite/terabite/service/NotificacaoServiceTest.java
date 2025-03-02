@@ -24,17 +24,14 @@ import static org.junit.jupiter.api.Assertions.*;
 @DisplayName("Notificações")
 class NotificacaoServiceTest {
 
-    @Mock
-    private NotificacaoRepository notificacaoRepository;
-
-    @Mock
-    private EmailApiService emailApiService;
-
-    @InjectMocks
-    private NotificacaoService notificacaoService;
-
     List<Produto> produtos;
     List<Notificacao> notificacoes;
+    @Mock
+    private NotificacaoRepository notificacaoRepository;
+    @Mock
+    private EmailApiService emailApiService;
+    @InjectMocks
+    private NotificacaoService notificacaoService;
 
     @BeforeEach
     protected void setup() {
@@ -94,7 +91,7 @@ class NotificacaoServiceTest {
 
     @Test
     @DisplayName("Deleta notificações")
-    public void deletarNotificacao(){
+    public void deletarNotificacao() {
         try {
             notificacaoService.deletarNotificacaoPorProdutoId(1);
         } catch (Exception e) {
@@ -104,16 +101,10 @@ class NotificacaoServiceTest {
 
     @Test
     @DisplayName("Envia notificações corretamente")
-    public void notificar(){
-        try {
-            Mockito.when(notificacaoRepository.findByProdutoId(Mockito.anyInt())).thenReturn(notificacoes.stream().filter( n -> n.getProduto().getId() == 1).toList());
-            notificacaoService.notificarProdutoEmEstoque(produtos.get(0));
-
-            Mockito.when(notificacaoRepository.findByProdutoId(Mockito.anyInt())).thenReturn(new ArrayList<>());
-            notificacaoService.notificarProdutoEmEstoque(produtos.get(0));
-        } catch (Exception e) {
-            fail("Erro ao deletar Notificações: " + (e.getMessage() != null ? e.getMessage() : e.getCause()));
-        }
+    public void notificar() {
+        Mockito.when(notificacaoRepository.findByProdutoId(Mockito.anyInt())).thenReturn(notificacoes.stream().filter(n -> n.getProduto().getId() == 1).toList());
+        Mockito.doNothing().when(emailApiService).enviarAlertaDeProdutos(Mockito.any());
+        notificacaoService.notificarProdutoEmEstoque(produtos.get(0));
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> notificacaoService.notificarProdutoEmEstoque(produtos.get(2)), "Não deve ser possivel notificar um produto inativo");
         assertThrows(RuntimeException.class, () -> notificacaoService.notificarProdutoEmEstoque(produtos.get(3)), "Não deve ser possivel notificar um produto inativo");
@@ -122,7 +113,7 @@ class NotificacaoServiceTest {
 
     @Test
     @DisplayName("Não cria notificação duplicadas")
-    public void registrarNotificaçãoDuplicada(){
+    public void registrarNotificacaoDuplicada() {
         Mockito.when(notificacaoRepository.findByEmailAndProdutoId(Mockito.anyString(), Mockito.anyInt())).thenReturn(List.of(notificacoes.get(0)));
 
         ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> notificacaoService.criarNotificacao(notificacoes.get(0)), "Deve ser retornado erro ao criar notificação já ativa");

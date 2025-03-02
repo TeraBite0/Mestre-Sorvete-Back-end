@@ -15,7 +15,7 @@ public class ProdutoResponseDTO {
 
     private Boolean isAtivo;
 
-    private Boolean emEstoque;
+    private Boolean disponivel;
 
     private SubtipoResponseDTO subtipo;
 

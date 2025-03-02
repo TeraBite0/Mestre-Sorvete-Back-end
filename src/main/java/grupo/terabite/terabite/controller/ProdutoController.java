@@ -2,19 +2,11 @@ package grupo.terabite.terabite.controller;
 
 import grupo.terabite.terabite.dto.create.ProdutoCreateDTO;
 import grupo.terabite.terabite.dto.mapper.ProdutoMapper;
-import grupo.terabite.terabite.dto.mapper.ProdutoPopularesMapper;
-import grupo.terabite.terabite.dto.mapper.RecomendacaoMapper;
-import grupo.terabite.terabite.dto.response.DestaqueResponseDTO;
-import grupo.terabite.terabite.dto.response.ProdutoPopularesReponseDto;
 import grupo.terabite.terabite.dto.response.ProdutoResponseDTO;
-import grupo.terabite.terabite.dto.response.RecomendacaoResponseDTO;
-import grupo.terabite.terabite.dto.update.DestaqueUpdateDTO;
 import grupo.terabite.terabite.dto.update.ProdutoUpdateDTO;
-import grupo.terabite.terabite.dto.update.RecomendacaoUpdateDTO;
 import grupo.terabite.terabite.entity.Produto;
 import grupo.terabite.terabite.service.MarcaService;
 import grupo.terabite.terabite.service.ProdutoService;
-import grupo.terabite.terabite.service.RecomendacaoService;
 import grupo.terabite.terabite.service.SubtipoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -34,7 +26,6 @@ import java.util.List;
 public class ProdutoController {
 
     private final ProdutoService produtoService;
-    private final RecomendacaoService recomendacaoService;
     private final SubtipoService subtipoService;
     private final MarcaService marcaService;
 
@@ -150,45 +141,6 @@ public class ProdutoController {
 
 //    RECOMENDAÇÃO E DESTAQUE
 
-    @Operation(summary = "Lista as recomendações", description = "Retorna a lista de produtos recomendados")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Retornado as recomendações"),
-            @ApiResponse(responseCode = "204", description = "Operação sucedida, sem recomendações")
-    })
-    @GetMapping("/recomendacao")
-    public ResponseEntity<List<RecomendacaoResponseDTO>> recomendacao() {
-        return ResponseEntity.ok(recomendacaoService.listarRecomendacoes().stream().map(RecomendacaoMapper::toRecomendacaoResponseDto).toList());
-    }
 
-    @Operation(summary = "Atualiza o produto de uma recomendação", description = "Retorna o produto recomendado")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Altera e retorna o produto recomendado"),
-            @ApiResponse(responseCode = "404", description = "Produto inexistente"),
-            @ApiResponse(responseCode = "401", description = "Erro de requisição, Não autorizado"),
-    })
-    @PutMapping("/recomendacao/{id}")
-    public ResponseEntity<RecomendacaoResponseDTO> alterarRecomendacao(@PathVariable Integer id, @RequestBody @Valid RecomendacaoUpdateDTO recomendacaoDTO) {
-        return ResponseEntity.ok(RecomendacaoMapper.toRecomendacaoResponseDto(recomendacaoService.atualizarRecomendacao(id, RecomendacaoMapper.toRecomendacao(recomendacaoDTO, produtoService))));
-    }
 
-    @Operation(summary = "Busca o destaque atual", description = "Retorna o produto aleatório que representa o destaque")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Retorna o produto que é o destaque"),
-            @ApiResponse(responseCode = "204", description = "Operação sucedida, nenhum produto cadastrado")
-    })
-    @GetMapping("/destaque")
-    public ResponseEntity<DestaqueResponseDTO> destaque() {
-        return ResponseEntity.ok(RecomendacaoMapper.toDestaqueResponseDTO(recomendacaoService.recomendacaoDoDia()));
-    }
-
-    @Operation(summary = "Atualiza o produto do destaque atual", description = "Retorna o produto que representa o destaque atualizado")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Altera e retorna o produto que é o destaque"),
-            @ApiResponse(responseCode = "404", description = "Produto inexistente"),
-            @ApiResponse(responseCode = "401", description = "Erro de requisição, Não autorizado"),
-    })
-    @PutMapping("/destaque/")
-    public ResponseEntity<DestaqueResponseDTO> alterarDestaque(@RequestBody @Valid DestaqueUpdateDTO recomendacaoDTO) {
-        return ResponseEntity.ok(RecomendacaoMapper.toDestaqueResponseDTO(recomendacaoService.alterarRecomendacaoDoDia(RecomendacaoMapper.toDestaque(recomendacaoDTO, produtoService))));
-    }
 }

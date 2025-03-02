@@ -25,8 +25,6 @@ import static org.junit.jupiter.api.Assertions.*;
 @DisplayName("Notificações")
 class NotificacaoServiceTest extends DataFactory {
 
-    List<Produto> produtos;
-    List<Notificacao> notificacoes;
     @Mock
     private NotificacaoRepository notificacaoRepository;
     @Mock

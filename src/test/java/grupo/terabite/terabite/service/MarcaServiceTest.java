@@ -162,9 +162,7 @@ class MarcaServiceTest extends DataFactory {
     @DisplayName("Quando passar uma marca que existe no banco de dados, deve atualizar marca")
     void deveAtualizarMarcaSeIdExistir() {
         Marca marcaExistente = new Marca(1,"Marca Original");
-
-        Marca marcaAtualizada = new Marca();
-        marcaAtualizada.setNome("Marca Atualizada");
+        Marca marcaAtualizada = new Marca(null, "Marca Atualizada");
 
         when(marcaRepository.existsById(marcaExistente.getId())).thenReturn(true);
         when(marcaRepository.save(any(Marca.class))).thenReturn(marcaAtualizada);

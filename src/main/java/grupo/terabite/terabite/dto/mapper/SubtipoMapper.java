@@ -11,7 +11,7 @@ public class SubtipoMapper {
 
         return Subtipo.builder()
                 .nome(entity.getNome())
-                .tipoPai(Tipo.builder().nome(entity.getNome()).build())
+                .tipo(Tipo.builder().nome(entity.getNome()).build())
                 .build();
     }
 
@@ -19,7 +19,7 @@ public class SubtipoMapper {
         if(entity == null) return null;
 
         return SubtipoResponseDTO.builder()
-                .tipoPai(TipoMapper.toResponseDto(entity.getTipoPai()))
+                .tipo(TipoMapper.toResponseDto(entity.getTipo()))
                 .nome(entity.getNome())
                 .build();
     }

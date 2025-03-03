@@ -88,7 +88,7 @@ class SubtipoServiceTest extends DataFactory {
         assertNotNull(resultado, "O subtipo retornada não deveria ser nula");
         assertEquals(subtipoExistente.getId(), resultado.getId(), "O ID do subtipo retornada não está correto");
         assertEquals(subtipoExistente.getNome(), resultado.getNome(), "O nome do subtipo retornada não está correto");
-        assertEquals(subtipoExistente.getTipoPai(), resultado.getTipoPai(), "O tipoPai do subtipo retornada não está correto");
+        assertEquals(subtipoExistente.getTipo(), resultado.getTipo(), "O tipo do subtipo retornada não está correto");
     }
 
     @Test
@@ -158,7 +158,7 @@ class SubtipoServiceTest extends DataFactory {
         assertNotNull(resultado, "O resultado não deve ser nulo");
         assertEquals(subtipoSalvo.getId(), resultado.getId(), "O ID do subtipo salvo não está correto");
         assertEquals(subtipoSalvo.getNome(), resultado.getNome(), "O nome da subtipo salva não está correto");
-        assertEquals(subtipoSalvo.getTipoPai(), resultado.getTipoPai(), "O tipoPai do subtipo salva não está correto");
+        assertEquals(subtipoSalvo.getTipo(), resultado.getTipo(), "O tipo do subtipo salva não está correto");
 
         verify(subtipoRepository).save(ArgumentMatchers.argThat(subtipo -> subtipo.getId() == null && "Novo Subtipo".equals(subtipo.getNome())));
     }

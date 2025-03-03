@@ -17,8 +17,8 @@ public class Subtipo {
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "FK_ID_TIPO_PAI", referencedColumnName = "ID_TIPO")
-    private Tipo tipoPai;
+    @JoinColumn(name = "FK_ID_TIPO_SUBT", referencedColumnName = "ID_TIPO")
+    private Tipo tipo;
 
     @Column(name = "NOME_SUBT")
     private String nome;

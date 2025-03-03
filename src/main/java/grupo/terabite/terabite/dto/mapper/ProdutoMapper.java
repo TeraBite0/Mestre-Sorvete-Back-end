@@ -20,7 +20,7 @@ public class ProdutoMapper {
 
         Marca marca = produto.getMarca();
         Subtipo subtipo = produto.getSubtipo();
-        Tipo tipo = subtipo.getTipoPai();
+        Tipo tipo = subtipo.getTipo();
 
         return ProdutoResponseDTO.builder()
                 .id(produto.getId())
@@ -38,7 +38,7 @@ public class ProdutoMapper {
                 .subtipo(SubtipoResponseDTO.builder()
                         .id(subtipo.getId())
                         .nome(subtipo.getNome())
-                        .tipoPai(TipoResponseDTO.builder()
+                        .tipo(TipoResponseDTO.builder()
                                 .id(tipo.getId())
                                 .nome(tipo.getNome())
                                 .build())

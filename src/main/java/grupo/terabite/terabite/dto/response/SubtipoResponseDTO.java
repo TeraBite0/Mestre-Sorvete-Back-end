@@ -9,7 +9,7 @@ public class SubtipoResponseDTO {
 
     private Integer id;
 
-    private TipoResponseDTO tipoPai;
+    private TipoResponseDTO tipo;
 
     private String nome;
 }

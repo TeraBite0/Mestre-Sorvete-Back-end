@@ -11,5 +11,5 @@ public class SubtipoCreateDTO {
     private String nome;
 
     @NotBlank
-    private String tipoPai;
+    private String tipo;
 }

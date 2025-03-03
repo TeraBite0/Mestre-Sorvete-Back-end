@@ -45,7 +45,7 @@ public class ProdutoService {
     }
 
     public List<Produto> buscarPorFiltroTipoOuNome(String nome, String tipo) {
-        return produtoRepository.findByNomeIgnoreCaseContainingOrSubtipo_TipoPai_NomeIgnoreCaseContainingOrderByNome(nome, tipo);
+        return produtoRepository.findByNomeIgnoreCaseContainingOrSubtipo_Tipo_NomeIgnoreCaseContainingOrderByNome(nome, tipo);
     }
 
     public Produto criarProduto(Produto produto, String nomeMarca, String nomeSubtipo) {

@@ -290,7 +290,7 @@ class ProdutoServiceTest extends DataFactory {
     void buscarPorFiltroTipoOuNome() {
         try {
             // Cenário 1: Buscar produtos por nome contendo o termo
-            Mockito.when(produtoRepository.findByNomeIgnoreCaseContainingOrSubtipo_TipoPai_NomeIgnoreCaseContainingOrderByNome(Mockito.anyString(), Mockito.anyString()))
+            Mockito.when(produtoRepository.findByNomeIgnoreCaseContainingOrSubtipo_tipo_NomeIgnoreCaseContainingOrderByNome(Mockito.anyString(), Mockito.anyString()))
                     .thenReturn(
                             this.produtos.stream().filter(p -> p.getNome().toLowerCase().contains("neve")).toList()
                     );
@@ -302,7 +302,7 @@ class ProdutoServiceTest extends DataFactory {
             assertTrue(produtosResposta.stream().anyMatch(p -> p.getNome().equals("Neve quente")), "Cenário 1 falhou: Produto esperado não encontrado");
 
             // Cenário 2: Buscar produtos por tipo contendo o termo
-            Mockito.when(produtoRepository.findByNomeIgnoreCaseContainingOrSubtipo_TipoPai_NomeIgnoreCaseContainingOrderByNome(Mockito.anyString(), Mockito.anyString()))
+            Mockito.when(produtoRepository.findByNomeIgnoreCaseContainingOrSubtipo_tipo_NomeIgnoreCaseContainingOrderByNome(Mockito.anyString(), Mockito.anyString()))
                     .thenReturn(
                             this.produtos.stream().filter(p -> p.getSubtipo().getNome().toLowerCase().contains("quente")).toList()
                     );
@@ -314,7 +314,7 @@ class ProdutoServiceTest extends DataFactory {
             assertTrue(produtosResposta.stream().anyMatch(p -> p.getNome().equals("Gelo quente")), "Cenário 2 falhou: Produto esperado não encontrado");
 
             // Cenário 3: Buscar produtos por nome e tipo contendo o termo
-            Mockito.when(produtoRepository.findByNomeIgnoreCaseContainingOrSubtipo_TipoPai_NomeIgnoreCaseContainingOrderByNome(Mockito.anyString(), Mockito.anyString()))
+            Mockito.when(produtoRepository.findByNomeIgnoreCaseContainingOrSubtipo_tipo_NomeIgnoreCaseContainingOrderByNome(Mockito.anyString(), Mockito.anyString()))
                     .thenReturn(
                             this.produtos.stream().filter(p -> p.getSubtipo().getNome().toLowerCase().contains("quente") ||
                                     p.getNome().toLowerCase().contains("neve")).toList()

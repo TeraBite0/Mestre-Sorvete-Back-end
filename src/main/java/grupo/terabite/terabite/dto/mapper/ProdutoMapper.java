@@ -31,18 +31,8 @@ public class ProdutoMapper {
                 //.emEstoque(produto.getEmEstoque())
                 .temGluten(produto.getTemGluten())
                 .temLactose(produto.getTemLactose())
-                .marca(MarcaResponseDTO.builder()
-                        .id(marca.getId())
-                        .nome(marca.getNome())
-                        .build())
-                .subtipo(SubtipoResponseDTO.builder()
-                        .id(subtipo.getId())
-                        .nome(subtipo.getNome())
-                        .tipo(TipoResponseDTO.builder()
-                                .id(tipo.getId())
-                                .nome(tipo.getNome())
-                                .build())
-                        .build())
+                .marca(MarcaMapper.toResponseDto(produto.getMarca()))
+                .subtipo(SubtipoMapper.toResponseDto(produto.getSubtipo()))
                 .build();
     }
 

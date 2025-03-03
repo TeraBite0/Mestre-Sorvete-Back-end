@@ -17,6 +17,7 @@ public class TipoMapper {
         if(entity == null) return null;
 
         return TipoResponseDTO.builder()
+                .id(entity.getId())
                 .nome(entity.getNome())
                 .build();
     }

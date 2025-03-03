@@ -19,6 +19,7 @@ public class SubtipoMapper {
         if(entity == null) return null;
 
         return SubtipoResponseDTO.builder()
+                .id(entity.getId())
                 .tipo(TipoMapper.toResponseDto(entity.getTipo()))
                 .nome(entity.getNome())
                 .build();

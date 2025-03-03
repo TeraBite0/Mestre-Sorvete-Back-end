@@ -9,7 +9,7 @@ VALUES ('Picolé'),
        ('Açai Pequeno');
 
 INSERT INTO SUBTIPO
-       (NOME_SUBT, FK_ID_TIPO_PAI)
+       (NOME_SUBT, FK_ID_TIPO_SUBT)
 VALUES ('Extrusado', 1),
        ('Ao leite', 1),
        ('Cremosinho', 1),

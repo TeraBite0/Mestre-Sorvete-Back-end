@@ -184,7 +184,7 @@ class MarcaServiceTest extends DataFactory {
         Marca marca = marcas.get(0);
         when(marcaService.buscarPorNomeMarca(marca.getNome())).thenReturn(marca);
 
-        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> marcaService.validarMarcaExistente(marca.getNome()));
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> marcaService.criarMarca(marca));
         assertEquals(HttpStatus.CONFLICT, exception.getStatusCode(), "O status HTTP esperado é 409 (CONFLICT)");
     }
 }

@@ -52,7 +52,7 @@ public class MarcaService {
         marcaRepository.deleteById(id);
     }
 
-    public void validarMarcaExistente(String nomeMarca) {
+    private void validarMarcaExistente(String nomeMarca) {
         if (buscarPorNomeMarca(nomeMarca) != null) {
             throw new ResponseStatusException(HttpStatusCode.valueOf(409), "Marca já cadastrada");
         }

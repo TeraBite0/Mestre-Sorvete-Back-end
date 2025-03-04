@@ -22,6 +22,8 @@ public class DataFactory {
 
     protected List<Destaque> destaques;
 
+    protected  List<Fornecedor> fornecedores;
+
     @BeforeEach
     protected void setup() {
         tipos = List.of(
@@ -72,6 +74,13 @@ public class DataFactory {
                 new Destaque(2, produtos.get(1), LocalDate.now().minusDays(1), "Esse produto é BOM"),
                 new Destaque(3, produtos.get(2), LocalDate.now().minusDays(2), "Esse produto é ok..."),
                 new Destaque(4, produtos.get(3), LocalDate.now().minusDays(3), "Esse produto nem é tão bom assim...")
+        );
+
+        this.fornecedores = List.of(
+                new Fornecedor(1, "Fornecedor"),
+                new Fornecedor(2, "Fornecedor2"),
+                new Fornecedor(3, "Fornecedor3"),
+                new Fornecedor(4, "Fornecedor4")
         );
     }
 }

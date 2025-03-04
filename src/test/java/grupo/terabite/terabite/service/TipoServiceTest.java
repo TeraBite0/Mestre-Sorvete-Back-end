@@ -122,7 +122,7 @@ class TipoServiceTest extends DataFactory {
         Tipo tipoExistente = tipos.get(0);
         when(tipoService.buscarPorNomeTipo(tipoExistente.getNome())).thenReturn(tipoExistente);
 
-        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> tipoService.validarTipoExistente(tipoExistente.getNome()));
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> tipoService.criarTipo(tipoExistente));
         assertEquals(HttpStatus.CONFLICT, exception.getStatusCode(), "O status HTTP esperado é 409 (CONFLICT)");
     }
 

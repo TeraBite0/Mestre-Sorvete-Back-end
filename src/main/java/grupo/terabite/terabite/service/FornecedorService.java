@@ -17,7 +17,11 @@ public class FornecedorService {
     private final FornecedorRepository fornecedorRepository;
 
     public List<Fornecedor> listarFornecedor() {
-        return fornecedorRepository.findAll();
+        List<Fornecedor> fornecedores = fornecedorRepository.findAll();
+        if (fornecedores.isEmpty()) {
+            throw new ResponseStatusException(HttpStatusCode.valueOf(204));
+        }
+        return fornecedores;
     }
 
     public Fornecedor buscarPorId(Integer id) {
@@ -42,7 +46,7 @@ public class FornecedorService {
         return fornecedorRepository.save(atualizarFornecedor);
     }
 
-    public void excluirFornecedor(Integer id) {
+    public void deletarFornecedorPorId(Integer id) {
         if (!fornecedorRepository.existsById(id)) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 
         fornecedorRepository.deleteById(id);

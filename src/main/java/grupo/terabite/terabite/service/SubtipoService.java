@@ -42,7 +42,7 @@ public class SubtipoService {
         return subtipoRepository.save(novoSubtipo);
     }
 
-    public void validarSubtipoExistente(String nomeSubtipo){
+    private void validarSubtipoExistente(String nomeSubtipo){
         if(buscarPorNomeSubtipo(nomeSubtipo) != null){
             throw new ResponseStatusException(HttpStatus.CONFLICT);
         }

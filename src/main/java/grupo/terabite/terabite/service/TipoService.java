@@ -39,7 +39,7 @@ public class TipoService {
         return tipoRepository.save(novoTipo);
     }
 
-    public void validarTipoExistente(String nomeTipo){
+    private void validarTipoExistente(String nomeTipo){
         if(buscarPorNomeTipo(nomeTipo) != null){
             throw new ResponseStatusException(HttpStatus.CONFLICT);
         }

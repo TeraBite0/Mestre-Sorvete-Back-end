@@ -134,6 +134,16 @@ class TipoServiceTest extends DataFactory {
     }
 
     @Test
+    @DisplayName("Quando criar um novo tipo com nome já existente, deve lançar exceção 409 (CONFLICT)")
+    void deveLancarExecaoQuandoPassarUmTipoJaExistente(){
+        Tipo tipoExistente = tipos.get(0);
+        when(tipoService.buscarPorNomeTipo(tipoExistente.getNome())).thenReturn(tipoExistente);
+
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> tipoService.validarTipoExistente(tipoExistente.getNome()));
+        assertEquals(HttpStatus.CONFLICT, exception.getStatusCode(), "O status HTTP esperado é 409 (CONFLICT)");
+    }
+
+    @Test
     @DisplayName("Quando criar um novo tipo, deve definir o ID como null e salvar no repositório")
     void deveRetornarCriarTipo() {
         Tipo tipoSalvo = new Tipo(3, "Novo Tipo");

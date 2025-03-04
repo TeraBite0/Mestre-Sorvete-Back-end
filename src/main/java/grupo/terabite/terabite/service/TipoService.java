@@ -3,6 +3,7 @@ package grupo.terabite.terabite.service;
 import grupo.terabite.terabite.entity.Tipo;
 import grupo.terabite.terabite.repository.TipoRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -28,18 +29,19 @@ public class TipoService {
     }
 
     public Tipo buscarPorNomeTipo(String nomeTipo) {
-        if (nomeTipo.isBlank()) {
-            throw new ResponseStatusException(HttpStatusCode.valueOf(400));
-        }
+        if (nomeTipo.isBlank()) throw new ResponseStatusException(HttpStatusCode.valueOf(400));
 
-        Tipo tipo = tipoRepository.findByNomeIgnoreCase(nomeTipo);
-
-        if (tipoRepository.findByNomeIgnoreCase(nomeTipo) == null) tipo = criarTipo(new Tipo(null, nomeTipo));
-
-        return tipo;
+        return tipoRepository.findByNomeIgnoreCase(nomeTipo);
     }
 
     public Tipo criarTipo(Tipo novoTipo) {
+        validarTipoExistente(novoTipo.getNome());
         return tipoRepository.save(novoTipo);
+    }
+
+    public void validarTipoExistente(String nomeTipo){
+        if(buscarPorNomeTipo(nomeTipo) != null){
+            throw new ResponseStatusException(HttpStatus.CONFLICT);
+        }
     }
 }

@@ -37,14 +37,13 @@ public class SubtipoService {
 
     public Subtipo criarSubtipo(Subtipo novoSubtipo, Integer idTipo) {
         novoSubtipo.setTipo(tipoService.buscarPorId(idTipo));
-        Subtipo subtipo = buscarPorNomeSubtipo(novoSubtipo.getNome());
-        validarSubtipoExistente(subtipo, novoSubtipo);
+        validarSubtipoExistente(novoSubtipo.getNome());
 
         return subtipoRepository.save(novoSubtipo);
     }
 
-    public void validarSubtipoExistente(Subtipo subtipo, Subtipo novoSubtipo){
-        if(subtipo != null){
+    public void validarSubtipoExistente(String nomeSubtipo){
+        if(buscarPorNomeSubtipo(nomeSubtipo) != null){
             throw new ResponseStatusException(HttpStatus.CONFLICT);
         }
     }

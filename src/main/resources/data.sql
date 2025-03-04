@@ -254,4 +254,4 @@ INSERT INTO DESTAQUE
        (ID_DEST, FK_ID_PROD_DEST, DATA_DEST, TEXTO_DEST)
 VALUES (1, 1, '2025-02-24', 'O sorvete de Nescolak é uma delícia cremosa que combina o sabor intenso do achocolatado com a textura suave do sorvete. Ele possui uma base de creme gelado, delicadamente misturado com o inconfundível sabor do Nesquik');
 
-INSERT INTO RECOMENDACAO (ID_RECO, FK_ID_PROD_RECO) VALUES (1, 1);
+-- INSERT INTO RECOMENDACAO (ID_RECO, FK_ID_PROD_RECO) VALUES (1, 1);

@@ -52,7 +52,7 @@ public class RecomendacaoController {
             @ApiResponse(responseCode = "401", description = "Erro de requisição, Não autorizado"),
     })
     @PutMapping("/{id}")
-    public ResponseEntity<RecomendacaoResponseDTO> alterarRecomendacao(@PathVariable Integer id, @RequestBody @Valid RecomendacaoUpdateDTO recomendacaoDTO) {
+    public ResponseEntity<RecomendacaoResponseDTO> alterarRecomendacao(@PathVariable Integer id, @RequestBody @Valid RecomendacaoCreateDTO recomendacaoDTO) {
         return ResponseEntity.ok(RecomendacaoMapper.toRecomendacaoResponseDto(recomendacaoService.atualizarRecomendacao(id, RecomendacaoMapper.toRecomendacao(recomendacaoDTO, produtoService))));
     }
 }

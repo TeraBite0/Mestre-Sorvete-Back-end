@@ -3,7 +3,6 @@ package grupo.terabite.terabite.controller;
 import grupo.terabite.terabite.dto.create.ProdutoCreateDTO;
 import grupo.terabite.terabite.dto.mapper.ProdutoMapper;
 import grupo.terabite.terabite.dto.response.ProdutoResponseDTO;
-import grupo.terabite.terabite.dto.update.ProdutoUpdateDTO;
 import grupo.terabite.terabite.entity.Produto;
 import grupo.terabite.terabite.service.MarcaService;
 import grupo.terabite.terabite.service.ProdutoService;

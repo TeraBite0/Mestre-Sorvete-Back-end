@@ -1,8 +1,10 @@
 package grupo.terabite.terabite.service;
 
+import grupo.terabite.terabite.entity.Produto;
 import grupo.terabite.terabite.entity.Recomendacao;
 import grupo.terabite.terabite.repository.RecomendacaoRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -24,11 +26,11 @@ public class RecomendacaoService {
     }
 
     public Recomendacao criarRecomendacao(Recomendacao recomendacao){
-        recomendacao.setProduto(produtoService.buscarPorId(recomendacao.getProduto().getId()));
+        Produto produto = produtoService.buscarPorId(recomendacao.getProduto().getId());
+        if(!produto.getIsAtivo()) throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE);
+        else if(!recomendacaoRepository.findByProdutoId(produto.getId()).isEmpty()) throw new ResponseStatusException(HttpStatus.CONFLICT);
 
-        // fazer validação de produto inativo
-
-        return recomendacaoRepository.save(recomendacao);
+        return recomendacaoRepository.save(new Recomendacao(null, produto));
     }
 
     public Recomendacao atualizarRecomendacao(Integer id, Recomendacao recomendacao){

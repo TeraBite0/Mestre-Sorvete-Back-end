@@ -193,7 +193,7 @@ class ProdutoServiceTest extends DataFactory {
 
         Mockito.when(produtoRepository.save(Mockito.any())).thenReturn(produto);
         Mockito.when(marcaService.buscarPorNomeMarca(marca.getNome())).thenReturn(marca);
-        Mockito.when(subtipoService.buscarPorNomeSubtipo(subtipo.getNome())).thenReturn(subtipo);
+        Mockito.when(subtipoService.buscarPorNomeSubtipo(subtipo.getNome())).thenReturn(subtipos.get(0));
         Mockito.when(produtoRepository.findById(Mockito.anyInt()))
                 .thenAnswer(invocation -> {
                     Integer id = invocation.getArgument(0);

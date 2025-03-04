@@ -47,6 +47,6 @@ public class SubtipoController {
     })
     @PostMapping
     public ResponseEntity<SubtipoResponseDTO> criarSubtipo(@RequestBody @Valid SubtipoCreateDTO subtipoCreateDTO) {
-        return ResponseEntity.created(null).body(SubtipoMapper.toResponseDto(subtipoService.criarSubtipo(SubtipoMapper.toCreateDto(subtipoCreateDTO))));
+        return ResponseEntity.created(null).body(SubtipoMapper.toResponseDto(subtipoService.criarSubtipo(SubtipoMapper.toCreateDto(subtipoCreateDTO), subtipoCreateDTO.getIdTipo())));
     }
 }

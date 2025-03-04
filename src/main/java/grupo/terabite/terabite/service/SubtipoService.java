@@ -4,6 +4,7 @@ import grupo.terabite.terabite.entity.Subtipo;
 import grupo.terabite.terabite.entity.Tipo;
 import grupo.terabite.terabite.repository.SubtipoRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -31,14 +32,20 @@ public class SubtipoService {
     public Subtipo buscarPorNomeSubtipo(String nomeSubtipo) {
         if (nomeSubtipo.isBlank()) throw new ResponseStatusException(HttpStatusCode.valueOf(400));
 
-        Subtipo subtipo = subtipoRepository.findByNomeIgnoreCase(nomeSubtipo);
-
-        if (subtipo == null) subtipo = criarSubtipo(new Subtipo(null, tipoService.buscarPorId(1),nomeSubtipo));
-
-        return subtipo;
+        return subtipoRepository.findByNomeIgnoreCase(nomeSubtipo);
     }
 
-    public Subtipo criarSubtipo(Subtipo novoSubtipo) {
+    public Subtipo criarSubtipo(Subtipo novoSubtipo, Integer idTipo) {
+        novoSubtipo.setTipo(tipoService.buscarPorId(idTipo));
+        Subtipo subtipo = buscarPorNomeSubtipo(novoSubtipo.getNome());
+        validarSubtipoExistende(subtipo, novoSubtipo);
+
         return subtipoRepository.save(novoSubtipo);
+    }
+
+    public void validarSubtipoExistende(Subtipo subtipo, Subtipo novoSubtipo){
+        if(subtipo != null){
+            throw new ResponseStatusException(HttpStatus.CONFLICT);
+        }
     }
 }

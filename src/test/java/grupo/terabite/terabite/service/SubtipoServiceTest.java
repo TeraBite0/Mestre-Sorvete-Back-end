@@ -92,33 +92,16 @@ class SubtipoServiceTest extends DataFactory {
     }
 
     @Test
-    @DisplayName("Qunado buscar por subtipo ignore case não existente, deve lançar exceção 404 (NOT_FOUND)")
-    void deveLancarExcecaoBuscarPorNomeIgnoreCaseSubtipo() {
+    @DisplayName("Qunado buscar por subtipo passando argumento vazio, deve lançar exceção 400 (BAD_REQUEST)")
+    void deveLancarExcecaoBuscarPorSubtipoArgumentoVazio() {
         ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> subtipoService.buscarPorNomeSubtipo(" "));
         assertEquals(HttpStatus.BAD_REQUEST, exception.getStatusCode(), "O status HTTP esperado é 400 (BAD_REQUEST)");
     }
 
-    @Test
-    @DisplayName("Quando passar um  que não existe no banco de dados, deve cadastrar uma novo subtipo")
-    void deveCriarNovoSubtipoQuandoBuscarPorNomeNaoExistente(){
-        String nomeSubtipo = "Novo subtipo";
-        when(subtipoRepository.findByNomeIgnoreCase(nomeSubtipo)).thenReturn(null);
-        when(tipoService.buscarPorId(Mockito.anyInt())).thenReturn(new Tipo(1, "Picolé"));
-
-        Subtipo subtipo;
-        try{
-            subtipo = subtipoService.buscarPorNomeSubtipo(nomeSubtipo);
-        } catch (Exception e) {
-            fail("Erro ao buscar subtipo com nome não existente: " + (e.getMessage() != null ? e.getMessage() : e.getCause()));
-            return;
-        }
-
-        assertNull(subtipo);
-    }
 
     @Test
     @DisplayName("Quando buscar por subtipo existente em diferentes cases, deve retornar a subtipo correspondente")
-    void deveRetornarBuscarPorNomeSubtipo() {
+    void deveRetornarSubtipoBuscarPorNomeSubtipoIgnoreCase() {
         Subtipo subtipo = subtipos.get(0);
         when(subtipoRepository.findByNomeIgnoreCase(Mockito.anyString())).thenReturn(subtipo);
 
@@ -140,26 +123,35 @@ class SubtipoServiceTest extends DataFactory {
     }
 
     @Test
+    @DisplayName("Quando tentar cadastrar um subtipo passando nome e tipo já existende, deve lançar exceção 409 (CONFLICT)")
+    void deveLancarExecaoQuandoCadastrarSubtipoComNomeETipoJaExistende() {
+        Subtipo subtipo = subtipos.get(0);
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> subtipoService.validarSubtipoExistende(subtipo, subtipo));
+        assertEquals(HttpStatus.CONFLICT, exception.getStatusCode(), "O status HTTP esperado é 409 (CONFLICT)");
+    }
+
+    @Test
     @DisplayName("Quando criar um novo subtipo, deve definir o ID como null e salvar no repositório")
     void deveRetornarCriarSubtipo() {
-        Subtipo subtipoSalvo = new Subtipo(3, tipos.get(0),"Novo Subtipo");
-        Subtipo novoSubtipo = new Subtipo(null, tipos.get(0),"Novo Subtipo");
+        Tipo tipo = tipos.get(0);
+        Subtipo novoSubtipo = subtipos.get(1);
 
-        when(subtipoRepository.save(novoSubtipo)).thenReturn(subtipoSalvo);
+        when(tipoService.buscarPorId(tipo.getId())).thenReturn(tipo);
+        when(subtipoRepository.save(novoSubtipo)).thenReturn(novoSubtipo);
 
         Subtipo resultado;
         try{
-            resultado = subtipoService.criarSubtipo(novoSubtipo);
+            resultado = subtipoService.criarSubtipo(novoSubtipo, novoSubtipo.getTipo().getId());
         } catch (Exception e) {
             fail("Erro ao buscar subtipo com nome não existente: " + (e.getMessage() != null ? e.getMessage() : e.getCause()));
             return;
         }
 
         assertNotNull(resultado, "O resultado não deve ser nulo");
-        assertEquals(subtipoSalvo.getId(), resultado.getId(), "O ID do subtipo salvo não está correto");
-        assertEquals(subtipoSalvo.getNome(), resultado.getNome(), "O nome da subtipo salva não está correto");
-        assertEquals(subtipoSalvo.getTipo(), resultado.getTipo(), "O tipo do subtipo salva não está correto");
+        assertEquals(novoSubtipo.getId(), resultado.getId(), "O ID do subtipo salvo não está correto");
+        assertEquals(novoSubtipo.getNome(), resultado.getNome(), "O nome da subtipo salvo não está correto");
+        assertEquals(novoSubtipo.getTipo(), resultado.getTipo(), "O tipo do subtipo salvo não está correto");
 
-        verify(subtipoRepository).save(ArgumentMatchers.argThat(subtipo -> subtipo.getId() == null && "Novo Subtipo".equals(subtipo.getNome())));
+        verify(subtipoRepository).save(ArgumentMatchers.argThat(subtipo -> subtipo.getId() == 2 && "Semi-congelado".equals(subtipo.getNome())));
     }
 }

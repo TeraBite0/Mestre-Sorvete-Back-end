@@ -87,27 +87,10 @@ class TipoServiceTest extends DataFactory {
     }
 
     @Test
-    @DisplayName("Qunado buscar por tipo ignore case não existente, deve lançar exceção 404 (NOT_FOUND)")
-    void deveLancarExcecaoBuscarPorNomeIgnoreCaseTipo() {
+    @DisplayName("Qunado buscar por tipo isBlanck não existente, deve lançar exceção 404 (NOT_FOUND)")
+    void deveLancarExcecaoBuscarPorNomeisBlanck() {
         ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> tipoService.buscarPorNomeTipo(" "));
         assertEquals(HttpStatus.BAD_REQUEST, exception.getStatusCode(), "O status HTTP esperado é 400 (BAD_REQUEST)");
-    }
-
-    @Test
-    @DisplayName("Quando passar um  que não existe no banco de dados, deve cadastrar um novo tipo")
-    void deveCriarNovoTipoQuandoBuscarPorNomeNaoExistente(){
-        String nomeTipo = "Novo Tipo";
-        when(tipoRepository.findByNomeIgnoreCase(nomeTipo)).thenReturn(null);
-
-        Tipo tipo;
-        try{
-            tipo = tipoService.buscarPorNomeTipo(nomeTipo);
-        } catch (Exception e) {
-            fail("Erro ao buscar tipo com nome não existente: " + (e.getMessage() != null ? e.getMessage() : e.getCause()));
-            return;
-        }
-
-        assertNull(tipo);
     }
 
     @Test

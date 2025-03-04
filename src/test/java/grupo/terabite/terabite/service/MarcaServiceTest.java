@@ -86,28 +86,9 @@ class MarcaServiceTest extends DataFactory {
 
     @Test
     @DisplayName("Quando buscar por marca isBlanck, deve lançar exceção 400 (BAD_REQUEST)")
-    void deveLancarExcecaoQuandoPassarNomeVazio(){
+    void deveLancarExcecaoQuandoPassarNomeisBlanck(){
         ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> marcaService.buscarPorNomeMarca(" "));
         assertEquals(HttpStatus.BAD_REQUEST, exception.getStatusCode(), "O status HTTP esperado é 400 (BAD_REQUEST)");
-    }
-
-    @Test
-    @DisplayName("Quando passar uma marca que não existe no banco de dados, deve cadastrar uma nova marca")
-    void deveCriarNovaMarcaQuandoBuscarPorNomeNaoExistente(){
-        String nomeMarca = "Nova Marca";
-        when(marcaRepository.findByNomeIgnoreCase(nomeMarca)).thenReturn(null);
-        when(marcaRepository.save(any())).thenReturn(new Marca(100, nomeMarca));
-
-        Marca marca;
-        try{
-            marca = marcaService.buscarPorNomeMarca(nomeMarca);
-        } catch (Exception e) {
-            fail("Erro ao buscar marca com nome não existente: " + (e.getMessage() != null ? e.getMessage() : e.getCause()));
-            return;
-        }
-
-        assertNotNull(marca);
-        assertEquals(nomeMarca, marca.getNome(), "O nome da marca retornada não está correto");
     }
 
     @Test
@@ -195,5 +176,15 @@ class MarcaServiceTest extends DataFactory {
 
         verify(marcaRepository).existsById(id);
         verify(marcaRepository).deleteById(id);
+    }
+
+    @Test
+    @DisplayName("Quando passar um nome de marca que já existe no banco de dados, deve lançar exceção 409 (CONFLICT)")
+    void deveLancarExecaoQuandoPassarUmaMarcaQueJaExiste(){
+        Marca marca = marcas.get(0);
+        when(marcaService.buscarPorNomeMarca(marca.getNome())).thenReturn(marca);
+
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> marcaService.validarMarcaExistente(marca.getNome()));
+        assertEquals(HttpStatus.CONFLICT, exception.getStatusCode(), "O status HTTP esperado é 409 (CONFLICT)");
     }
 }

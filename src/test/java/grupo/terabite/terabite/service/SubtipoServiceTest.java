@@ -92,8 +92,8 @@ class SubtipoServiceTest extends DataFactory {
     }
 
     @Test
-    @DisplayName("Qunado buscar por subtipo passando argumento vazio, deve lançar exceção 400 (BAD_REQUEST)")
-    void deveLancarExcecaoBuscarPorSubtipoArgumentoVazio() {
+    @DisplayName("Qunado buscar por subtipo isBlanck, deve lançar exceção 400 (BAD_REQUEST)")
+    void deveLancarExcecaoBuscarPorSubtipoisBlanck() {
         ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> subtipoService.buscarPorNomeSubtipo(" "));
         assertEquals(HttpStatus.BAD_REQUEST, exception.getStatusCode(), "O status HTTP esperado é 400 (BAD_REQUEST)");
     }

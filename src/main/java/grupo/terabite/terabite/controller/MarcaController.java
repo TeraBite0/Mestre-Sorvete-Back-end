@@ -47,6 +47,6 @@ public class MarcaController {
     })
     @PostMapping
     public ResponseEntity<MarcaResponseDTO> criarMarca(@RequestBody @Valid MarcaCreateDTO marcaCreateDTO) {
-        return ResponseEntity.created(null).body(MarcaMapper.toResponseDto(MarcaMapper.toCreateMarca(marcaCreateDTO)));
+        return ResponseEntity.created(null).body(MarcaMapper.toResponseDto(marcaService.criarMarca(MarcaMapper.toCreateMarca(marcaCreateDTO))));
     }
 }

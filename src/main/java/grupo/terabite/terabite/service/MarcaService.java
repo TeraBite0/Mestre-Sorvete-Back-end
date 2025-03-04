@@ -32,15 +32,11 @@ public class MarcaService {
     public Marca buscarPorNomeMarca(String nomeMarca) {
         if (nomeMarca.isBlank()) throw new ResponseStatusException(HttpStatusCode.valueOf(400));
 
-        Marca marca = marcaRepository.findByNomeIgnoreCase(nomeMarca);
-
-        if (marca == null) marca = criarMarca(new Marca(null, nomeMarca));
-
-        return marca;
+        return marcaRepository.findByNomeIgnoreCase(nomeMarca);
     }
 
     public Marca criarMarca(Marca novaMarca) {
-        novaMarca.setId(null);
+        validarMarcaExistente(novaMarca.getNome());
         return marcaRepository.save(novaMarca);
     }
 
@@ -54,5 +50,11 @@ public class MarcaService {
     public void deletarMarca(Integer id) {
         if (!marcaRepository.existsById(id)) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         marcaRepository.deleteById(id);
+    }
+
+    public void validarMarcaExistente(String nomeMarca) {
+        if (buscarPorNomeMarca(nomeMarca) != null) {
+            throw new ResponseStatusException(HttpStatusCode.valueOf(409), "Marca já cadastrada");
+        }
     }
 }

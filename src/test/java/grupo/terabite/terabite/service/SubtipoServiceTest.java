@@ -123,10 +123,10 @@ class SubtipoServiceTest extends DataFactory {
     }
 
     @Test
-    @DisplayName("Quando tentar cadastrar um subtipo passando nome e tipo já existende, deve lançar exceção 409 (CONFLICT)")
-    void deveLancarExecaoQuandoCadastrarSubtipoComNomeETipoJaExistende() {
+    @DisplayName("Quando tentar cadastrar um subtipo passando nome e tipo já existente, deve lançar exceção 409 (CONFLICT)")
+    void deveLancarExecaoQuandoCadastrarSubtipoComNomeETipoJaExistente() {
         Subtipo subtipo = subtipos.get(0);
-        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> subtipoService.validarSubtipoExistende(subtipo, subtipo));
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> subtipoService.validarSubtipoExistente(subtipo, subtipo));
         assertEquals(HttpStatus.CONFLICT, exception.getStatusCode(), "O status HTTP esperado é 409 (CONFLICT)");
     }
 

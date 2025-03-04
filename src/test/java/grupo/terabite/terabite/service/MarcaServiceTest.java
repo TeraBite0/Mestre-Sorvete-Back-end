@@ -182,7 +182,7 @@ class MarcaServiceTest extends DataFactory {
 
     @Test
     @DisplayName("Quando passar um Id que existe no banco de dados, deve deletar se a marca por id")
-    void deveDeletarMarcaSeExistende() {
+    void deveDeletarMarcaSeExistente() {
         Integer id = 1;
         when(marcaRepository.existsById(id)).thenReturn(true);
 

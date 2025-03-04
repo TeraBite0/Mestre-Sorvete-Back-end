@@ -38,6 +38,8 @@ public class ProdutoMapper {
                 .preco(entity.getPreco())
                 .temGluten(entity.getTemGluten())
                 .temLactose(entity.getTemLactose())
+                .qtdCaixasEstoque(entity.getQtdCaixasEstoque())
+                .qtdPorCaixas(entity.getQtdPorCaixas())
                 .build();
     }
 }

@@ -1,6 +1,8 @@
 package grupo.terabite.terabite.service;
 
+import grupo.terabite.terabite.entity.Marca;
 import grupo.terabite.terabite.entity.Produto;
+import grupo.terabite.terabite.entity.Subtipo;
 import grupo.terabite.terabite.repository.ProdutoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatusCode;
@@ -17,7 +19,7 @@ public class ProdutoService {
     private final SubtipoService subtipoService;
 
     public List<Produto> listarProduto() {
-        return produtoRepository.findAll();
+        return produtoRepository.findAllByOrderByNome();
     }
 
     public List<Produto> listarProdutoIsAtivos() {
@@ -49,11 +51,9 @@ public class ProdutoService {
     }
 
     public Produto criarProduto(Produto produto, String nomeMarca, String nomeSubtipo) {
-        produto.setMarca(marcaService.buscarPorNomeMarca(nomeMarca));
-        produto.setSubtipo((subtipoService.buscarPorNomeSubtipo(nomeSubtipo)));
+        validarMarcaESubtipoExistentes(nomeMarca, nomeSubtipo, produto);
         produto.setIsAtivo(true);
         produto.setDisponivel(false);
-        produto.setQtdCaixasEstoque(0);
         return produtoRepository.save(produto);
     }
 
@@ -75,5 +75,16 @@ public class ProdutoService {
         }
         produtoAtualizado.setId(id);
         return produtoRepository.save(produtoAtualizado);
+    }
+
+    private void validarMarcaESubtipoExistentes(String nomeMarca, String nomeSubtipo, Produto produto) {
+        Marca marca = marcaService.buscarPorNomeMarca(nomeMarca);
+        Subtipo subtipo = subtipoService.buscarPorNomeSubtipo(nomeSubtipo);
+        if (marca == null || subtipo == null) {
+            throw new ResponseStatusException(HttpStatusCode.valueOf(404));
+        }
+
+        produto.setMarca(marca);
+        produto.setSubtipo(subtipo);
     }
 }

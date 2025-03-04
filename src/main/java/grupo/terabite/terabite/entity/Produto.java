@@ -37,6 +37,9 @@ public class Produto {
     @Column(name = "QTD_CAIXA_ESTOQUE_PROD")
     private Integer qtdCaixasEstoque;
 
+    @Column(name = "QTD_POR_CAIXA_PROD")
+    private Integer qtdPorCaixas;
+
     @Column(name = "DISPONIVEL_PROD")
     private Boolean disponivel;
 

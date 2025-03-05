@@ -22,9 +22,6 @@ public class ProdutoCreateDTO {
     private Double preco;
 
     @NotNull
-    private Integer qtdCaixasEstoque;
-
-    @NotNull
     private Integer qtdPorCaixas;
 
     @NotNull

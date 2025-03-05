@@ -13,15 +13,20 @@ public class ProdutoResponseDTO {
 
     private Double preco;
 
+    private Integer qtdCaixasEstoque;
+
+    private Integer qtdPorCaixas;
+
     private Boolean isAtivo;
 
     private Boolean disponivel;
+
+    private Boolean temLactose;
+
+    private Boolean temGluten;
 
     private SubtipoResponseDTO subtipo;
 
     private MarcaResponseDTO marca;
 
-    private Boolean temLactose;
-
-    private Boolean temGluten;
 }

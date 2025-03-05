@@ -21,6 +21,8 @@ public class ProdutoMapper {
                 .nome(produto.getNome())
                 .preco(produto.getPreco())
                 .isAtivo(produto.getIsAtivo())
+                .qtdCaixasEstoque(produto.getQtdCaixasEstoque())
+                .qtdPorCaixas(produto.getQtdPorCaixas())
                 .disponivel(produto.getDisponivel())
                 //.emEstoque(produto.getEmEstoque())
                 .temGluten(produto.getTemGluten())
@@ -38,7 +40,6 @@ public class ProdutoMapper {
                 .preco(entity.getPreco())
                 .temGluten(entity.getTemGluten())
                 .temLactose(entity.getTemLactose())
-                .qtdCaixasEstoque(entity.getQtdCaixasEstoque())
                 .qtdPorCaixas(entity.getQtdPorCaixas())
                 .build();
     }

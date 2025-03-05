@@ -54,6 +54,7 @@ public class ProdutoService {
         validarMarcaESubtipoExistentes(nomeMarca, nomeSubtipo, produto);
         produto.setIsAtivo(true);
         produto.setDisponivel(false);
+        produto.setQtdCaixasEstoque(0);
         return produtoRepository.save(produto);
     }
 

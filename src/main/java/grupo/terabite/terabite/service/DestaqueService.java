@@ -28,7 +28,7 @@ public class DestaqueService {
         }
 
         destaque.setProduto(produtoNovo);
-        destaque.setTexto(destaque.getTexto());
+        destaque.setTexto(destaqueNovo.getTexto());
         destaqueRepository.save(destaque);
         return destaque;
     }

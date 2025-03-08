@@ -3,10 +3,8 @@ package grupo.terabite.terabite.service;
 import grupo.terabite.terabite.entity.Marca;
 import grupo.terabite.terabite.entity.Produto;
 import grupo.terabite.terabite.entity.Subtipo;
-import grupo.terabite.terabite.entity.Tipo;
 import grupo.terabite.terabite.factory.DataFactory;
 import grupo.terabite.terabite.repository.ProdutoRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -41,7 +39,7 @@ class ProdutoServiceTest extends DataFactory {
     @Test
     @DisplayName("Lista todos produtos")
     void listarProduto() {
-        Mockito.when(produtoRepository.findAll()).thenReturn(produtos);
+        Mockito.when(produtoRepository.findAllByOrderByNome()).thenReturn(produtos);
 
         List<Produto> produtosResposta = new ArrayList<>();
 
@@ -113,7 +111,7 @@ class ProdutoServiceTest extends DataFactory {
     @Test
     @DisplayName("Cria corretamente")
     void criarProduto() {
-        Produto produto = new Produto(100, "Gelo esquecido", subtipos.get(0), marcas.get(0), 5.0, true, null,null, false, false);
+        Produto produto = new Produto(100, "Gelo esquecido", subtipos.get(0), marcas.get(0), 5.0, true, null, null, null, false, false);
         Mockito.when(produtoRepository.save(Mockito.any())).thenReturn(produto);
         Mockito.when(marcaService.buscarPorNomeMarca(Mockito.any())).thenReturn(marcas.get(0));
         Mockito.when(subtipoService.buscarPorNomeSubtipo(Mockito.any())).thenReturn(subtipos.get(0));

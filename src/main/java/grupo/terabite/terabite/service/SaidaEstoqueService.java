@@ -4,6 +4,7 @@ import grupo.terabite.terabite.entity.SaidaEstoque;
 import grupo.terabite.terabite.repository.SaidaEstoqueRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -20,7 +21,10 @@ public class SaidaEstoqueService {
     private  final ProdutoService produtoService;
 
     public List<SaidaEstoque> listar(){
-        return saidaEstoqueRepository.findAll();
+        List<SaidaEstoque> saidaEstoques = saidaEstoqueRepository.findAll();
+        if(saidaEstoques.isEmpty()) throw new ResponseStatusException(HttpStatusCode.valueOf(204));
+        
+        return saidaEstoques;
     }
 
     public List<SaidaEstoque> registrarSaida(List<SaidaEstoque> saidaEstoques){

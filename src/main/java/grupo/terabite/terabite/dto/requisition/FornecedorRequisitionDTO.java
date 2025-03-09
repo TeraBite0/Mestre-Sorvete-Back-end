@@ -1,4 +1,4 @@
-package grupo.terabite.terabite.dto.create;
+package grupo.terabite.terabite.dto.requisition;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class TipoCreateDTO {
+public class FornecedorRequisitionDTO {
 
     @NotBlank
     private String nome;

@@ -2,7 +2,7 @@ package grupo.terabite.terabite.controller;
 
 import grupo.terabite.terabite.dto.mapper.DestaqueMapper;
 import grupo.terabite.terabite.dto.response.DestaqueResponseDTO;
-import grupo.terabite.terabite.dto.update.DestaqueUpdateDTO;
+import grupo.terabite.terabite.dto.requisition.DestaqueRequisitionDTO;
 import grupo.terabite.terabite.service.DestaqueService;
 import grupo.terabite.terabite.service.ProdutoService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -38,7 +38,7 @@ public class DestaqueController {
             @ApiResponse(responseCode = "401", description = "Erro de requisição, Não autorizado"),
     })
     @PutMapping()
-    public ResponseEntity<DestaqueResponseDTO> alterarDestaque(@RequestBody @Valid DestaqueUpdateDTO recomendacaoDTO) {
+    public ResponseEntity<DestaqueResponseDTO> alterarDestaque(@RequestBody @Valid DestaqueRequisitionDTO recomendacaoDTO) {
         return ResponseEntity.ok(DestaqueMapper.toDestaqueResponseDTO(destaqueService.alterarDestaque(DestaqueMapper.toDestaque(recomendacaoDTO, produtoService))));
     }
 }

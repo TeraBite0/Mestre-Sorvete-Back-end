@@ -1,6 +1,6 @@
 package grupo.terabite.terabite.controller;
 
-import grupo.terabite.terabite.dto.create.MarcaCreateDTO;
+import grupo.terabite.terabite.dto.requisition.MarcaRequisitionDTO;
 import grupo.terabite.terabite.dto.mapper.MarcaMapper;
 import grupo.terabite.terabite.dto.response.MarcaResponseDTO;
 import grupo.terabite.terabite.entity.Marca;
@@ -46,7 +46,7 @@ public class MarcaController {
             @ApiResponse(responseCode = "400", description = "Parâmetros inválidos")
     })
     @PostMapping
-    public ResponseEntity<MarcaResponseDTO> criarMarca(@RequestBody @Valid MarcaCreateDTO marcaCreateDTO) {
-        return ResponseEntity.created(null).body(MarcaMapper.toResponseDto(marcaService.criarMarca(MarcaMapper.toCreateMarca(marcaCreateDTO))));
+    public ResponseEntity<MarcaResponseDTO> criarMarca(@RequestBody @Valid MarcaRequisitionDTO marcaRequisitionDTO) {
+        return ResponseEntity.created(null).body(MarcaMapper.toResponseDto(marcaService.criarMarca(MarcaMapper.toCreateMarca(marcaRequisitionDTO))));
     }
 }

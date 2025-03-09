@@ -1,4 +1,4 @@
-package grupo.terabite.terabite.dto.create;
+package grupo.terabite.terabite.dto.requisition;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -7,7 +7,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class PerdaCreateDTO {
+public class PerdaRequisitionDTO {
 
     @NotNull
     private Integer produtoId;

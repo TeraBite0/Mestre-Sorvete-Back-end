@@ -1,13 +1,12 @@
 package grupo.terabite.terabite.dto.mapper;
 
-import grupo.terabite.terabite.dto.create.LoteCreateDTO;
-import grupo.terabite.terabite.dto.response.LoteResponseDTO;
 import grupo.terabite.terabite.dto.requisition.LoteRequisitionDTO;
+import grupo.terabite.terabite.dto.response.LoteResponseDTO;
 import grupo.terabite.terabite.entity.Lote;
 import grupo.terabite.terabite.service.ProdutoService;
 
 public class LoteMapper {
-    public static Lote toEntity(LoteCreateDTO lote, ProdutoService produtoService) {
+    public static Lote toEntity(LoteRequisitionDTO lote, ProdutoService produtoService) {
         if (lote == null || produtoService == null) return null;
         return null;
 //        return new Lote(null,
@@ -20,18 +19,18 @@ public class LoteMapper {
 //        );
     }
 
-    public static Lote toEntity(LoteRequisitionDTO lote, ProdutoService produtoService) {
-        if (lote == null || produtoService == null) return null;
-        return null;
-//        return new Lote(null,
-//                lote.getDtCompra(),
-//                lote.getDtEntrega(),
-//                lote.getDtVencimento(),
-//                //lote.getQtdProdutoComprado(),
-//                lote.getValorLote()
-//                //produtoService.buscarPorId(lote.getProdutoId())
-//        );
-    }
+//    public static Lote toEntity(grupo.terabite.terabite.dto.requisition.LoteRequisitionDTO lote, ProdutoService produtoService) {
+//        if (lote == null || produtoService == null) return null;
+//        return null;
+////        return new Lote(null,
+////                lote.getDtCompra(),
+////                lote.getDtEntrega(),
+////                lote.getDtVencimento(),
+////                //lote.getQtdProdutoComprado(),
+////                lote.getValorLote()
+////                //produtoService.buscarPorId(lote.getProdutoId())
+////        );
+//    }
 
     public static LoteResponseDTO toResponseDto(Lote lote) {
         if (lote == null) return null;

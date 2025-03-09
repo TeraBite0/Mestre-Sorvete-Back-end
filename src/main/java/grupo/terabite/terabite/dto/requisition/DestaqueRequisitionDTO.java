@@ -1,4 +1,4 @@
-package grupo.terabite.terabite.dto.update;
+package grupo.terabite.terabite.dto.requisition;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -7,7 +7,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class DestaqueUpdateDTO {
+public class DestaqueRequisitionDTO {
 
     @NotNull
     private Integer produtoId;

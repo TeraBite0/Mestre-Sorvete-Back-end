@@ -1,6 +1,6 @@
 package grupo.terabite.terabite.controller;
 
-import grupo.terabite.terabite.dto.create.TipoCreateDTO;
+import grupo.terabite.terabite.dto.requisition.TipoRequisitionDTO;
 import grupo.terabite.terabite.dto.mapper.TipoMapper;
 import grupo.terabite.terabite.dto.response.TipoResponseDTO;
 import grupo.terabite.terabite.entity.Tipo;
@@ -46,7 +46,7 @@ public class TipoController {
             @ApiResponse(responseCode = "400", description = "Parâmetros inválidos")
     })
     @PostMapping
-    public ResponseEntity<TipoResponseDTO> criarTipo(@RequestBody @Valid TipoCreateDTO tipoCreateDTO) {
+    public ResponseEntity<TipoResponseDTO> criarTipo(@RequestBody @Valid TipoRequisitionDTO tipoCreateDTO) {
         return ResponseEntity.created(null).body(TipoMapper.toResponseDto(tipoService.criarTipo(TipoMapper.toCreateDto(tipoCreateDTO))));
     }
 }

@@ -1,6 +1,6 @@
 package grupo.terabite.terabite.controller;
 
-import grupo.terabite.terabite.dto.create.ProdutoCreateDTO;
+import grupo.terabite.terabite.dto.requisition.ProdutoRequisitionDTO;
 import grupo.terabite.terabite.dto.mapper.ProdutoMapper;
 import grupo.terabite.terabite.dto.response.ProdutoResponseDTO;
 import grupo.terabite.terabite.entity.Produto;
@@ -116,13 +116,13 @@ public class ProdutoController {
             @ApiResponse(responseCode = "409", description = "Produto duplicado"),
     })
     @PostMapping
-    public ResponseEntity<ProdutoResponseDTO> criar(@RequestBody @Valid ProdutoCreateDTO produtoCreateDTO) {
+    public ResponseEntity<ProdutoResponseDTO> criar(@RequestBody @Valid ProdutoRequisitionDTO produtoRequisitionDTO) {
         return ResponseEntity.created(null).body(
                 ProdutoMapper.toResponseDto(
                         produtoService.criarProduto(
-                                ProdutoMapper.toCreateProduto(produtoCreateDTO),
-                                produtoCreateDTO.getNomeMarca(),
-                                produtoCreateDTO.getNomeSubtipo())));
+                                ProdutoMapper.toCreateProduto(produtoRequisitionDTO),
+                                produtoRequisitionDTO.getNomeMarca(),
+                                produtoRequisitionDTO.getNomeSubtipo())));
     }
 
     @Operation(summary = "Atualiza um produto", description = "Retorna o produto atualizado caso sucesso na criação")
@@ -134,7 +134,7 @@ public class ProdutoController {
             @ApiResponse(responseCode = "409", description = "Produto duplicado"),
     })
     @PutMapping("/{id}")
-    public ResponseEntity<ProdutoResponseDTO> atualizarProduto(@PathVariable Integer id, @RequestBody @Valid ProdutoCreateDTO produtoUpdateDTO) {
+    public ResponseEntity<ProdutoResponseDTO> atualizarProduto(@PathVariable Integer id, @RequestBody @Valid ProdutoRequisitionDTO produtoUpdateDTO) {
         return ResponseEntity.ok(ProdutoMapper.toResponseDto(produtoService.atualizarProduto(id, ProdutoMapper.toCreateProduto(produtoUpdateDTO), produtoUpdateDTO.getNomeMarca(), produtoUpdateDTO.getNomeSubtipo())));
     }
 

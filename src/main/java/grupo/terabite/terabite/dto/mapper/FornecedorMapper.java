@@ -1,6 +1,6 @@
 package grupo.terabite.terabite.dto.mapper;
 
-import grupo.terabite.terabite.dto.create.FornecedorCreateDTO;
+import grupo.terabite.terabite.dto.requisition.FornecedorRequisitionDTO;
 import grupo.terabite.terabite.dto.response.FornecedorResponseDTO;
 import grupo.terabite.terabite.entity.Fornecedor;
 
@@ -35,7 +35,7 @@ public class FornecedorMapper {
         return fornecedorDto;
     }
 
-    public static Fornecedor toCreateDto(FornecedorCreateDTO fornecedorCreateDTO) {
+    public static Fornecedor toCreateDto(FornecedorRequisitionDTO fornecedorCreateDTO) {
         return Fornecedor.builder()
             .nome(fornecedorCreateDTO.getNome())
             .build();

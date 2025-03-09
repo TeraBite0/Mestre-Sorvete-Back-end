@@ -1,12 +1,11 @@
 package grupo.terabite.terabite.dto.mapper;
 
-import grupo.terabite.terabite.dto.create.SubtipoCreateDTO;
+import grupo.terabite.terabite.dto.requisition.SubtipoRequisitionDTO;
 import grupo.terabite.terabite.dto.response.SubtipoResponseDTO;
 import grupo.terabite.terabite.entity.Subtipo;
-import grupo.terabite.terabite.entity.Tipo;
 
 public class SubtipoMapper {
-    public static Subtipo toCreateDto(SubtipoCreateDTO entity){
+    public static Subtipo toCreateDto(SubtipoRequisitionDTO entity){
         if(entity == null) return null;
 
         return Subtipo.builder()

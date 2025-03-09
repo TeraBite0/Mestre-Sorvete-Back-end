@@ -1,6 +1,6 @@
 package grupo.terabite.terabite.dto.mapper;
 
-import grupo.terabite.terabite.dto.create.ProdutoCreateDTO;
+import grupo.terabite.terabite.dto.requisition.ProdutoRequisitionDTO;
 import grupo.terabite.terabite.dto.response.ProdutoResponseDTO;
 import grupo.terabite.terabite.entity.Marca;
 import grupo.terabite.terabite.entity.Produto;
@@ -32,7 +32,7 @@ public class ProdutoMapper {
                 .build();
     }
 
-    public static Produto toCreateProduto(ProdutoCreateDTO entity) {
+    public static Produto toCreateProduto(ProdutoRequisitionDTO entity) {
         if (entity == null) return null;
 
         return Produto.builder()

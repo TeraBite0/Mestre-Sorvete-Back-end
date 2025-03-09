@@ -1,6 +1,6 @@
 package grupo.terabite.terabite.controller;
 
-import grupo.terabite.terabite.dto.create.NotificacaoCreateDTO;
+import grupo.terabite.terabite.dto.requisition.NotificacaoRequisitionDTO;
 import grupo.terabite.terabite.dto.mapper.NotificacaoMapper;
 import grupo.terabite.terabite.dto.response.NotificacaoResponseDTO;
 import grupo.terabite.terabite.entity.Notificacao;
@@ -45,7 +45,7 @@ public class NotificacaoController {
             @ApiResponse(responseCode = "400", description = "Parâmetros inválidos")
     })
     @PostMapping
-    public ResponseEntity<NotificacaoResponseDTO> criarNotificacao(@RequestBody @Valid NotificacaoCreateDTO novaNotificacao) {
+    public ResponseEntity<NotificacaoResponseDTO> criarNotificacao(@RequestBody @Valid NotificacaoRequisitionDTO novaNotificacao) {
         return ResponseEntity.created(null).body(NotificacaoMapper.toResponseNotificacaoDto(
                 service.criarNotificacao(
                         NotificacaoMapper.toCreateNotificacaoDto(novaNotificacao, produtoService))));

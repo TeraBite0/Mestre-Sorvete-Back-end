@@ -1,7 +1,7 @@
 package grupo.terabite.terabite.dto.mapper;
 
 import grupo.terabite.terabite.dto.response.DestaqueResponseDTO;
-import grupo.terabite.terabite.dto.update.DestaqueUpdateDTO;
+import grupo.terabite.terabite.dto.requisition.DestaqueRequisitionDTO;
 import grupo.terabite.terabite.entity.Destaque;
 import grupo.terabite.terabite.service.ProdutoService;
 
@@ -16,7 +16,7 @@ public class DestaqueMapper {
                 .build();
     }
 
-    public static Destaque toDestaque(DestaqueUpdateDTO entity, ProdutoService produtoService) {
+    public static Destaque toDestaque(DestaqueRequisitionDTO entity, ProdutoService produtoService) {
         if (entity == null) return null;
 
         return Destaque.builder()

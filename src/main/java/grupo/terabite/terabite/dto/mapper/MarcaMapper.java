@@ -1,6 +1,6 @@
 package grupo.terabite.terabite.dto.mapper;
 
-import grupo.terabite.terabite.dto.create.MarcaCreateDTO;
+import grupo.terabite.terabite.dto.requisition.MarcaRequisitionDTO;
 import grupo.terabite.terabite.dto.response.MarcaResponseDTO;
 import grupo.terabite.terabite.entity.Marca;
 
@@ -37,7 +37,7 @@ public class MarcaMapper {
         return marcasDto;
     }
 
-    public static Marca toCreateMarca(MarcaCreateDTO entity){
+    public static Marca toCreateMarca(MarcaRequisitionDTO entity){
         if(entity == null) return null;
 
         return Marca.builder()

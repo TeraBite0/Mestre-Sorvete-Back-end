@@ -1,4 +1,4 @@
-package grupo.terabite.terabite.dto.create;
+package grupo.terabite.terabite.dto.requisition;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -8,12 +8,12 @@ import lombok.Data;
 
 @Data
 @Builder
-public class NotificacaoCreateDTO {
+public class SubtipoRequisitionDTO {
 
     @NotBlank
-    private String email;
+    private String nome;
 
     @NotNull
     @Positive
-    private Integer idProduto;
+    private Integer idTipo;
 }

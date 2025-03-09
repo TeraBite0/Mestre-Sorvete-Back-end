@@ -1,6 +1,6 @@
 package grupo.terabite.terabite.controller;
 
-import grupo.terabite.terabite.dto.create.FornecedorCreateDTO;
+import grupo.terabite.terabite.dto.requisition.FornecedorRequisitionDTO;
 import grupo.terabite.terabite.dto.mapper.FornecedorMapper;
 import grupo.terabite.terabite.dto.response.FornecedorResponseDTO;
 import grupo.terabite.terabite.entity.Fornecedor;
@@ -52,7 +52,7 @@ public class FornecedorController {
             @ApiResponse(responseCode = "400", description = "Parâmetros inválidos")
     })
     @PostMapping
-    public ResponseEntity<FornecedorResponseDTO> criarFornecedor(@RequestBody @Valid FornecedorCreateDTO fornecedorCreateDTO) {
+    public ResponseEntity<FornecedorResponseDTO> criarFornecedor(@RequestBody @Valid FornecedorRequisitionDTO fornecedorCreateDTO) {
         return ResponseEntity.created(null).body(FornecedorMapper.toResponseDto(FornecedorService.criarFornecedor(FornecedorMapper.toCreateDto(fornecedorCreateDTO))));
     }
 }

@@ -1,9 +1,8 @@
 package grupo.terabite.terabite.controller;
 
-import grupo.terabite.terabite.dto.create.RecomendacaoCreateDTO;
+import grupo.terabite.terabite.dto.requisition.RecomendacaoRequisitionDTO;
 import grupo.terabite.terabite.dto.mapper.RecomendacaoMapper;
 import grupo.terabite.terabite.dto.response.RecomendacaoResponseDTO;
-import grupo.terabite.terabite.dto.update.RecomendacaoUpdateDTO;
 import grupo.terabite.terabite.service.ProdutoService;
 import grupo.terabite.terabite.service.RecomendacaoService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -41,7 +40,7 @@ public class RecomendacaoController {
             @ApiResponse(responseCode = "401", description = "Erro de requisição, Não autorizado"),
     })
     @PostMapping
-    public ResponseEntity<RecomendacaoResponseDTO> criarRecomendacao(@RequestBody @Valid RecomendacaoCreateDTO recomendacaoDTO) {
+    public ResponseEntity<RecomendacaoResponseDTO> criarRecomendacao(@RequestBody @Valid RecomendacaoRequisitionDTO recomendacaoDTO) {
         return ResponseEntity.ok(RecomendacaoMapper.toRecomendacaoResponseDto(recomendacaoService.criarRecomendacao(RecomendacaoMapper.toRecomendacao(recomendacaoDTO, produtoService))));
     }
 
@@ -52,7 +51,7 @@ public class RecomendacaoController {
             @ApiResponse(responseCode = "401", description = "Erro de requisição, Não autorizado"),
     })
     @PutMapping("/{id}")
-    public ResponseEntity<RecomendacaoResponseDTO> alterarRecomendacao(@PathVariable Integer id, @RequestBody @Valid RecomendacaoCreateDTO recomendacaoDTO) {
+    public ResponseEntity<RecomendacaoResponseDTO> alterarRecomendacao(@PathVariable Integer id, @RequestBody @Valid RecomendacaoRequisitionDTO recomendacaoDTO) {
         return ResponseEntity.ok(RecomendacaoMapper.toRecomendacaoResponseDto(recomendacaoService.atualizarRecomendacao(id, RecomendacaoMapper.toRecomendacao(recomendacaoDTO, produtoService))));
     }
 }

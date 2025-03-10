@@ -1,40 +1,22 @@
 package grupo.terabite.terabite.controller;
 
-import grupo.terabite.terabite.dto.requisition.LoteRequisitionDTO;
 import grupo.terabite.terabite.dto.mapper.LoteMapper;
+import grupo.terabite.terabite.dto.requisition.LoteRequisitionDTO;
 import grupo.terabite.terabite.dto.response.LoteResponseDTO;
-import grupo.terabite.terabite.entity.Lote;
 import grupo.terabite.terabite.service.LoteService;
-import grupo.terabite.terabite.service.ProdutoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.annotations.Any;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/estoque")
+@RequestMapping("/lotes")
 public class LoteController {
 
     private final LoteService loteService;
-    private final ProdutoService produtoService;
-
-    @Operation(summary = "Lista todos produtos com informações de estoque", description = "Retorna todos os produtos com lotes registrados")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Operação bem-sucedida,Estoque listado com sucesso"),
-            @ApiResponse(responseCode = "204", description = "Operação bem-sucedida, sem produtos"),
-            @ApiResponse(responseCode = "401", description = "Erro de requisição, Não autorizado")
-    })
-    @GetMapping
-    public ResponseEntity<List<Any>> listarEstoque() {
-        return null; // ResponseEntity.ok(loteService.estoque().stream().map(EstoqueProdutoMapper::toResponseDTO).toList());
-    }
 
     @Operation(summary = "Busca um lote pelo ID", description = "Retorna um lote com base no seu ID")
     @ApiResponses(value = {
@@ -66,7 +48,7 @@ public class LoteController {
             @ApiResponse(responseCode = "404", description = "Lote não encontrado")
     })
     @PutMapping("/{id}")
-    public ResponseEntity<LoteResponseDTO> atualizarLote(@PathVariable Integer id, @RequestBody grupo.terabite.terabite.dto.requisition.LoteRequisitionDTO loteAtualizado) {
+    public ResponseEntity<LoteResponseDTO> atualizarLote(@PathVariable Integer id, @RequestBody LoteRequisitionDTO loteAtualizado) {
         return ResponseEntity.ok(LoteMapper.toResponseDto(loteService.atualizarLote(id, LoteMapper.toEntity(loteAtualizado))));
     }
 

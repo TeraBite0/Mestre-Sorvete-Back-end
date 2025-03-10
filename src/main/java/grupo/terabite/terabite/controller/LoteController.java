@@ -55,7 +55,7 @@ public class LoteController {
     })
     @PostMapping
     public ResponseEntity<LoteResponseDTO> adicionarLote(@RequestBody LoteRequisitionDTO novoLote) {
-        return ResponseEntity.created(null).body(LoteMapper.toResponseDto(loteService.criarLote(LoteMapper.toEntity(novoLote, produtoService))));
+        return ResponseEntity.created(null).body(LoteMapper.toResponseDto(loteService.criarLote(LoteMapper.toEntity(novoLote))));
     }
 
     @Operation(summary = "Atualiza um lote apartir de um id", description = "Retorna o lote atualizado com base no seu ID")
@@ -67,7 +67,7 @@ public class LoteController {
     })
     @PutMapping("/{id}")
     public ResponseEntity<LoteResponseDTO> atualizarLote(@PathVariable Integer id, @RequestBody grupo.terabite.terabite.dto.requisition.LoteRequisitionDTO loteAtualizado) {
-        return ResponseEntity.ok(LoteMapper.toResponseDto(loteService.atualizarLote(id, LoteMapper.toEntity(loteAtualizado, produtoService))));
+        return ResponseEntity.ok(LoteMapper.toResponseDto(loteService.atualizarLote(id, LoteMapper.toEntity(loteAtualizado))));
     }
 
     @Operation(summary = "Deleta um lote pelo ID", description = "Deleta lote e retorna o sucesso da exclusão")

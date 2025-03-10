@@ -7,6 +7,6 @@ import lombok.Data;
 @Builder
 public class LoteProdutoResponseDTO {
 
-    private ProdutoResponseDTO produtos;
+    private ProdutoResponseDTO produto;
     private Integer qtdCaixasCompradas;
 }

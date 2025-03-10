@@ -1,5 +1,6 @@
 package grupo.terabite.terabite.dto.requisition;
 
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -22,8 +23,7 @@ public class LoteRequisitionDTO {
     @NotBlank
     private LocalDate dtVencimento;
 
-    @NotBlank
-    private LocalDate dtCompra;
+    private LocalDate dtPedido;
 
     @NotNull
     private Double valorLote;
@@ -31,6 +31,8 @@ public class LoteRequisitionDTO {
     @NotBlank
     private String status;
 
-    @NotEmpty
+    private String observacao;
+
+    @NotEmpty @Max(15)
     private List<LoteProdutoRequisitionDTO> loteProdutos;
 }

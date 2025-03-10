@@ -1,55 +1,70 @@
 package grupo.terabite.terabite.dto.mapper;
 
+import grupo.terabite.terabite.dto.requisition.LoteProdutoRequisitionDTO;
 import grupo.terabite.terabite.dto.requisition.LoteRequisitionDTO;
+import grupo.terabite.terabite.dto.response.LoteProdutoResponseDTO;
 import grupo.terabite.terabite.dto.response.LoteResponseDTO;
+import grupo.terabite.terabite.entity.Fornecedor;
 import grupo.terabite.terabite.entity.Lote;
-import grupo.terabite.terabite.service.ProdutoService;
+import grupo.terabite.terabite.entity.LoteProduto;
+import grupo.terabite.terabite.entity.Produto;
+import grupo.terabite.terabite.entity.enums.LoteStatusEnum;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class LoteMapper {
-    public static Lote toEntity(LoteRequisitionDTO lote, ProdutoService produtoService) {
-        if (lote == null || produtoService == null) return null;
-        return null;
-//        return new Lote(null,
-//                lote.getDtCompra(),
-//                lote.getDtEntrega(),
-//                lote.getDtVencimento(),
-//                lote.getQtdProdutoComprado(),
-//                lote.getValorLote(),
-//                produtoService.buscarPorId(lote.getProdutoId())
-//        );
-    }
+    public static Lote toEntity(LoteRequisitionDTO loteRequisitionDTO) {
+        if (loteRequisitionDTO == null) return null;
+        Lote lote = new Lote(null,
+                new Fornecedor(null, loteRequisitionDTO.getNomeFornecedor()),
+                loteRequisitionDTO.getDtEntrega(),
+                loteRequisitionDTO.getDtVencimento(),
+                (loteRequisitionDTO.getDtPedido() != null ? loteRequisitionDTO.getDtPedido() : null), // valida se foi preenchida, caso contrário preenche null
+                loteRequisitionDTO.getValorLote(),
+                LoteStatusEnum.valueOf(loteRequisitionDTO.getStatus()),
+                loteRequisitionDTO.getObservacao(),
+                null);
 
-//    public static Lote toEntity(grupo.terabite.terabite.dto.requisition.LoteRequisitionDTO lote, ProdutoService produtoService) {
-//        if (lote == null || produtoService == null) return null;
-//        return null;
-////        return new Lote(null,
-////                lote.getDtCompra(),
-////                lote.getDtEntrega(),
-////                lote.getDtVencimento(),
-////                //lote.getQtdProdutoComprado(),
-////                lote.getValorLote()
-////                //produtoService.buscarPorId(lote.getProdutoId())
-////        );
-//    }
+        lote.setLoteProdutos(toLoteProdutosList(loteRequisitionDTO.getLoteProdutos(), lote));
+        return lote;
+    }
 
     public static LoteResponseDTO toResponseDto(Lote lote) {
         if (lote == null) return null;
 
         return LoteResponseDTO.builder()
                 .id(lote.getId())
-                .dtPedido(lote.getDtPedido())
+                .fornecedor(lote.getFornecedor().getNome())
                 .dtEntrega(lote.getDtEntrega())
                 .dtVencimento(lote.getDtVencimento())
-                //.qtdProdutoComprado(lote.getQtdCixasCompradas())
+                .dtPedido(lote.getDtPedido())
                 .valorLote(lote.getValorLote())
-//                .produto(ProdutoResponseDTO.builder()
-//                        .id(lote.getProduto().getId())
-//                        .nome(lote.getProduto().getNome())
-//                        .marca(MarcaResponseDTO.builder()
-//                                .id(lote.getProduto().getMarca().getId())
-//                                .nome(lote.getProduto().getMarca().getNome())
-//                                .build())
-//                        .build())
+                .status(lote.getStatus().name())
+                .observacao(lote.getObservacao())
                 .build();
+    }
+
+    private static List<LoteProdutoResponseDTO> loteProdutoResponseDTOSList(List<LoteProduto> loteProdutos) {
+        if (loteProdutos == null) return null;
+
+        List<LoteProdutoResponseDTO> loteProdutosResponseDTOS = new ArrayList<>();
+        loteProdutos.forEach(lp ->
+                loteProdutosResponseDTOS.add(LoteProdutoResponseDTO.builder()
+                        .produto(ProdutoMapper.toResponseDto(lp.getProduto()))
+                        .qtdCaixasCompradas(lp.getQtdCaixasCompradas())
+                        .build())
+        );
+        return loteProdutosResponseDTOS;
+    }
+
+    private static List<LoteProduto> toLoteProdutosList(List<LoteProdutoRequisitionDTO> loteProdutoRequisitionDTOS, Lote lote) {
+        if (loteProdutoRequisitionDTOS == null) return null;
+
+        List<LoteProduto> loteProdutos = new ArrayList<>();
+        loteProdutoRequisitionDTOS.forEach(lp ->
+                loteProdutos.add(new LoteProduto(null, lote, Produto.builder().id(lp.getProdutoId()).build(), lp.getQtdCaixasCompradas()))
+        );
+        return loteProdutos;
     }
 }

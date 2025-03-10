@@ -57,7 +57,7 @@ public class Lote {
     @JoinColumn(name = "FK_ID_STATUS_LOTE", referencedColumnName = "ID_LOTE_STATUS")
     private LoteStatus statusObj;
 
-    public Lote(Integer id, Fornecedor fornecedor, LocalDate dtEntrega, LocalDate dtVencimento, LocalDate dtPedido, Double valorLote, LoteStatusEnum status, String observacao) {
+    public Lote(Integer id, Fornecedor fornecedor, LocalDate dtEntrega, LocalDate dtVencimento, LocalDate dtPedido, Double valorLote, LoteStatusEnum status, String observacao, List<LoteProduto>loteProdutos) {
         this.id = id;
         this.fornecedor = fornecedor;
         this.dtEntrega = dtEntrega;
@@ -66,6 +66,7 @@ public class Lote {
         this.valorLote = valorLote;
         this.status = status;
         this.observacao = observacao;
+        this.loteProdutos = loteProdutos;
     }
 
     public void setStatus(LoteStatusEnum status) {

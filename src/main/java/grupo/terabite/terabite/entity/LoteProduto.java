@@ -1,9 +1,11 @@
 package grupo.terabite.terabite.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+@AllArgsConstructor
 @Getter @Setter
 @Entity
 public class LoteProduto {

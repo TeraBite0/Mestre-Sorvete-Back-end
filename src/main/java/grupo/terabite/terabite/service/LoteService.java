@@ -69,17 +69,13 @@ public class LoteService {
         if (!loteRepository.existsById(id)) throw new ResponseStatusException(HttpStatusCode.valueOf(404));
 
         lote.setId(id);
+
         validarLoteProdutos(lote.getLoteProdutos());
+        loteProdutoRepository.saveAll(lote.getLoteProdutos());
+        lote.getLoteProdutos().forEach((lp) -> lp.setLote(lote));
+        atualizarEstoqueProduto(lote.getLoteProdutos().stream().map(LoteProduto::getProduto).toList());
+
         Lote novoLote = loteRepository.save(lote);
-
-        // preciso atualizar individualmente cada loteProduto ?
-        // atualizar estoque dos mesmos
-
-//        if (produtoEmEstoque(lote.getProduto().getId()) < 1) {
-//            Produto p = produtoService.buscarPorId(lote.getProduto().getId());
-//            // p.setEmEstoque(false);
-//            produtoService.atualizarProduto(p.getId(), p);
-//        }
 
         return novoLote;
     }
@@ -98,7 +94,7 @@ public class LoteService {
 
     // este método atualiza o estoque do produto com base na quantidade de entrada e saida
     protected void atualizarEstoqueProduto(List<Produto> produtos){
-        produtos.forEach((p) -> {
+        produtos.forEach((p) -> { // refatorar sql
             List<LoteProduto> loteProdutos = loteProdutoRepository.findByProdutoId(p.getId());
             List<SaidaEstoque> saidaEstoques = saidaEstoqueRepository.findByProdutoId(p.getId());
 

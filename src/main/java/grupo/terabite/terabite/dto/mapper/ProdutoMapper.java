@@ -24,11 +24,11 @@ public class ProdutoMapper {
                 .qtdCaixasEstoque(produto.getQtdCaixasEstoque())
                 .qtdPorCaixas(produto.getQtdPorCaixas())
                 .disponivel(produto.getDisponivel())
-                //.emEstoque(produto.getEmEstoque())
                 .temGluten(produto.getTemGluten())
                 .temLactose(produto.getTemLactose())
-                .marca(MarcaMapper.toResponseDto(produto.getMarca()))
-                .subtipo(SubtipoMapper.toResponseDto(produto.getSubtipo()))
+                .marca(marca.getNome())
+                .subtipo(subtipo.getNome())
+                .tipo(tipo.getNome())
                 .build();
     }
 

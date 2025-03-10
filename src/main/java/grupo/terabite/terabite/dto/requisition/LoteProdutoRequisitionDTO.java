@@ -9,6 +9,7 @@ import lombok.Data;
 @Builder
 public class LoteProdutoRequisitionDTO {
     @NotNull
+    @Positive
     private Integer produtoId;
 
     @NotNull

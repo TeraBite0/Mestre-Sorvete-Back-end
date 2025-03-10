@@ -17,27 +17,31 @@ import java.util.stream.Collectors;
 public class SaidaEstoqueService {
 
     private final SaidaEstoqueRepository saidaEstoqueRepository;
-
+    private final LoteService loteService;
     private  final ProdutoService produtoService;
 
     public List<SaidaEstoque> listar(){
         List<SaidaEstoque> saidaEstoques = saidaEstoqueRepository.findAll();
         if(saidaEstoques.isEmpty()) throw new ResponseStatusException(HttpStatusCode.valueOf(204));
-        
+
         return saidaEstoques;
     }
 
     public List<SaidaEstoque> registrarSaida(List<SaidaEstoque> saidaEstoques){
         saidaEstoques.forEach(se -> se.setProduto(produtoService.buscarPorId(se.getProduto().getId()))); // atualiza os seus produtos com seus respectivos ids
-        return saidaEstoqueRepository.saveAll(saidaEstoques);
+        List<SaidaEstoque> saidaEstoquesNova = saidaEstoqueRepository.saveAll(saidaEstoques);
+        loteService.atualizarEstoqueProduto(saidaEstoques.stream().map(SaidaEstoque::getProduto).toList());
+        return saidaEstoquesNova;
     }
 
-    public SaidaEstoque editarSaida(Integer id, SaidaEstoque saidaEstoqueAtualizada){
+    public SaidaEstoque editarSaida(Integer id, SaidaEstoque saidaEstoque){
         if(!saidaEstoqueRepository.existsById(id)) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 
-        saidaEstoqueAtualizada.setId(id);
-        saidaEstoqueAtualizada.setProduto(produtoService.buscarPorId(saidaEstoqueAtualizada.getProduto().getId()));
-        return saidaEstoqueRepository.save(saidaEstoqueAtualizada);
+        saidaEstoque.setId(id);
+        saidaEstoque.setProduto(produtoService.buscarPorId(saidaEstoque.getProduto().getId()));
+        SaidaEstoque saidaEstoqueAtualizada = saidaEstoqueRepository.save(saidaEstoque);
+        loteService.atualizarEstoqueProduto(List.of(saidaEstoqueAtualizada.getProduto()));
+        return saidaEstoqueAtualizada;
     }
 
     public void deletarSaidas(List<SaidaEstoque> saidaEstoques){
@@ -46,5 +50,6 @@ public class SaidaEstoqueService {
         if(saidaEstoqueRepository.findAllById(ids).size() != ids.size()) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 
         saidaEstoqueRepository.deleteAllById(ids);
+        loteService.atualizarEstoqueProduto(saidaEstoques.stream().map(SaidaEstoque::getProduto).toList());
     }
 }

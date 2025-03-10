@@ -25,8 +25,10 @@ public class ProdutoResponseDTO {
 
     private Boolean temGluten;
 
-    private SubtipoResponseDTO subtipo;
+    private String subtipo;
 
-    private MarcaResponseDTO marca;
+    private String tipo;
+
+    private String marca;
 
 }

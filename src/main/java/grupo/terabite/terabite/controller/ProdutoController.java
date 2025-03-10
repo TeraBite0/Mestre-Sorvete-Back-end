@@ -125,7 +125,7 @@ public class ProdutoController {
                                 produtoRequisitionDTO.getNomeSubtipo())));
     }
 
-    @Operation(summary = "Atualiza um produto", description = "Retorna o produto atualizado caso sucesso na criação")
+    @Operation(summary = "Atualiza um produto", description = "Retorna o produto atualizado caso sucesso")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Operação bem-sucedida, produto criado"),
             @ApiResponse(responseCode = "400", description = "Erro de requisição, parâmetros inválidos"),
@@ -137,9 +137,4 @@ public class ProdutoController {
     public ResponseEntity<ProdutoResponseDTO> atualizarProduto(@PathVariable Integer id, @RequestBody @Valid ProdutoRequisitionDTO produtoUpdateDTO) {
         return ResponseEntity.ok(ProdutoMapper.toResponseDto(produtoService.atualizarProduto(id, ProdutoMapper.toCreateProduto(produtoUpdateDTO), produtoUpdateDTO.getNomeMarca(), produtoUpdateDTO.getNomeSubtipo())));
     }
-
-//    RECOMENDAÇÃO E DESTAQUE
-
-
-
 }

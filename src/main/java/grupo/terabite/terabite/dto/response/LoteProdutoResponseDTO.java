@@ -8,5 +8,6 @@ import lombok.Data;
 public class LoteProdutoResponseDTO {
 
     private ProdutoResponseDTO produto;
+
     private Integer qtdCaixasCompradas;
 }

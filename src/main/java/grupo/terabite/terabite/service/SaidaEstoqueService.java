@@ -34,12 +34,19 @@ public class SaidaEstoqueService {
         return saidaEstoquesNova;
     }
 
-    public SaidaEstoque editarSaida(Integer id, SaidaEstoque saidaEstoque){
-        if(!saidaEstoqueRepository.existsById(id)) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+    public SaidaEstoque editarSaida(Integer id, SaidaEstoque saidaEstoqueAtualizada){
+        SaidaEstoque saidaEstoque = saidaEstoqueRepository.findById(id).orElseThrow(() ->  new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        saidaEstoque.setId(id);
-        saidaEstoque.setProduto(produtoService.buscarPorId(saidaEstoque.getProduto().getId()));
-        SaidaEstoque saidaEstoqueAtualizada = saidaEstoqueRepository.save(saidaEstoque);
+        saidaEstoqueAtualizada.setId(id);
+
+        if(saidaEstoque.getProduto().getId() != saidaEstoqueAtualizada.getProduto().getId()){
+            saidaEstoqueAtualizada.setProduto(produtoService.buscarPorId(saidaEstoqueAtualizada.getProduto().getId()));
+        } else {
+            saidaEstoqueAtualizada.setProduto(saidaEstoque.getProduto());
+        }
+        saidaEstoqueAtualizada.setDtSaida(saidaEstoque.getDtSaida());
+        
+        saidaEstoqueAtualizada = saidaEstoqueRepository.save(saidaEstoqueAtualizada);
         loteService.atualizarEstoqueProduto(List.of(saidaEstoqueAtualizada.getProduto()));
         return saidaEstoqueAtualizada;
     }

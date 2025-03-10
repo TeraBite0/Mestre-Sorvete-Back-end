@@ -48,6 +48,7 @@ public class Lote {
     @Column(name = "OBSERVACAO_LOTE")
     private String observacao;
 
+    @Getter @Setter
     @OneToMany(mappedBy = "lote", fetch = FetchType.LAZY)
     private List<LoteProduto> loteProdutos;
 

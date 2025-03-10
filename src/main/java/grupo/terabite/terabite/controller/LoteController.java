@@ -81,21 +81,4 @@ public class LoteController {
         loteService.deletarLote(id);
         return ResponseEntity.noContent().build();
     }
-
-    @Operation(summary = "Busca lotes pelo ID de um produto", description = "Retorna lotes com base no produto atrelado")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Operação bem sucedida, Lotes retornado"),
-            @ApiResponse(responseCode = "204", description = "Operação bem sucedida, Sem lotes cadastrados"),
-            @ApiResponse(responseCode = "401", description = "Erro de requisição, Não autorizado"),
-            @ApiResponse(responseCode = "404", description = "Produto não encontrado")
-    })
-    @GetMapping("/produtos/{id}")
-    public ResponseEntity<List<LoteResponseDTO>> buscarPorProdutoId(@PathVariable Integer id) {
-        List<Lote> lotes = loteService.buscarPorProdutoId(id);
-        List<LoteResponseDTO> loteResponseDtos = new ArrayList<>();
-        for (Lote l : lotes) {
-            loteResponseDtos.add(LoteMapper.toResponseDto(l));
-        }
-        return ResponseEntity.ok(loteResponseDtos);
-    }
 }

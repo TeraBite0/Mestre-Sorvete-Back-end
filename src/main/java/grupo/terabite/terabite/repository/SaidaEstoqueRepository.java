@@ -10,4 +10,6 @@ import java.util.List;
 @Repository
 public interface SaidaEstoqueRepository extends JpaRepository<SaidaEstoque, Integer> {
     List<SaidaEstoque> findByDtSaidaAfter(LocalDate dtSaida);
+
+    List<SaidaEstoque> findByProdutoId(Integer produtoId);
 }

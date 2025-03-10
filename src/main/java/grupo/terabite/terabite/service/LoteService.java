@@ -1,22 +1,32 @@
 package grupo.terabite.terabite.service;
 
-import grupo.terabite.terabite.entity.*;
+import grupo.terabite.terabite.entity.Lote;
+import grupo.terabite.terabite.entity.LoteProduto;
+import grupo.terabite.terabite.entity.Produto;
+import grupo.terabite.terabite.entity.SaidaEstoque;
+import grupo.terabite.terabite.entity.enums.LoteStatusEnum;
+import grupo.terabite.terabite.repository.LoteProdutoRepository;
 import grupo.terabite.terabite.repository.LoteRepository;
+import grupo.terabite.terabite.repository.SaidaEstoqueRepository;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.annotations.Any;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class LoteService {
 
     private final LoteRepository loteRepository;
+    private final LoteProdutoRepository loteProdutoRepository;
+    private final SaidaEstoqueRepository saidaEstoqueRepository;
     private final ProdutoService produtoService;
-    private final NotificacaoService notificacaoService;
 
     private List<Lote> listarLote() {
         List<Lote> lotes = loteRepository.findAll();
@@ -27,32 +37,43 @@ public class LoteService {
     }
 
     public Lote buscarPorId(Integer id) {
-        Lote lote = loteRepository.findById(id).orElse(null);
-        if (lote == null) {
-            throw new ResponseStatusException(HttpStatusCode.valueOf(404));
-        }
-        return lote;
+        return loteRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatusCode.valueOf(404)));
     }
 
+    // Este método cria o lote separados de seus lotes produtos e retorna todos
     public Lote criarLote(Lote novoLote) {
         novoLote.setId(null);
-        //Produto p = produtoService.buscarPorId(novoLote.getProduto().getId());
+        novoLote.setStatus(LoteStatusEnum.AGUARDANDO_ENTREGA);
+        novoLote.setDtPedido(LocalDate.now());
 
-        //        if (!p.getEmEstoque()) { // atualiza o status de estoque do produto apenas se necessário
-        //            p.setEmEstoque(true);
-        //            produtoService.atualizarProduto(p.getId(), p);
-        //            notificacaoService.notificarProdutoEmEstoque(p);
-        //        }
+        List<LoteProduto> loteProdutos = novoLote.getLoteProdutos();
+        validarLoteProdutos(loteProdutos);
+        novoLote.setLoteProdutos(null);
 
-        return loteRepository.save(novoLote);
+        // salva o lote sem os produtos
+        novoLote = loteRepository.save(novoLote);
+
+        // salva os loteProdutos
+        final Lote finalNovoLote = novoLote;
+        loteProdutos.forEach(loteProduto -> loteProduto.setLote(finalNovoLote));
+        loteProdutoRepository.saveAll(loteProdutos);
+
+        atualizarEstoqueProduto(loteProdutos.stream().map(LoteProduto::getProduto).toList());
+
+        // return buscarPorId(novoLote.getId());
+        return novoLote; // testar o retorno de loteProdutos
     }
 
+
     public Lote atualizarLote(Integer id, Lote lote) {
-        if (!loteRepository.existsById(id)) {
-            throw new ResponseStatusException(HttpStatusCode.valueOf(404));
-        }
+        if (!loteRepository.existsById(id)) throw new ResponseStatusException(HttpStatusCode.valueOf(404));
+
         lote.setId(id);
+        validarLoteProdutos(lote.getLoteProdutos());
         Lote novoLote = loteRepository.save(lote);
+
+        // preciso atualizar individualmente cada loteProduto ?
+        // atualizar estoque dos mesmos
 
 //        if (produtoEmEstoque(lote.getProduto().getId()) < 1) {
 //            Produto p = produtoService.buscarPorId(lote.getProduto().getId());
@@ -64,78 +85,35 @@ public class LoteService {
     }
 
     public void deletarLote(Integer id) {
-        if (!loteRepository.existsById(id)) {
-            throw new ResponseStatusException(HttpStatusCode.valueOf(404));
-        }
+        Lote lote = loteRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatusCode.valueOf(404)));
+        List<LoteProduto> loteProdutos = loteProdutoRepository.findByLoteId(id);
+        List<Produto> produtos = loteProdutos.stream().map(LoteProduto::getProduto).toList();
+
+        loteProdutoRepository.deleteAll(lote.getLoteProdutos());
         loteRepository.deleteById(id);
+
+        atualizarEstoqueProduto(produtos);
     }
 
-    public Integer produtoEmEstoque(Integer produtoId) {
-        return null;
-//        Integer qtdEmEstoque = 0;
-//        List<VendaProduto> vendaProdutos = vendaProdutoRepository.findByProdutoId(produtoId);
-//        List<Lote> lotes = loteRepository.findByProdutoId(produtoId);
-//        List<Perda> perdas = perdaRepository.findByProdutoId(produtoId);
-//
-//
-//        for (Lote l : lotes) {
-//            qtdEmEstoque += l.getQtdProdutoComprado();
-//        }
-//        for (VendaProduto v : vendaProdutos) {
-//            qtdEmEstoque -= v.getQtdProdutosVendido();
-//        }
-//        for (Perda p : perdas) {
-//            qtdEmEstoque -= p.getQtdProduto();
-//        }
-//
-//        return qtdEmEstoque;
+
+    // este método atualiza o estoque do produto com base na quantidade de entrada e saida
+    protected void atualizarEstoqueProduto(List<Produto> produtos){
+        produtos.forEach((p) -> {
+            List<LoteProduto> loteProdutos = loteProdutoRepository.findByProdutoId(p.getId());
+            List<SaidaEstoque> saidaEstoques = saidaEstoqueRepository.findByProdutoId(p.getId());
+
+            Integer qtdCaixasEntrada = loteProdutos.stream().mapToInt(LoteProduto::getQtdCaixasCompradas).sum();
+            Integer qtdCaixasSaida = saidaEstoques.stream().mapToInt(SaidaEstoque::getQtdCaixasSaida).sum();
+
+            p.setQtdCaixasEstoque(qtdCaixasEntrada - qtdCaixasSaida);
+        });
     }
 
-    public List<Lote> buscarPorProdutoId(Integer id) {
-        return null;
-//        List<Lote> lotes = loteRepository.findByProdutoId(id);
-//        if (lotes.isEmpty()) {
-//            throw new ResponseStatusException(HttpStatusCode.valueOf(204));
-//        }
-//        return lotes;
-    }
+    // metodo responsável por atualizar os produtos de loteProduto e apontar conflito
+    private void validarLoteProdutos(List<LoteProduto> loteProdutos) {
+        Set<Integer> produtosId = loteProdutos.stream().map(loteProduto -> loteProduto.getProduto().getId()).collect(Collectors.toSet());
+        if(produtosId.size() != loteProdutos.size()) throw new ResponseStatusException(HttpStatus.CONFLICT);
 
-    public List<Any> estoque() {
-        return null;
-//        List<Produto> produtos = produtoService.listarProduto();
-//        List<Lote> lotes = loteRepository.findAll();
-//        List<Perda> perdas = perdaRepository.findAll();
-//        List<VendaProduto> vendas = vendaProdutoRepository.findAll();
-//        List<EstoqueProduto> estoque = new ArrayList<>();
-//
-//        for (Produto p : produtos) {
-//            Integer qtdEmEstoque = 0;
-//            List<Lote> lotesDoProduto = lotes.stream()
-//                    .filter(lote -> lote.getProduto().getId().equals(p.getId())).toList();
-//            List<VendaProduto> vendasDoProduto = vendas.stream()
-//                    .filter(venda -> venda.getProduto().getId().equals(p.getId())).toList();
-//            List<Perda> perdasDoProduto = perdas.stream()
-//                    .filter((perda -> perda.getProduto().getId().equals(p.getId()))).toList();
-//
-//            for (Lote l : lotesDoProduto) {
-//                qtdEmEstoque += l.getQtdProdutoComprado();
-//            }
-//            for (VendaProduto v : vendasDoProduto) {
-//                qtdEmEstoque -= v.getQtdProdutosVendido();
-//            }
-//            for (Perda pe : perdasDoProduto) {
-//                qtdEmEstoque -= pe.getQtdProduto();
-//            }
-//
-//            estoque.add(new EstoqueProduto(
-//                    p.getId(),
-//                    p.getNome(),
-//                    p.getMarca().getNome(),
-//                    p.getPreco(),
-//                    qtdEmEstoque
-//            ));
-//        }
-//
-//        return estoque;
+        loteProdutos.forEach((lp) -> lp.setProduto(produtoService.buscarPorId(lp.getProduto().getId())));
     }
 }

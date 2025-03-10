@@ -24,4 +24,7 @@ public class SaidaEstoque {
 
     @Column(name = "DATA_SAID")
     private LocalDate dtSaida;
+
+    @Column(name = "QTD_CAIXAS_SAID")
+    private Integer qtdCaixasSaida;
 }

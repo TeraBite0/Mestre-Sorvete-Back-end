@@ -18,7 +18,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/subtipo")
+@RequestMapping("/subtipos")
 @RequiredArgsConstructor
 public class SubtipoController {
 

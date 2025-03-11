@@ -47,7 +47,7 @@ public class ProdutoController {
             @ApiResponse(responseCode = "204", description = "Operação bem-sucedida, sem produtos"),
             @ApiResponse(responseCode = "401", description = "Erro de requisição, Não autorizado"),
     })
-    @GetMapping("/isAtivos")
+    @GetMapping("/ativos")
     public ResponseEntity<List<ProdutoResponseDTO>> listarTodosIsAtivo() {
         List<Produto> produtos = produtoService.listarProdutoIsAtivos();
         if (produtos.isEmpty()) return ResponseEntity.noContent().build();

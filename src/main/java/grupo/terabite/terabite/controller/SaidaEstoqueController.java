@@ -20,7 +20,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/saida-estoque")
+@RequestMapping("/saidas-estoque")
 @RequiredArgsConstructor
 public class SaidaEstoqueController {
     private final SaidaEstoqueService saidaEstoqueService;

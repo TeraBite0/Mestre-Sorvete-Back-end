@@ -18,7 +18,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/tipo")
+@RequestMapping("/tipos")
 @RequiredArgsConstructor
 public class TipoController {
 

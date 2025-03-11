@@ -16,6 +16,6 @@ public class LoteStatus {
     @Column(name = "ID_LOTE_STATUS")
     private Integer id;
 
-    @Column(name = "NOME_PROD", unique = true, nullable = false)
+    @Column(name = "NOME_STATUS", unique = true, nullable = false)
     private String status;
 }

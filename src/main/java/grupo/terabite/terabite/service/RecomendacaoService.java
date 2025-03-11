@@ -25,8 +25,8 @@ public class RecomendacaoService {
         return recomendacoes;
     }
 
-    public Recomendacao criarRecomendacao(Recomendacao recomendacao){
-        Produto produto = produtoService.buscarPorId(recomendacao.getProduto().getId());
+    public Recomendacao criarRecomendacao(Integer idProduto){
+        Produto produto = produtoService.buscarPorId(idProduto);
         if(!produto.getIsAtivo()) throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE);
         else if(!recomendacaoRepository.findByProdutoId(produto.getId()).isEmpty()) throw new ResponseStatusException(HttpStatus.CONFLICT);
 

@@ -41,7 +41,7 @@ public class RecomendacaoController {
     })
     @PostMapping
     public ResponseEntity<RecomendacaoResponseDTO> criarRecomendacao(@RequestBody @Valid RecomendacaoRequisitionDTO recomendacaoDTO) {
-        return ResponseEntity.ok(RecomendacaoMapper.toRecomendacaoResponseDto(recomendacaoService.criarRecomendacao(RecomendacaoMapper.toRecomendacao(recomendacaoDTO, produtoService))));
+        return ResponseEntity.ok(RecomendacaoMapper.toRecomendacaoResponseDto(recomendacaoService.criarRecomendacao(recomendacaoDTO.getProdutoId())));
     }
 
     @Operation(summary = "Atualiza o produto de uma recomendação", description = "Retorna o produto recomendado")

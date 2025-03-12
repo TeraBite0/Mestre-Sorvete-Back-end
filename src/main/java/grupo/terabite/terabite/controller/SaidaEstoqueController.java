@@ -66,9 +66,9 @@ public class SaidaEstoqueController {
             @ApiResponse(responseCode = "401", description = "Erro de requisição, Não autorizado"),
             @ApiResponse(responseCode = "404", description = "Saida Estoque(s) especificada(s) não encontrada")
     })
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletarSaidasEstoque(@RequestBody @Valid SaidaEstoqueRequisitionGroupDTO saidaEstoqueRequisitionGroupDTO) {
-        saidaEstoqueService.deletarSaidas(SaidaEstoqueMapper.toEntityList(saidaEstoqueRequisitionGroupDTO));
+    @DeleteMapping()
+    public ResponseEntity<Void> deletarSaidasEstoque(@RequestBody @Valid List<Integer> idSaida) {
+        saidaEstoqueService.deletarSaidas(idSaida);
         return ResponseEntity.noContent().build();
     }
 }

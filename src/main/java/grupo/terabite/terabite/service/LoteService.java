@@ -1,9 +1,7 @@
 package grupo.terabite.terabite.service;
 
-import grupo.terabite.terabite.entity.Lote;
-import grupo.terabite.terabite.entity.LoteProduto;
-import grupo.terabite.terabite.entity.Produto;
-import grupo.terabite.terabite.entity.SaidaEstoque;
+import grupo.terabite.terabite.dto.requisition.LoteProdutoRequisitionDTO;
+import grupo.terabite.terabite.entity.*;
 import grupo.terabite.terabite.entity.enums.LoteStatusEnum;
 import grupo.terabite.terabite.repository.LoteProdutoRepository;
 import grupo.terabite.terabite.repository.LoteRepository;
@@ -27,6 +25,7 @@ public class LoteService {
     private final LoteProdutoRepository loteProdutoRepository;
     private final SaidaEstoqueRepository saidaEstoqueRepository;
     private final ProdutoService produtoService;
+    private final FornecedorService fornecedorService;
 
     private List<Lote> listarLote() {
         List<Lote> lotes = loteRepository.findAll();
@@ -41,8 +40,11 @@ public class LoteService {
     }
 
     // Este método cria o lote separados de seus lotes produtos e retorna todos
-    public Lote criarLote(Lote novoLote) {
+    public Lote criarLote(Lote novoLote, String nomeFornecedor) {
+        Fornecedor fornedor = fornecedorService.buscarPorNomeFornecedor(nomeFornecedor);
+        novoLote.setFornecedor(fornedor);
         novoLote.setId(null);
+        novoLote.getFornecedor().setId(1);
         novoLote.setStatus(LoteStatusEnum.AGUARDANDO_ENTREGA);
         novoLote.setDtPedido(LocalDate.now());
 

@@ -28,11 +28,6 @@ public class LoteRequisitionDTO {
     @NotNull
     private Double valorLote;
 
-    @NotBlank
-    private String status;
-
-    private String observacao;
-
     @NotEmpty @Size(max = 15, message = "A lista pode ter no máximo 15 itens.")
     private List<LoteProdutoRequisitionDTO> loteProdutos;
 }

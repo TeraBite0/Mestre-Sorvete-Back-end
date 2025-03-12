@@ -33,10 +33,6 @@ public class TipoController {
     @GetMapping
     public ResponseEntity<List<TipoResponseDTO>> listarTipos(){
         List<Tipo> tipos = tipoService.listarTipo();
-        if(tipos.isEmpty()){
-            throw new ResponseStatusException(HttpStatusCode.valueOf(204));
-        }
-
         return ResponseEntity.ok(tipos.stream().map(TipoMapper::toResponseDto).toList());
     }
 

@@ -33,10 +33,6 @@ public class SubtipoController {
     @GetMapping
     public ResponseEntity<List<SubtipoResponseDTO>> listarSubtipos(){
         List<Subtipo> subtipos = subtipoService.listarSubtipo();
-        if(subtipos.isEmpty()){
-            throw new ResponseStatusException(HttpStatusCode.valueOf(204));
-        }
-
         return ResponseEntity.ok(subtipos.stream().map(SubtipoMapper::toResponseDto).toList());
     }
 

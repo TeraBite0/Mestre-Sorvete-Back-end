@@ -34,8 +34,6 @@ public class SaidaEstoqueController {
     @GetMapping
     public ResponseEntity<List<SaidaEstoqueResponseGroupDTO>> listarSaidas(){
         List<SaidaEstoque> saidaEstoques = saidaEstoqueService.listar();
-        if(saidaEstoques.isEmpty()) throw new ResponseStatusException(HttpStatusCode.valueOf(204));
-
         return ResponseEntity.ok(SaidaEstoqueMapper.toSaidaEstoqueResponseGroupDTO(saidaEstoques));
     }
 

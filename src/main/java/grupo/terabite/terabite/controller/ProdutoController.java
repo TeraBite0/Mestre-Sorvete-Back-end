@@ -50,7 +50,6 @@ public class ProdutoController {
     @GetMapping("/ativos")
     public ResponseEntity<List<ProdutoResponseDTO>> listarTodosIsAtivo() {
         List<Produto> produtos = produtoService.listarProdutoIsAtivos();
-        if (produtos.isEmpty()) return ResponseEntity.noContent().build();
         return ResponseEntity.ok(produtos.stream().map(ProdutoMapper::toResponseDto).toList());
     }
 

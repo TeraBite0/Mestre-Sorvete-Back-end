@@ -95,20 +95,20 @@ public class ProdutoService {
         return produtoRepository.save(produto);
     }
 
-    private void validarQtdCaixaEstoque(Produto produto, Integer qtdCaixaEstoque, OperacaoEstoque operacao) {
-        int qtdCaixasEstoque = produto.getQtdCaixasEstoque();
+    private void validarQtdCaixaEstoque(Produto produto, Integer novaQtdCaixaEstoque, OperacaoEstoque operacao) {
+        int qtdCaixaAtual = produto.getQtdCaixasEstoque();
 
         if(operacao == OperacaoEstoque.INSERIR) {
-            qtdCaixasEstoque += qtdCaixaEstoque;
+            qtdCaixaAtual += novaQtdCaixaEstoque;
 
         } else if (operacao == OperacaoEstoque.RETIRAR){
-            qtdCaixasEstoque -= qtdCaixaEstoque;
+            qtdCaixaAtual -= novaQtdCaixaEstoque;
 
-            if(qtdCaixasEstoque < 0){
+            if(qtdCaixaAtual < 0){
                 throw new ResponseStatusException(HttpStatusCode.valueOf(400), "Quantidade de caixas em estoque insuficiente");
             }
         }
 
-        produto.setQtdCaixasEstoque(qtdCaixasEstoque);
+        produto.setQtdCaixasEstoque(qtdCaixaAtual);
     }
 }

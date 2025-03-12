@@ -2,6 +2,7 @@ package grupo.terabite.terabite.dto.mapper;
 
 import grupo.terabite.terabite.dto.requisition.LoteProdutoRequisitionDTO;
 import grupo.terabite.terabite.dto.requisition.LoteRequisitionDTO;
+import grupo.terabite.terabite.dto.requisition.LoteStatusRequisitionDTO;
 import grupo.terabite.terabite.dto.response.LoteProdutoResponseDTO;
 import grupo.terabite.terabite.dto.response.LoteResponseDTO;
 import grupo.terabite.terabite.entity.Fornecedor;
@@ -73,5 +74,13 @@ public class LoteMapper {
                 loteProdutos.add(new LoteProduto(null, lote, Produto.builder().id(lp.getProdutoId()).build(), lp.getQtdCaixasCompradas()))
         );
         return loteProdutos;
+    }
+
+    public static Lote toRequisitionUpdateStatusDTO(LoteStatusRequisitionDTO loteStatusRequisitionDTO) {
+        if (loteStatusRequisitionDTO == null) return null;
+        return Lote.builder()
+                .status(LoteStatusEnum.valueOf(loteStatusRequisitionDTO.getStatus()))
+                .observacao(loteStatusRequisitionDTO.getObservacao())
+                .build();
     }
 }

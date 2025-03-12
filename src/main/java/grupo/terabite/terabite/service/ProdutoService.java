@@ -64,8 +64,7 @@ public class ProdutoService {
             throw new ResponseStatusException(HttpStatusCode.valueOf(404));
         }
         produtoAtualizado.setId(id);
-        produtoAtualizado.setMarca(marcaService.buscarPorNomeMarca(nomeMarca));
-        produtoAtualizado.setSubtipo((subtipoService.buscarPorNomeSubtipo(nomeSubtipo)));
+        validarMarcaESubtipoExistentes(nomeMarca, nomeSubtipo, produtoAtualizado);
         return produtoRepository.save(produtoAtualizado);
     }
 
@@ -87,5 +86,11 @@ public class ProdutoService {
 
         produto.setMarca(marca);
         produto.setSubtipo(subtipo);
+    }
+
+    public Produto atualizarQtdCaixaEstoque(Integer idProduto, Integer qtdCaixaEstoque){
+        Produto produto = buscarPorId(idProduto);
+        produto.setQtdCaixasEstoque(produto.getQtdCaixasEstoque() + qtdCaixaEstoque);
+        return produtoRepository.save(produto);
     }
 }

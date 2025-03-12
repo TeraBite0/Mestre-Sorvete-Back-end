@@ -114,4 +114,15 @@ public class LoteService {
 
         loteProdutos.forEach((lp) -> lp.setProduto(produtoService.buscarPorId(lp.getProduto().getId())));
     }
+
+    public Lote atualizarStatusLote(Integer id, Lote atualizarStatusLote) {
+        Lote lote = buscarPorId(id);
+        lote.setStatus(atualizarStatusLote.getStatus());
+        lote.setObservacao(atualizarStatusLote.getObservacao());
+        loteRepository.save(lote);
+        if(atualizarStatusLote.getStatus().equals("ENTREGUE")){
+            produtoService.atualizarQtdCaixaEstoque(lote.getLoteProdutos().get(0).getProduto().getId(), lote.getLoteProdutos().get(0).getQtdCaixasCompradas());
+        }
+        return lote;
+    }
 }

@@ -21,7 +21,6 @@ public class LoteMapper {
                 .dtVencimento(loteRequisitionDTO.getDtVencimento())
                 .dtPedido(loteRequisitionDTO.getDtPedido())
                 .valorLote(loteRequisitionDTO.getValorLote())
-                .observacao(loteRequisitionDTO.getObservacao())
                 .loteProdutos(toLoteProdutosList(loteRequisitionDTO.getLoteProdutos(), new Lote()))
                 .build();
 

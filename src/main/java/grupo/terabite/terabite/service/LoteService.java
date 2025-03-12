@@ -3,6 +3,7 @@ package grupo.terabite.terabite.service;
 import grupo.terabite.terabite.dto.requisition.LoteProdutoRequisitionDTO;
 import grupo.terabite.terabite.entity.*;
 import grupo.terabite.terabite.entity.enums.LoteStatusEnum;
+import grupo.terabite.terabite.entity.enums.OperacaoEstoque;
 import grupo.terabite.terabite.repository.LoteProdutoRepository;
 import grupo.terabite.terabite.repository.LoteRepository;
 import grupo.terabite.terabite.repository.SaidaEstoqueRepository;
@@ -60,8 +61,6 @@ public class LoteService {
         loteProdutos.forEach(loteProduto -> loteProduto.setLote(finalNovoLote));
         loteProdutoRepository.saveAll(loteProdutos);
 
-        atualizarEstoqueProduto(loteProdutos.stream().map(LoteProduto::getProduto).toList());
-
         // return buscarPorId(novoLote.getId());
         return novoLote; // testar o retorno de loteProdutos
     }
@@ -100,10 +99,10 @@ public class LoteService {
             List<LoteProduto> loteProdutos = loteProdutoRepository.findByProdutoId(p.getId());
             List<SaidaEstoque> saidaEstoques = saidaEstoqueRepository.findByProdutoId(p.getId());
 
-            Integer qtdCaixasEntrada = loteProdutos.stream().mapToInt(LoteProduto::getQtdCaixasCompradas).sum();
+//            Integer qtdCaixasEntrada = loteProdutos.stream().mapToInt(LoteProduto::getQtdCaixasCompradas).sum();
             Integer qtdCaixasSaida = saidaEstoques.stream().mapToInt(SaidaEstoque::getQtdCaixasSaida).sum();
 
-            p.setQtdCaixasEstoque(qtdCaixasEntrada - qtdCaixasSaida);
+            produtoService.atualizarQtdCaixaEstoque(p.getId(), qtdCaixasSaida, OperacaoEstoque.RETIRAR);
         });
     }
 
@@ -125,7 +124,7 @@ public class LoteService {
         loteRepository.save(lote);
         if(atualizarStatusLote.getStatus().getStatus().equals("Entregue")){
             lote.getLoteProdutos().forEach(produto -> {
-                produtoService.atualizarQtdCaixaEstoque(produto.getProduto().getId(), produto.getQtdCaixasCompradas());
+                produtoService.atualizarQtdCaixaEstoque(produto.getProduto().getId(), produto.getQtdCaixasCompradas(), OperacaoEstoque.INSERIR);
             });
         }
         return lote;

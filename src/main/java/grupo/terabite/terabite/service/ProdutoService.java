@@ -3,6 +3,7 @@ package grupo.terabite.terabite.service;
 import grupo.terabite.terabite.entity.Marca;
 import grupo.terabite.terabite.entity.Produto;
 import grupo.terabite.terabite.entity.Subtipo;
+import grupo.terabite.terabite.entity.enums.OperacaoEstoque;
 import grupo.terabite.terabite.repository.ProdutoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatusCode;
@@ -88,9 +89,26 @@ public class ProdutoService {
         produto.setSubtipo(subtipo);
     }
 
-    public Produto atualizarQtdCaixaEstoque(Integer idProduto, Integer qtdCaixaEstoque){
+    public Produto atualizarQtdCaixaEstoque(Integer idProduto, Integer qtdCaixaEstoque, OperacaoEstoque operacao) {
         Produto produto = buscarPorId(idProduto);
-        produto.setQtdCaixasEstoque(produto.getQtdCaixasEstoque() + qtdCaixaEstoque);
+        validarQtdCaixaEstoque(produto, qtdCaixaEstoque, operacao);
         return produtoRepository.save(produto);
+    }
+
+    private void validarQtdCaixaEstoque(Produto produto, Integer qtdCaixaEstoque, OperacaoEstoque operacao) {
+        int qtdCaixasEstoque = produto.getQtdCaixasEstoque();
+
+        if(operacao == OperacaoEstoque.INSERIR) {
+            qtdCaixasEstoque += qtdCaixaEstoque;
+
+        } else if (operacao == OperacaoEstoque.RETIRAR){
+            qtdCaixasEstoque -= qtdCaixaEstoque;
+
+            if(qtdCaixasEstoque < 0){
+                throw new ResponseStatusException(HttpStatusCode.valueOf(400), "Quantidade de caixas em estoque insuficiente");
+            }
+        }
+
+        produto.setQtdCaixasEstoque(qtdCaixasEstoque);
     }
 }

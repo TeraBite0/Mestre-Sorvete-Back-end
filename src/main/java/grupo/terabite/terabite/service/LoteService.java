@@ -116,17 +116,22 @@ public class LoteService {
 
     public Lote atualizarStatusLote(Integer id, Lote atualizarStatusLote) {
         Lote lote = buscarPorId(id);
+
         if(lote.getStatus().getStatus().equals("Entregue")){
             throw new ResponseStatusException(HttpStatusCode.valueOf(409));
         }
+
         lote.setStatus(atualizarStatusLote.getStatus());
         lote.setObservacao(atualizarStatusLote.getObservacao());
+
         loteRepository.save(lote);
+
         if(atualizarStatusLote.getStatus().getStatus().equals("Entregue")){
             lote.getLoteProdutos().forEach(produto -> {
                 produtoService.atualizarQtdCaixaEstoque(produto.getProduto().getId(), produto.getQtdCaixasCompradas(), OperacaoEstoque.INSERIR);
             });
         }
+
         return lote;
     }
 }

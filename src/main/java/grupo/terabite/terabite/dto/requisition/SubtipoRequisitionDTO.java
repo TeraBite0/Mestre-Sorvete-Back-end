@@ -1,8 +1,6 @@
 package grupo.terabite.terabite.dto.requisition;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
 import lombok.Builder;
 import lombok.Data;
 
@@ -13,7 +11,6 @@ public class SubtipoRequisitionDTO {
     @NotBlank
     private String nome;
 
-    @NotNull
-    @Positive
-    private Integer idTipo;
+    @NotBlank
+    private String nomeTipo;
 }

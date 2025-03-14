@@ -136,4 +136,9 @@ public class ProdutoController {
     public ResponseEntity<ProdutoResponseDTO> atualizarProduto(@PathVariable Integer id, @RequestBody @Valid ProdutoRequisitionDTO produtoUpdateDTO) {
         return ResponseEntity.ok(ProdutoMapper.toResponseDto(produtoService.atualizarProduto(id, ProdutoMapper.toCreateProduto(produtoUpdateDTO), produtoUpdateDTO.getNomeMarca(), produtoUpdateDTO.getNomeSubtipo())));
     }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<ProdutoResponseDTO> atualizarProduto(@PathVariable Integer id, @RequestParam boolean isAtivo) {
+        return ResponseEntity.ok(ProdutoMapper.toResponseDto(produtoService.atualizarProdutoAtivo(id, isAtivo)));
+    }
 }

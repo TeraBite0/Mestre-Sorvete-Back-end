@@ -111,4 +111,11 @@ public class ProdutoService {
 
         produto.setQtdCaixasEstoque(qtdCaixaAtual);
     }
+
+    public Produto atualizarProdutoAtivo(Integer id, boolean isAtivo) {
+        Produto produto = buscarPorId(id);
+        produto.setIsAtivo(isAtivo);
+
+        return produtoRepository.save(produto);
+    }
 }

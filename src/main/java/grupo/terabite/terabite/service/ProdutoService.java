@@ -65,17 +65,16 @@ public class ProdutoService {
             throw new ResponseStatusException(HttpStatusCode.valueOf(404));
         }
         produtoAtualizado.setId(id);
+        manterDadosAntigos(produtoAntigo, produtoAtualizado);
         validarMarcaESubtipoExistentes(nomeMarca, nomeSubtipo, produtoAtualizado);
         return produtoRepository.save(produtoAtualizado);
     }
 
-    protected Produto atualizarProduto(Integer id, Produto produtoAtualizado){
-        Produto produtoAntigo = produtoRepository.findById(id).orElse(null);
-        if (produtoAntigo == null) {
-            throw new ResponseStatusException(HttpStatusCode.valueOf(404));
-        }
-        produtoAtualizado.setId(id);
-        return produtoRepository.save(produtoAtualizado);
+    private void manterDadosAntigos(Produto antigo, Produto atualizado) {
+        atualizado.setId(antigo.getId());
+        atualizado.setIsAtivo(antigo.getIsAtivo());
+        atualizado.setQtdCaixasEstoque(antigo.getQtdCaixasEstoque());
+        atualizado.setDisponivel(antigo.getDisponivel());
     }
 
     private void validarMarcaESubtipoExistentes(String nomeMarca, String nomeSubtipo, Produto produto) {

@@ -8,5 +8,7 @@ import java.util.List;
 
 @Repository
 public interface RecomendacaoRepository extends JpaRepository<Recomendacao, Integer> {
+
+
     List<Recomendacao> findByProdutoId(Integer produtoId);
 }

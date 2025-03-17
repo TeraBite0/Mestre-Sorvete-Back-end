@@ -3,7 +3,6 @@ package grupo.terabite.terabite.controller;
 import grupo.terabite.terabite.dto.requisition.RecomendacaoRequisitionDTO;
 import grupo.terabite.terabite.dto.mapper.RecomendacaoMapper;
 import grupo.terabite.terabite.dto.response.RecomendacaoResponseDTO;
-import grupo.terabite.terabite.service.ProdutoService;
 import grupo.terabite.terabite.service.RecomendacaoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -20,7 +19,6 @@ import java.util.List;
 @RequestMapping("/produtos/recomendacao")
 public class RecomendacaoController {
 
-    private final ProdutoService produtoService;
     private final RecomendacaoService recomendacaoService;
 
     @Operation(summary = "Lista as recomendações", description = "Retorna a lista de produtos recomendados")
@@ -33,16 +31,16 @@ public class RecomendacaoController {
         return ResponseEntity.ok(recomendacaoService.listarRecomendacoes().stream().map(RecomendacaoMapper::toRecomendacaoResponseDto).toList());
     }
 
-    @Operation(summary = "Cria recomendação", description = "Retorna o produto recomendado")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "cria e retorna o produto recomendado"),
-            @ApiResponse(responseCode = "404", description = "Produto inexistente"),
-            @ApiResponse(responseCode = "401", description = "Erro de requisição, Não autorizado"),
-    })
-    @PostMapping
-    public ResponseEntity<RecomendacaoResponseDTO> criarRecomendacao(@RequestBody @Valid RecomendacaoRequisitionDTO recomendacaoDTO) {
-        return ResponseEntity.ok(RecomendacaoMapper.toRecomendacaoResponseDto(recomendacaoService.criarRecomendacao(recomendacaoDTO.getProdutoId())));
-    }
+//    @Operation(summary = "Cria recomendação", description = "Retorna o produto recomendado")
+//    @ApiResponses(value = {
+//            @ApiResponse(responseCode = "200", description = "cria e retorna o produto recomendado"),
+//            @ApiResponse(responseCode = "404", description = "Produto inexistente"),
+//            @ApiResponse(responseCode = "401", description = "Erro de requisição, Não autorizado"),
+//    })
+//    @PostMapping
+//    public ResponseEntity<RecomendacaoResponseDTO> criarRecomendacao(@RequestBody @Valid RecomendacaoRequisitionDTO recomendacaoDTO) {
+//        return ResponseEntity.ok(RecomendacaoMapper.toRecomendacaoResponseDto(recomendacaoService.criarRecomendacao(recomendacaoDTO.getProdutoId())));
+//    }
 
     @Operation(summary = "Atualiza o produto de uma recomendação", description = "Retorna o produto recomendado")
     @ApiResponses(value = {
@@ -52,6 +50,6 @@ public class RecomendacaoController {
     })
     @PutMapping("/{id}")
     public ResponseEntity<RecomendacaoResponseDTO> alterarRecomendacao(@PathVariable Integer id, @RequestBody @Valid RecomendacaoRequisitionDTO recomendacaoDTO) {
-        return ResponseEntity.ok(RecomendacaoMapper.toRecomendacaoResponseDto(recomendacaoService.atualizarRecomendacao(id, RecomendacaoMapper.toRecomendacao(recomendacaoDTO, produtoService))));
+        return ResponseEntity.ok(RecomendacaoMapper.toRecomendacaoResponseDto(recomendacaoService.atualizarRecomendacao(id, recomendacaoDTO.getProdutoId())));
     }
 }

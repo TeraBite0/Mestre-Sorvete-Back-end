@@ -19,7 +19,7 @@ public class RecomendacaoService {
     private final RecomendacaoRepository recomendacaoRepository;
 
     public List<Recomendacao> listarRecomendacoes(){
-        List<Recomendacao> recomendacoes = recomendacaoRepository.findAll();
+        List<Recomendacao> recomendacoes = recomendacaoRepository.listarPorNomeProduto();
         if(recomendacoes.isEmpty()) throw new ResponseStatusException(HttpStatusCode.valueOf(204));
 
         return recomendacoes;

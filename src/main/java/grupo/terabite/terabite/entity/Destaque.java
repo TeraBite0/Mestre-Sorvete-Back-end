@@ -25,7 +25,7 @@ public class Destaque {
     @Column(name = "DATA_DEST")
     private LocalDate dtRecomendacao;
 
-    @Column(name = "TEXTO_DEST")
+    @Column(name = "TEXTO_DEST", length = 1000)
     private String texto;
 
     public Destaque(Produto produto, LocalDate dtRecomendacao) {

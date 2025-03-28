@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -59,6 +60,8 @@ public class LoteService {
         loteProdutoRepository.saveAll(loteProdutos);
 
         atualizarEstoqueProduto(loteProdutos.stream().map(LoteProduto::getProduto).toList());
+
+        deletarLotesAntigos();
 
         // return buscarPorId(novoLote.getId());
         return novoLote; // testar o retorno de loteProdutos
@@ -111,5 +114,17 @@ public class LoteService {
         if(produtosId.size() != loteProdutos.size()) throw new ResponseStatusException(HttpStatus.CONFLICT);
 
         loteProdutos.forEach((lp) -> lp.setProduto(produtoService.buscarPorId(lp.getProduto().getId())));
+    }
+
+    private void deletarLotesAntigos(){
+        List<Lote> lotesAntigos = loteRepository.findByDtEntregaBefore(LocalDate.now().minusYears(1)); // lotes com data de entrega > 1 ano
+        List<LoteProduto> loteProdutosAntigos = new ArrayList<>();
+
+        for(Lote l: lotesAntigos){
+            loteProdutosAntigos.addAll(l.getLoteProdutos());
+        }
+
+        loteRepository.deleteAll(lotesAntigos);
+        loteProdutoRepository.deleteAll(loteProdutosAntigos);
     }
 }

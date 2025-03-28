@@ -2,6 +2,7 @@ package grupo.terabite.terabite.dto.mapper;
 
 import grupo.terabite.terabite.dto.requisition.LoteProdutoRequisitionDTO;
 import grupo.terabite.terabite.dto.requisition.LoteRequisitionDTO;
+import grupo.terabite.terabite.dto.requisition.LoteStatusRequisitionDTO;
 import grupo.terabite.terabite.dto.response.LoteProdutoResponseDTO;
 import grupo.terabite.terabite.dto.response.LoteResponseDTO;
 import grupo.terabite.terabite.entity.Fornecedor;
@@ -16,18 +17,24 @@ import java.util.List;
 public class LoteMapper {
     public static Lote toEntity(LoteRequisitionDTO loteRequisitionDTO) {
         if (loteRequisitionDTO == null) return null;
-        Lote lote = new Lote(null,
-                new Fornecedor(null, loteRequisitionDTO.getNomeFornecedor()),
-                loteRequisitionDTO.getDtEntrega(),
-                loteRequisitionDTO.getDtVencimento(),
-                (loteRequisitionDTO.getDtPedido() != null ? loteRequisitionDTO.getDtPedido() : null), // valida se foi preenchida, caso contrário preenche null
-                loteRequisitionDTO.getValorLote(),
-                LoteStatusEnum.valueOf(loteRequisitionDTO.getStatus()),
-                loteRequisitionDTO.getObservacao(),
-                null);
+        return Lote.builder()
+                .dtEntrega(loteRequisitionDTO.getDtEntrega())
+                .dtVencimento(loteRequisitionDTO.getDtVencimento())
+                .dtPedido(loteRequisitionDTO.getDtPedido())
+                .valorLote(loteRequisitionDTO.getValorLote())
+                .loteProdutos(toLoteProdutosList(loteRequisitionDTO.getLoteProdutos(), new Lote()))
+                .build();
 
-        lote.setLoteProdutos(toLoteProdutosList(loteRequisitionDTO.getLoteProdutos(), lote));
-        return lote;
+//        Lote lote = new Lote(null,
+//                loteRequisitionDTO.getDtEntrega(),
+//                loteRequisitionDTO.getDtVencimento(),
+//                (loteRequisitionDTO.getDtPedido() != null ? loteRequisitionDTO.getDtPedido() : null), // valida se foi preenchida, caso contrário preenche null
+//                loteRequisitionDTO.getValorLote(),
+//                loteRequisitionDTO.getObservacao(),
+//                null);
+
+//        lote.setLoteProdutos(toLoteProdutosList(loteRequisitionDTO.getLoteProdutos(), lote));
+//        return lote;
     }
 
     public static LoteResponseDTO toResponseDto(Lote lote) {
@@ -40,8 +47,9 @@ public class LoteMapper {
                 .dtVencimento(lote.getDtVencimento())
                 .dtPedido(lote.getDtPedido())
                 .valorLote(lote.getValorLote())
-                .status(lote.getStatus().name())
+                .status(lote.getStatus().getStatus())
                 .observacao(lote.getObservacao())
+                .loteProdutos(loteProdutoResponseDTOSList(lote.getLoteProdutos()))
                 .build();
     }
 
@@ -66,5 +74,13 @@ public class LoteMapper {
                 loteProdutos.add(new LoteProduto(null, lote, Produto.builder().id(lp.getProdutoId()).build(), lp.getQtdCaixasCompradas()))
         );
         return loteProdutos;
+    }
+
+    public static Lote toRequisitionUpdateStatusDTO(LoteStatusRequisitionDTO loteStatusRequisitionDTO) {
+        if (loteStatusRequisitionDTO == null) return null;
+        return Lote.builder()
+                .status(LoteStatusEnum.valueOf(loteStatusRequisitionDTO.getStatus()))
+                .observacao(loteStatusRequisitionDTO.getObservacao())
+                .build();
     }
 }

@@ -19,29 +19,29 @@ public class RecomendacaoService {
     private final RecomendacaoRepository recomendacaoRepository;
 
     public List<Recomendacao> listarRecomendacoes(){
-        List<Recomendacao> recomendacoes = recomendacaoRepository.findAll();
+        List<Recomendacao> recomendacoes = recomendacaoRepository.listarPorNomeProduto();
         if(recomendacoes.isEmpty()) throw new ResponseStatusException(HttpStatusCode.valueOf(204));
 
         return recomendacoes;
     }
 
-    public Recomendacao criarRecomendacao(Recomendacao recomendacao){
-        Produto produto = produtoService.buscarPorId(recomendacao.getProduto().getId());
+    public Recomendacao criarRecomendacao(Integer idProduto){
+        Produto produto = produtoService.buscarPorId(idProduto);
         if(!produto.getIsAtivo()) throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE);
         else if(!recomendacaoRepository.findByProdutoId(produto.getId()).isEmpty()) throw new ResponseStatusException(HttpStatus.CONFLICT);
 
         return recomendacaoRepository.save(new Recomendacao(null, produto));
     }
 
-    public Recomendacao atualizarRecomendacao(Integer id, Recomendacao recomendacao){
-        if(!recomendacaoRepository.existsById(id)){
-            throw new ResponseStatusException(HttpStatusCode.valueOf(404));
-        } else if(!recomendacaoRepository.findByProdutoId(recomendacao.getProduto().getId()).isEmpty()){
+    public Recomendacao atualizarRecomendacao(Integer id, Integer idProduto){
+        Recomendacao recomendacao = recomendacaoRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        if(!recomendacaoRepository.findByProdutoId(idProduto).isEmpty()){
             throw new ResponseStatusException(HttpStatusCode.valueOf(409));
         }
 
-        recomendacao.setId(id);
-        recomendacao.setProduto(produtoService.buscarPorId(recomendacao.getProduto().getId()));
+        recomendacao.setProduto(produtoService.buscarPorId(idProduto));
         return recomendacaoRepository.save(recomendacao);
     }
 

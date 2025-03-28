@@ -16,11 +16,11 @@ public class RecomendacaoMapper {
                 .build();
     }
 
-    public static Recomendacao toRecomendacao(RecomendacaoRequisitionDTO entity, ProdutoService produtoService){
-        if (entity == null) return null;
-
-        return Recomendacao.builder()
-                .produto(produtoService.buscarPorId(entity.getProdutoId()))
-                .build();
-    }
+//    public static Recomendacao toRecomendacao(RecomendacaoRequisitionDTO entity){
+//        if (entity == null) return null;
+//
+//        return Recomendacao.builder()
+//                .id(entity.getId())
+//                .build();
+//    }
 }

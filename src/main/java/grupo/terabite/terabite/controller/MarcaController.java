@@ -33,10 +33,6 @@ public class MarcaController {
     @GetMapping
     public ResponseEntity<List<MarcaResponseDTO>> listarMarcas(){
         List<Marca> marcas = marcaService.listarMarca();
-        if(marcas.isEmpty()){
-            throw new ResponseStatusException(HttpStatusCode.valueOf(204));
-        }
-
         return ResponseEntity.ok(MarcaMapper.toListResposeDto(marcas));
     }
 

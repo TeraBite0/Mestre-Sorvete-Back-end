@@ -2,6 +2,7 @@ package grupo.terabite.terabite.controller;
 
 import grupo.terabite.terabite.dto.mapper.LoteMapper;
 import grupo.terabite.terabite.dto.requisition.LoteRequisitionDTO;
+import grupo.terabite.terabite.dto.requisition.LoteStatusRequisitionDTO;
 import grupo.terabite.terabite.dto.response.LoteResponseDTO;
 import grupo.terabite.terabite.service.LoteService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -37,7 +38,7 @@ public class LoteController {
     })
     @PostMapping
     public ResponseEntity<LoteResponseDTO> adicionarLote(@RequestBody LoteRequisitionDTO novoLote) {
-        return ResponseEntity.created(null).body(LoteMapper.toResponseDto(loteService.criarLote(LoteMapper.toEntity(novoLote))));
+        return ResponseEntity.created(null).body(LoteMapper.toResponseDto(loteService.criarLote(LoteMapper.toEntity(novoLote), novoLote.getNomeFornecedor())));
     }
 
     @Operation(summary = "Atualiza um lote apartir de um id", description = "Retorna o lote atualizado com base no seu ID")
@@ -62,5 +63,16 @@ public class LoteController {
     public ResponseEntity<Void> deletarLote(@PathVariable Integer id) {
         loteService.deletarLote(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @Operation(summary = "Atualiza o status de um lote pelo ID", description = "Atualiza o status do lote e retorna o sucesso da atualização")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Status atualizado com sucesso"),
+            @ApiResponse(responseCode = "401", description = "Erro de requisição, Não autorizado"),
+            @ApiResponse(responseCode = "404", description = "Lote não encontrado")
+    })
+    @PatchMapping("/{id}")
+    public ResponseEntity<LoteResponseDTO> atualizarStatusLote(@PathVariable Integer id, @RequestBody LoteStatusRequisitionDTO loteUpdateStatus) {
+        return ResponseEntity.ok(LoteMapper.toResponseDto(loteService.atualizarStatusLote(id, LoteMapper.toRequisitionUpdateStatusDTO(loteUpdateStatus))));
     }
 }

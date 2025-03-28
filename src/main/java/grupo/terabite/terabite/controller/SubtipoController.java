@@ -18,7 +18,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/subtipo")
+@RequestMapping("/subtipos")
 @RequiredArgsConstructor
 public class SubtipoController {
 
@@ -33,10 +33,6 @@ public class SubtipoController {
     @GetMapping
     public ResponseEntity<List<SubtipoResponseDTO>> listarSubtipos(){
         List<Subtipo> subtipos = subtipoService.listarSubtipo();
-        if(subtipos.isEmpty()){
-            throw new ResponseStatusException(HttpStatusCode.valueOf(204));
-        }
-
         return ResponseEntity.ok(subtipos.stream().map(SubtipoMapper::toResponseDto).toList());
     }
 
@@ -47,6 +43,6 @@ public class SubtipoController {
     })
     @PostMapping
     public ResponseEntity<SubtipoResponseDTO> criarSubtipo(@RequestBody @Valid SubtipoRequisitionDTO subtipoRequisitionDTO) {
-        return ResponseEntity.created(null).body(SubtipoMapper.toResponseDto(subtipoService.criarSubtipo(SubtipoMapper.toCreateDto(subtipoRequisitionDTO), subtipoRequisitionDTO.getIdTipo())));
+        return ResponseEntity.created(null).body(SubtipoMapper.toResponseDto(subtipoService.criarSubtipo(SubtipoMapper.toCreateDto(subtipoRequisitionDTO), subtipoRequisitionDTO.getNomeTipo())));
     }
 }

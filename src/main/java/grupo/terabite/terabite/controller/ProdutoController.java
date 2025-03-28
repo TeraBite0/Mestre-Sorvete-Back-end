@@ -47,10 +47,9 @@ public class ProdutoController {
             @ApiResponse(responseCode = "204", description = "Operação bem-sucedida, sem produtos"),
             @ApiResponse(responseCode = "401", description = "Erro de requisição, Não autorizado"),
     })
-    @GetMapping("/isAtivos")
+    @GetMapping("/ativos")
     public ResponseEntity<List<ProdutoResponseDTO>> listarTodosIsAtivo() {
         List<Produto> produtos = produtoService.listarProdutoIsAtivos();
-        if (produtos.isEmpty()) return ResponseEntity.noContent().build();
         return ResponseEntity.ok(produtos.stream().map(ProdutoMapper::toResponseDto).toList());
     }
 
@@ -136,5 +135,10 @@ public class ProdutoController {
     @PutMapping("/{id}")
     public ResponseEntity<ProdutoResponseDTO> atualizarProduto(@PathVariable Integer id, @RequestBody @Valid ProdutoRequisitionDTO produtoUpdateDTO) {
         return ResponseEntity.ok(ProdutoMapper.toResponseDto(produtoService.atualizarProduto(id, ProdutoMapper.toCreateProduto(produtoUpdateDTO), produtoUpdateDTO.getNomeMarca(), produtoUpdateDTO.getNomeSubtipo())));
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<ProdutoResponseDTO> atualizarProduto(@PathVariable Integer id, @RequestParam boolean isAtivo) {
+        return ResponseEntity.ok(ProdutoMapper.toResponseDto(produtoService.atualizarProdutoAtivo(id, isAtivo)));
     }
 }

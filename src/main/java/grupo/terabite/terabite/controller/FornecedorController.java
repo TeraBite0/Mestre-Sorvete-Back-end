@@ -39,10 +39,6 @@ public class FornecedorController {
     @GetMapping
     public ResponseEntity<List<FornecedorResponseDTO>> listarFornecedors(){
         List<Fornecedor> fornecedores = FornecedorService.listarFornecedor();
-        if(fornecedores.isEmpty()){
-            throw new ResponseStatusException(HttpStatusCode.valueOf(204));
-        }
-
         return ResponseEntity.ok(FornecedorMapper.toListResposeDto(fornecedores));
     }
 

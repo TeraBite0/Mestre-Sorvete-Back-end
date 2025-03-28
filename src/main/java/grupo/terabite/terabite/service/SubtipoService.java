@@ -35,8 +35,8 @@ public class SubtipoService {
         return subtipoRepository.findByNomeIgnoreCase(nomeSubtipo);
     }
 
-    public Subtipo criarSubtipo(Subtipo novoSubtipo, Integer idTipo) {
-        novoSubtipo.setTipo(tipoService.buscarPorId(idTipo));
+    public Subtipo criarSubtipo(Subtipo novoSubtipo, String nomeTipo) {
+        novoSubtipo.setTipo(tipoService.buscarPorNomeTipo(nomeTipo));
         validarSubtipoExistente(novoSubtipo.getNome());
 
         return subtipoRepository.save(novoSubtipo);

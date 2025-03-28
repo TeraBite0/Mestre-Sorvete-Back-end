@@ -6,11 +6,10 @@ import lombok.Data;
 
 @Data
 @Builder
-public class SubtipoRequisitionDTO {
+public class LoteStatusRequisitionDTO {
 
     @NotBlank
-    private String nome;
+    private String status;
 
-    @NotBlank
-    private String nomeTipo;
+    private String observacao;
 }

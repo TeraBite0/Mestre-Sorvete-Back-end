@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -51,12 +52,12 @@ public class SaidaEstoqueService {
         return saidaEstoqueAtualizada;
     }
 
-    public void deletarSaidas(List<SaidaEstoque> saidaEstoques){
-        Set<Integer> ids = saidaEstoques.stream().map(SaidaEstoque::getId).collect(Collectors.toSet());
+    public void deletarSaidas(List<Integer> idSaida){
+        Set<Integer> ids = new HashSet<>(idSaida);
 
         if(saidaEstoqueRepository.findAllById(ids).size() != ids.size()) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 
+//        loteService.atualizarEstoqueProduto(saidaEstoques.stream().map(SaidaEstoque::getProduto).toList());
         saidaEstoqueRepository.deleteAllById(ids);
-        loteService.atualizarEstoqueProduto(saidaEstoques.stream().map(SaidaEstoque::getProduto).toList());
     }
 }

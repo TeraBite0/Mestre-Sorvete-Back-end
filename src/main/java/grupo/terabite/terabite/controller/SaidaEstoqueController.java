@@ -20,7 +20,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/saida-estoque")
+@RequestMapping("/saidas-estoque")
 @RequiredArgsConstructor
 public class SaidaEstoqueController {
     private final SaidaEstoqueService saidaEstoqueService;
@@ -34,8 +34,6 @@ public class SaidaEstoqueController {
     @GetMapping
     public ResponseEntity<List<SaidaEstoqueResponseGroupDTO>> listarSaidas(){
         List<SaidaEstoque> saidaEstoques = saidaEstoqueService.listar();
-        if(saidaEstoques.isEmpty()) throw new ResponseStatusException(HttpStatusCode.valueOf(204));
-
         return ResponseEntity.ok(SaidaEstoqueMapper.toSaidaEstoqueResponseGroupDTO(saidaEstoques));
     }
 
@@ -68,9 +66,9 @@ public class SaidaEstoqueController {
             @ApiResponse(responseCode = "401", description = "Erro de requisição, Não autorizado"),
             @ApiResponse(responseCode = "404", description = "Saida Estoque(s) especificada(s) não encontrada")
     })
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletarSaidasEstoque(@RequestBody @Valid SaidaEstoqueRequisitionGroupDTO saidaEstoqueRequisitionGroupDTO) {
-        saidaEstoqueService.deletarSaidas(SaidaEstoqueMapper.toEntityList(saidaEstoqueRequisitionGroupDTO));
+    @DeleteMapping()
+    public ResponseEntity<Void> deletarSaidasEstoque(@RequestBody @Valid List<Integer> idSaida) {
+        saidaEstoqueService.deletarSaidas(idSaida);
         return ResponseEntity.noContent().build();
     }
 }

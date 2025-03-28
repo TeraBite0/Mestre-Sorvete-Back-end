@@ -1,9 +1,9 @@
 package grupo.terabite.terabite.dto.requisition;
 
-import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Data;
 
@@ -28,11 +28,6 @@ public class LoteRequisitionDTO {
     @NotNull
     private Double valorLote;
 
-    @NotBlank
-    private String status;
-
-    private String observacao;
-
-    @NotEmpty @Max(15)
+    @NotEmpty @Size(max = 15, message = "A lista pode ter no máximo 15 itens.")
     private List<LoteProdutoRequisitionDTO> loteProdutos;
 }

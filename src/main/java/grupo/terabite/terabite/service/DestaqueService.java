@@ -40,7 +40,14 @@ public class DestaqueService {
         if (destaque == null) {
             List<Destaque> recomendacoes = destaqueRepository.findAll();
             Produto produtoDoDia = gerarDestaque(recomendacoes);
-            destaque = new Destaque(null, produtoDoDia, hoje, ""); // colocar texto depois
+            String txt = """
+                    Este sorvete é uma combinação irresistível de cremosidade e sabor, 
+                    trazendo uma experiência única. 
+                    Feito com uma base suave e refrescante, 
+                    ele harmoniza perfeitamente com o sabor característico de seu ingrediente principal, 
+                    proporcionando uma explosão de sabor e textura a cada porção.
+                    """;
+            destaque = new Destaque(null, produtoDoDia, hoje, txt); // colocar texto depois
             destaqueRepository.save(destaque);
             excluirDadosAntigos();
         }

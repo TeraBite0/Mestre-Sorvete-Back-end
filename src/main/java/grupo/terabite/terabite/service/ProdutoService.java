@@ -3,6 +3,7 @@ package grupo.terabite.terabite.service;
 import grupo.terabite.terabite.entity.Marca;
 import grupo.terabite.terabite.entity.Produto;
 import grupo.terabite.terabite.entity.Subtipo;
+import grupo.terabite.terabite.entity.enums.OperacaoEstoque;
 import grupo.terabite.terabite.repository.ProdutoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatusCode;
@@ -64,18 +65,16 @@ public class ProdutoService {
             throw new ResponseStatusException(HttpStatusCode.valueOf(404));
         }
         produtoAtualizado.setId(id);
-        produtoAtualizado.setMarca(marcaService.buscarPorNomeMarca(nomeMarca));
-        produtoAtualizado.setSubtipo((subtipoService.buscarPorNomeSubtipo(nomeSubtipo)));
+        manterDadosAntigos(produtoAntigo, produtoAtualizado);
+        validarMarcaESubtipoExistentes(nomeMarca, nomeSubtipo, produtoAtualizado);
         return produtoRepository.save(produtoAtualizado);
     }
 
-    protected Produto atualizarProduto(Integer id, Produto produtoAtualizado){
-        Produto produtoAntigo = produtoRepository.findById(id).orElse(null);
-        if (produtoAntigo == null) {
-            throw new ResponseStatusException(HttpStatusCode.valueOf(404));
-        }
-        produtoAtualizado.setId(id);
-        return produtoRepository.save(produtoAtualizado);
+    private void manterDadosAntigos(Produto antigo, Produto atualizado) {
+        atualizado.setId(antigo.getId());
+        atualizado.setIsAtivo(antigo.getIsAtivo());
+        atualizado.setQtdCaixasEstoque(antigo.getQtdCaixasEstoque());
+        atualizado.setDisponivel(antigo.getDisponivel());
     }
 
     private void validarMarcaESubtipoExistentes(String nomeMarca, String nomeSubtipo, Produto produto) {
@@ -87,5 +86,35 @@ public class ProdutoService {
 
         produto.setMarca(marca);
         produto.setSubtipo(subtipo);
+    }
+
+    public Produto atualizarQtdCaixaEstoque(Integer idProduto, Integer qtdCaixaEstoque, OperacaoEstoque operacao) {
+        Produto produto = buscarPorId(idProduto);
+        validarQtdCaixaEstoque(produto, qtdCaixaEstoque, operacao);
+        return produtoRepository.save(produto);
+    }
+
+    private void validarQtdCaixaEstoque(Produto produto, Integer novaQtdCaixaEstoque, OperacaoEstoque operacao) {
+        int qtdCaixaAtual = produto.getQtdCaixasEstoque();
+
+        if(operacao == OperacaoEstoque.INSERIR) {
+            qtdCaixaAtual += novaQtdCaixaEstoque;
+
+        } else if (operacao == OperacaoEstoque.RETIRAR){
+            qtdCaixaAtual -= novaQtdCaixaEstoque;
+
+            if(qtdCaixaAtual < 0){
+                throw new ResponseStatusException(HttpStatusCode.valueOf(400), "Quantidade de caixas em estoque insuficiente");
+            }
+        }
+
+        produto.setQtdCaixasEstoque(qtdCaixaAtual);
+    }
+
+    public Produto atualizarProdutoAtivo(Integer id, boolean isAtivo) {
+        Produto produto = buscarPorId(id);
+        produto.setIsAtivo(isAtivo);
+
+        return produtoRepository.save(produto);
     }
 }

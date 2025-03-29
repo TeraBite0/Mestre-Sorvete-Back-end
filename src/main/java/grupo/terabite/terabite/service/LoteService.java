@@ -139,7 +139,7 @@ public class LoteService {
 
         return lote;
     }
-    
+
     private void deletarLotesAntigos() {
         List<Lote> lotesAntigos = loteRepository.findByDtEntregaBefore(LocalDate.now().minusYears(1)); // lotes com data de entrega > 1 ano
         List<LoteProduto> loteProdutosAntigos = new ArrayList<>();

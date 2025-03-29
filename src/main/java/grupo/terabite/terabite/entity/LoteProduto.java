@@ -10,6 +10,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter @Setter
 @Entity
+@Table(name = "LOTE_PRODUTO")
 public class LoteProduto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

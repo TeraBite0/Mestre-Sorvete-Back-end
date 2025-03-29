@@ -18,13 +18,4 @@ public class NotificacaoMapper {
                 .produtoResponseDTO(ProdutoMapper.toResponseDto(produto))
                 .build();
     }
-
-    public static Notificacao toCreateNotificacaoDto(NotificacaoRequisitionDTO notificacaoRequisitionDTO, ProdutoService produtoService) {
-        if (notificacaoRequisitionDTO == null || produtoService == null) return null;
-
-        return Notificacao.builder()
-                .email(notificacaoRequisitionDTO.getEmail())
-                .produto(produtoService.buscarPorId(notificacaoRequisitionDTO.getIdProduto()))
-                .build();
-    }
 }

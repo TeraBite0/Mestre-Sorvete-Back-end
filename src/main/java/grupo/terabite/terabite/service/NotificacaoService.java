@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -17,6 +18,7 @@ public class NotificacaoService {
 
     private final NotificacaoRepository notificacaoRepository;
     private final EmailApiService emailApiService;
+    private final ProdutoService produtoService;
 
     public List<Notificacao> listarNotificacoes() {
         List<Notificacao> notificacoes = notificacaoRepository.findAll();
@@ -38,14 +40,19 @@ public class NotificacaoService {
         }
     }
 
-    public Notificacao criarNotificacao(Notificacao novaNotificacao) {
+    public List<Notificacao> criarNotificacao(String email, List<Integer> produtosId) {
 
-        // Validação de duplicatas
-        if(!notificacaoRepository.findByEmailAndProdutoId(novaNotificacao.getEmail(), novaNotificacao.getProduto().getId()).isEmpty()){
-            throw new ResponseStatusException(HttpStatusCode.valueOf(409));
+        // lista com produtos registrados notificação para este email (validação de duplicatas)
+        List<Integer> produtosIdUsuario = notificacaoRepository.findByEmail(email).stream().map(Notificacao::getProduto).map(Produto::getId).toList();
+        List<Notificacao> notificacoesSalvar = new ArrayList<>();
+
+        for(Integer produtoId: produtosId){
+            if(!produtosIdUsuario.contains(produtoId)){
+                notificacoesSalvar.add(new Notificacao(null, email, produtoService.buscarPorId(produtoId)));
+            }
         }
 
-        return notificacaoRepository.save(novaNotificacao);
+        return notificacaoRepository.saveAll(notificacoesSalvar);
     }
 
     public void deletarNotificacaoPorProdutoId(Integer produtoId) {

@@ -24,7 +24,6 @@ import java.util.List;
 public class NotificacaoController {
 
     private final NotificacaoService service;
-    private final ProdutoService produtoService;
 
     @Operation(summary = "Lista todos alertas de notificação pendentes", description = "Retorna a lista de alertas")
     @ApiResponses(value = {
@@ -44,9 +43,7 @@ public class NotificacaoController {
             @ApiResponse(responseCode = "400", description = "Parâmetros inválidos")
     })
     @PostMapping
-    public ResponseEntity<NotificacaoResponseDTO> criarNotificacao(@RequestBody @Valid NotificacaoRequisitionDTO novaNotificacao) {
-        return ResponseEntity.created(null).body(NotificacaoMapper.toResponseNotificacaoDto(
-                service.criarNotificacao(
-                        NotificacaoMapper.toCreateNotificacaoDto(novaNotificacao, produtoService))));
+    public ResponseEntity<List<NotificacaoResponseDTO>> criarNotificacao(@RequestBody @Valid NotificacaoRequisitionDTO novaNotificacao) {
+        return ResponseEntity.created(null).body(service.criarNotificacao(novaNotificacao.getEmail(), novaNotificacao.getIdProdutos()).stream().map(NotificacaoMapper::toResponseNotificacaoDto).toList());
     }
 }

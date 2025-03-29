@@ -156,7 +156,7 @@ class ProdutoServiceTest extends DataFactory {
                 });
 
         try {
-            produtoResposta = produtoService.atualizarProduto(2, produtoResposta);
+            produtoResposta = produtoService.atualizarProduto(2, produtoResposta, marca.getNome(), subtipo.getNome());
         } catch (Exception e) {
             fail("Erro ao atualizar Produto: " + (e.getMessage() != null ? e.getMessage() : e.getCause()));
         }
@@ -171,7 +171,7 @@ class ProdutoServiceTest extends DataFactory {
 
         Mockito.when(produtoRepository.findById(Mockito.anyInt())).thenReturn(Optional.empty());
 
-        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> produtoService.atualizarProduto(1, null), "Não deve ser possivel atualizar um produto passando um id inválido como argumento");
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> produtoService.atualizarProduto(1, null, null, null), "Não deve ser possivel atualizar um produto passando um id inválido como argumento");
         assertEquals(HttpStatusCode.valueOf(404), exception.getStatusCode(), "O código de erro HTTP está incorreto");
     }
 

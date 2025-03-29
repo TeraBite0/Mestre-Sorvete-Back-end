@@ -5,6 +5,7 @@ import grupo.terabite.terabite.entity.Produto;
 import grupo.terabite.terabite.repository.NotificacaoRepository;
 import grupo.terabite.terabite.service.api.EmailApiService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -46,10 +47,14 @@ public class NotificacaoService {
         List<Integer> produtosIdUsuario = notificacaoRepository.findByEmail(email).stream().map(Notificacao::getProduto).map(Produto::getId).toList();
         List<Notificacao> notificacoesSalvar = new ArrayList<>();
 
-        for(Integer produtoId: produtosId){
-            if(!produtosIdUsuario.contains(produtoId)){
+        for (Integer produtoId : produtosId) {
+            if (!produtosIdUsuario.contains(produtoId)) {
                 notificacoesSalvar.add(new Notificacao(null, email, produtoService.buscarPorId(produtoId)));
             }
+        }
+
+        if (notificacoesSalvar.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NO_CONTENT, "Nenhuma notificação registrada");
         }
 
         return notificacaoRepository.saveAll(notificacoesSalvar);

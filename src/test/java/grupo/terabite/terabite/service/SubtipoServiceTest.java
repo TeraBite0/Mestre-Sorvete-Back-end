@@ -127,7 +127,7 @@ class SubtipoServiceTest extends DataFactory {
     void deveLancarExecaoQuandoCadastrarSubtipoComNomeETipoJaExistente() {
         Subtipo subtipo = subtipos.get(0);
         when(subtipoService.buscarPorNomeSubtipo(subtipo.getNome())).thenReturn(subtipo);
-        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> subtipoService.criarSubtipo(subtipo, 1));
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> subtipoService.criarSubtipo(subtipo, subtipo.getTipo().getNome()));
         assertEquals(HttpStatus.CONFLICT, exception.getStatusCode(), "O status HTTP esperado é 409 (CONFLICT)");
     }
 
@@ -142,7 +142,7 @@ class SubtipoServiceTest extends DataFactory {
 
         Subtipo resultado;
         try{
-            resultado = subtipoService.criarSubtipo(novoSubtipo, novoSubtipo.getTipo().getId());
+            resultado = subtipoService.criarSubtipo(novoSubtipo, novoSubtipo.getTipo().getNome());
         } catch (Exception e) {
             fail("Erro ao buscar subtipo com nome não existente: " + (e.getMessage() != null ? e.getMessage() : e.getCause()));
             return;

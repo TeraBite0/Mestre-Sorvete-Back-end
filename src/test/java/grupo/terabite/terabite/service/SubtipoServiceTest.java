@@ -137,7 +137,7 @@ class SubtipoServiceTest extends DataFactory {
         Tipo tipo = tipos.get(0);
         Subtipo novoSubtipo = subtipos.get(1);
 
-        when(tipoService.buscarPorId(tipo.getId())).thenReturn(tipo);
+        when(tipoService.buscarPorNomeTipo(tipo.getNome())).thenReturn(tipo);
         when(subtipoRepository.save(novoSubtipo)).thenReturn(novoSubtipo);
 
         Subtipo resultado;

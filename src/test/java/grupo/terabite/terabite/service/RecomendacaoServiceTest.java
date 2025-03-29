@@ -16,6 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -36,7 +37,7 @@ class RecomendacaoServiceTest extends DataFactory {
     @Test
     @DisplayName("Lista todas recomendações")
     void listarRecomendacoes() {
-        Mockito.when(recomendacaoRepository.findAll()).thenReturn(recomendacoes);
+        Mockito.when(recomendacaoRepository.listarPorNomeProduto()).thenReturn(recomendacoes);
 
         List<Recomendacao> recomendacaoResponse = recomendacaoService.listarRecomendacoes();
 
@@ -44,7 +45,7 @@ class RecomendacaoServiceTest extends DataFactory {
         assertNotNull(recomendacaoResponse.get(0).getProduto(), "Não pode ser retornado um produto nulo");
         assertEquals(recomendacoes, recomendacaoResponse, "A lista de recomendações foi alterada");
 
-        Mockito.when(recomendacaoRepository.findAll()).thenReturn(new ArrayList<>());
+        Mockito.when(recomendacaoRepository.listarPorNomeProduto()).thenReturn(new ArrayList<>());
 
         ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> recomendacaoService.listarRecomendacoes(), "Nenhuma Recomendação devia ser listada");
         assertEquals(HttpStatusCode.valueOf(204), exception.getStatusCode(), "O status da requisição deveria ser 204 quando não há recomendações");
@@ -69,10 +70,10 @@ class RecomendacaoServiceTest extends DataFactory {
     void atualizarRecomendacao() {
         Recomendacao expected = recomendacoes.get(0);
 
-        Mockito.when((recomendacaoRepository.existsById(Mockito.anyInt()))).thenReturn(true);
         Mockito.when(recomendacaoRepository.save(Mockito.any())).thenReturn(expected);
         Mockito.when(produtoService.buscarPorId(Mockito.anyInt())).thenReturn(produtos.get(0));
         Mockito.when(recomendacaoRepository.findByProdutoId(Mockito.anyInt())).thenReturn(new ArrayList<>());
+        Mockito.when(recomendacaoRepository.findById(Mockito.anyInt())).thenReturn(Optional.ofNullable(expected));
 
         Recomendacao response = recomendacaoService.atualizarRecomendacao(expected.getId(), expected.getProduto().getId());
 
@@ -84,10 +85,9 @@ class RecomendacaoServiceTest extends DataFactory {
         ResponseStatusException exception1 = assertThrows(ResponseStatusException.class, () -> recomendacaoService.atualizarRecomendacao(expected.getId(), expected.getProduto().getId()),"Não deveria ser possivel recomendar um produto já recomendado");
         assertEquals(HttpStatusCode.valueOf(409), exception1.getStatusCode(), "O status deveria ser 409");
 
-        Mockito.when((recomendacaoRepository.existsById(Mockito.anyInt()))).thenReturn(false);
+        Mockito.when((recomendacaoRepository.findById(Mockito.anyInt()))).thenReturn(Optional.empty());
         ResponseStatusException exception2 = assertThrows(ResponseStatusException.class, () -> recomendacaoService.atualizarRecomendacao(expected.getId(), expected.getProduto().getId()), "Não deveria ser possivel atualizar uma recomendação com id inexistente");
         assertEquals(HttpStatusCode.valueOf(404), exception2.getStatusCode(), "O status deveria ser 404");
-
     }
 
     @Test

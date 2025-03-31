@@ -45,7 +45,6 @@ public class ProdutoController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Operação bem-sucedida, produtos listados"),
             @ApiResponse(responseCode = "204", description = "Operação bem-sucedida, sem produtos"),
-            @ApiResponse(responseCode = "401", description = "Erro de requisição, Não autorizado"),
     })
     @GetMapping("/ativos")
     public ResponseEntity<List<ProdutoResponseDTO>> listarTodosIsAtivo() {

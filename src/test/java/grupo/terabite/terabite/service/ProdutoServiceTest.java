@@ -105,7 +105,7 @@ class ProdutoServiceTest extends DataFactory {
         Mockito.when(produtoRepository.findById(Mockito.anyInt())).thenReturn(Optional.empty());
 
         ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> produtoService.buscarPorId(100), "Produto não deveria ser encontrado");
-        assertEquals(HttpStatusCode.valueOf(204), exception.getStatusCode(), "O status da resposta não é o correto");
+        assertEquals(HttpStatusCode.valueOf(04), exception.getStatusCode(), "O status da resposta não é o correto");
     }
 
     @Test

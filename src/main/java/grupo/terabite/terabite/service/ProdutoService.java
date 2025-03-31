@@ -117,4 +117,11 @@ public class ProdutoService {
 
         return produtoRepository.save(produto);
     }
+
+    public Produto atualizarProdutoDisponivel(Integer id, boolean isDisponivel) {
+        Produto produto = buscarPorId(id);
+        produto.setDisponivel(isDisponivel);
+
+        return produtoRepository.save(produto);
+    }
 }

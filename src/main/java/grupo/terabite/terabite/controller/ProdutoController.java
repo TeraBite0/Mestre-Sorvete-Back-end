@@ -125,15 +125,34 @@ public class ProdutoController {
             @ApiResponse(responseCode = "400", description = "Erro de requisição, parâmetros inválidos"),
             @ApiResponse(responseCode = "401", description = "Erro de requisição, Não autorizado"),
             @ApiResponse(responseCode = "404", description = "Nenhum produto encontrado"),
-            @ApiResponse(responseCode = "409", description = "Produto duplicado"),
+            @ApiResponse(responseCode = "409", description = "Produto duplicado")
     })
     @PutMapping("/{id}")
     public ResponseEntity<ProdutoResponseDTO> atualizarProduto(@PathVariable Integer id, @RequestBody @Valid ProdutoRequisitionDTO produtoUpdateDTO) {
         return ResponseEntity.ok(ProdutoMapper.toResponseDto(produtoService.atualizarProduto(id, ProdutoMapper.toCreateProduto(produtoUpdateDTO), produtoUpdateDTO.getNomeMarca(), produtoUpdateDTO.getNomeSubtipo())));
     }
 
-    @PatchMapping("/{id}")
-    public ResponseEntity<ProdutoResponseDTO> atualizarProduto(@PathVariable Integer id, @RequestParam boolean isAtivo) {
+    @Operation(summary = "Ativa ou desativa um produto", description = "Retorna o produto atualizado caso sucesso")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Operação bem-sucedida, produto atualizado"),
+            @ApiResponse(responseCode = "400", description = "Erro de requisição, parâmetros inválidos"),
+            @ApiResponse(responseCode = "401", description = "Erro de requisição, Não autorizado"),
+            @ApiResponse(responseCode = "404", description = "Nenhum produto encontrado"),
+    })
+    @PatchMapping("/ativar/{id}")
+    public ResponseEntity<ProdutoResponseDTO> atualizarProdutoAtivo(@PathVariable Integer id, @RequestParam boolean isAtivo) {
         return ResponseEntity.ok(ProdutoMapper.toResponseDto(produtoService.atualizarProdutoAtivo(id, isAtivo)));
+    }
+
+    @Operation(summary = "Define o produto disponivel ou indisponivel para agendamento", description = "Retorna o produto atualizado caso sucesso")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Operação bem-sucedida, produto atualizado"),
+            @ApiResponse(responseCode = "400", description = "Erro de requisição, parâmetros inválidos"),
+            @ApiResponse(responseCode = "401", description = "Erro de requisição, Não autorizado"),
+            @ApiResponse(responseCode = "404", description = "Nenhum produto encontrado"),
+    })
+    @PatchMapping("/disponivel/{id}")
+    public ResponseEntity<ProdutoResponseDTO> atualizarProdutoDisponivel(@PathVariable Integer id, @RequestParam boolean isDisponivel) {
+        return ResponseEntity.ok(ProdutoMapper.toResponseDto(produtoService.atualizarProdutoDisponivel(id, isDisponivel)));
     }
 }

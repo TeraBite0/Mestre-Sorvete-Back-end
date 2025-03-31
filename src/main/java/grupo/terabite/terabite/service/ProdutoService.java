@@ -37,7 +37,7 @@ public class ProdutoService {
     }
 
     public Produto buscarPorId(Integer id) {
-        return produtoRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatusCode.valueOf(204)));
+        return produtoRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatusCode.valueOf(404)));
     }
 
     public Produto buscarPorNomeProduto(String nomeProduto) {

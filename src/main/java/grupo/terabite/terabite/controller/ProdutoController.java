@@ -4,9 +4,7 @@ import grupo.terabite.terabite.dto.requisition.ProdutoRequisitionDTO;
 import grupo.terabite.terabite.dto.mapper.ProdutoMapper;
 import grupo.terabite.terabite.dto.response.ProdutoResponseDTO;
 import grupo.terabite.terabite.entity.Produto;
-import grupo.terabite.terabite.service.MarcaService;
 import grupo.terabite.terabite.service.ProdutoService;
-import grupo.terabite.terabite.service.SubtipoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -25,8 +23,6 @@ import java.util.List;
 public class ProdutoController {
 
     private final ProdutoService produtoService;
-    private final SubtipoService subtipoService;
-    private final MarcaService marcaService;
 
     @Operation(summary = "Lista todos produtos", description = "Retorna uma lista com todos os produtos")
     @ApiResponses(value = {

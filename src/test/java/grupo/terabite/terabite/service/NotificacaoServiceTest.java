@@ -1,11 +1,9 @@
 package grupo.terabite.terabite.service;
 
 import grupo.terabite.terabite.entity.Notificacao;
-import grupo.terabite.terabite.entity.Produto;
 import grupo.terabite.terabite.factory.DataFactory;
 import grupo.terabite.terabite.repository.NotificacaoRepository;
 import grupo.terabite.terabite.service.api.EmailApiService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -97,15 +95,13 @@ class NotificacaoServiceTest extends DataFactory {
         assertEquals("Erro ao notificar, produto inapto para notificar", exception.getMessage(), "Mensagem de erro, diferente do esperado");
     }
 
-//  atualmente existe validação de duplicatas mas, ela faz a operação sem retornar erro
-//    @Test
-//    @DisplayName("Não cria notificação duplicadas")
-//    public void registrarNotificacaoDuplicada() {
-//        Mockito.when(notificacaoRepository.findByEmail(Mockito.anyString())).thenReturn(List.of(notificacoes.get(0)));
-//        Mockito.when(produtoService.buscarPorId(Mockito.anyInt())).thenReturn(null);
-//
-//        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> notificacaoService.criarNotificacao(notificacoes.get(0).getEmail(), List.of(notificacoes.get(0).getId())), "Deve ser retornado erro ao criar notificação já ativa");
-//        assertEquals(HttpStatusCode.valueOf(409), exception.getStatusCode(), "A resposta da exception de duplicados está incorreta");
-//        Mockito.verify(notificacaoRepository, Mockito.never()).save(Mockito.any(Notificacao.class));
-//    }
+    @Test
+    @DisplayName("Não cria notificação duplicadas")
+    public void registrarNotificacaoDuplicada() {
+        Mockito.when(notificacaoRepository.findByEmail(Mockito.anyString())).thenReturn(List.of(notificacoes.get(0)));
+
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> notificacaoService.criarNotificacao(notificacoes.get(0).getEmail(), List.of(notificacoes.get(0).getProduto().getId())), "Deve ser retornado erro ao criar notificação já ativa");
+        assertEquals(HttpStatusCode.valueOf(204), exception.getStatusCode(), "A resposta da exception de duplicados está incorreta");
+        Mockito.verify(notificacaoRepository, Mockito.never()).save(Mockito.any(Notificacao.class));
+    }
 }

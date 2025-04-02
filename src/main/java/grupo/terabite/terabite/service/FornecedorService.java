@@ -16,13 +16,13 @@ public class FornecedorService {
 
     private final FornecedorRepository fornecedorRepository;
 
-//    public List<Fornecedor> listarFornecedor() {
-//        List<Fornecedor> fornecedores = fornecedorRepository.findAll();
-//        if (fornecedores.isEmpty()) {
-//            throw new ResponseStatusException(HttpStatusCode.valueOf(204));
-//        }
-//        return fornecedores;
-//    }
+    public List<Fornecedor> listarFornecedor() {
+        List<Fornecedor> fornecedores = fornecedorRepository.findAll();
+        if (fornecedores.isEmpty()) {
+            throw new ResponseStatusException(HttpStatusCode.valueOf(204));
+        }
+        return fornecedores;
+    }
 
     public Fornecedor buscarPorId(Integer id) {
         return fornecedorRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));

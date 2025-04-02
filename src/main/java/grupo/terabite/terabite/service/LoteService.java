@@ -1,6 +1,5 @@
 package grupo.terabite.terabite.service;
 
-import grupo.terabite.terabite.dto.requisition.LoteProdutoRequisitionDTO;
 import grupo.terabite.terabite.entity.*;
 import grupo.terabite.terabite.entity.enums.LoteStatusEnum;
 import grupo.terabite.terabite.entity.enums.OperacaoEstoque;

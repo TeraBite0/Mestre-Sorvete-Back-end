@@ -7,10 +7,7 @@ import lombok.*;
 import java.time.LocalDate;
 import java.util.List;
 
-@NoArgsConstructor
 @Entity
-@Builder
-@AllArgsConstructor
 @Table(name = "LOTE")
 public class Lote {
     @Id
@@ -57,17 +54,17 @@ public class Lote {
     @JoinColumn(name = "FK_ID_STATUS_LOTE", referencedColumnName = "ID_LOTE_STATUS")
     private LoteStatus statusObj;
 
-//    public Lote(Integer id, Fornecedor fornecedor, LocalDate dtEntrega, LocalDate dtVencimento, LocalDate dtPedido, Double valorLote, LoteStatusEnum status, String observacao, List<LoteProduto>loteProdutos) {
-//        this.id = id;
-//        this.fornecedor = fornecedor;
-//        this.dtEntrega = dtEntrega;
-//        this.dtVencimento = dtVencimento;
-//        this.dtPedido = dtPedido;
-//        this.valorLote = valorLote;
-//        this.status = status;
-//        this.observacao = observacao;
-//        this.loteProdutos = loteProdutos;
-//    }
+    public Lote(Integer id, Fornecedor fornecedor, LocalDate dtEntrega, LocalDate dtVencimento, LocalDate dtPedido, Double valorLote, LoteStatusEnum status, String observacao, List<LoteProduto>loteProdutos) {
+        this.id = id;
+        this.fornecedor = fornecedor;
+        this.dtEntrega = dtEntrega;
+        this.dtVencimento = dtVencimento;
+        this.dtPedido = dtPedido;
+        this.valorLote = valorLote;
+        this.status = status;
+        this.observacao = observacao;
+        this.loteProdutos = loteProdutos;
+    }
 
     public void setStatus(LoteStatusEnum status) {
         this.statusObj = new LoteStatus(status.getId(), status.getStatus());

@@ -1,6 +1,7 @@
 package grupo.terabite.terabite.factory;
 
 import grupo.terabite.terabite.entity.*;
+import grupo.terabite.terabite.entity.enums.LoteStatusEnum;
 import org.junit.jupiter.api.BeforeEach;
 
 import java.time.LocalDate;
@@ -24,6 +25,8 @@ public class DataFactory {
 
     protected List<Fornecedor> fornecedores;
 
+    protected Lote lote;
+
     @BeforeEach
     protected void setup() {
         tipos = List.of(
@@ -43,7 +46,7 @@ public class DataFactory {
         );
 
         produtos = List.of(
-        new Produto(1, "Gelo gelado", subtipos.get(0), marcas.get(1), 9.0, true, 10, 10, true, false, false),
+                new Produto(1, "Gelo gelado", subtipos.get(0), marcas.get(1), 9.0, true, 10, 10, true, false, false),
                 new Produto(2, "Gelo geladinho", subtipos.get(0), marcas.get(0), 6.0, true, 10, 10, true, false, false),
                 new Produto(3, "Gelo quente", subtipos.get(2), marcas.get(1), 8.0, true, 10, 10, false, false, false),
                 new Produto(4, "Gelo quentinho", subtipos.get(2), marcas.get(0), 10.0, true, 10, 10, false, false, false),
@@ -82,5 +85,16 @@ public class DataFactory {
                 new Fornecedor(3, "Fornecedor3"),
                 new Fornecedor(4, "Fornecedor4")
         );
+
+        List<LoteProduto> loteProdutos = List.of(
+                new LoteProduto(1, null, produtos.get(0), 10)
+                // new LoteProduto(2, null, produtos.get(1), 20)
+        );
+
+        this.lote = new Lote(1, fornecedores.get(0), LocalDate.now(), LocalDate.now(), LocalDate.now(), 1000.0, LoteStatusEnum.AGUARDANDO_ENTREGA, null, loteProdutos);
+
+        for (LoteProduto lp : loteProdutos) {
+            lp.setLote(lote);
+        }
     }
 }

@@ -11,30 +11,26 @@ import grupo.terabite.terabite.entity.LoteProduto;
 import grupo.terabite.terabite.entity.Produto;
 import grupo.terabite.terabite.entity.enums.LoteStatusEnum;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 public class LoteMapper {
     public static Lote toEntity(LoteRequisitionDTO loteRequisitionDTO) {
         if (loteRequisitionDTO == null) return null;
-        return Lote.builder()
-                .dtEntrega(loteRequisitionDTO.getDtEntrega())
-                .dtVencimento(loteRequisitionDTO.getDtVencimento())
-                .dtPedido(loteRequisitionDTO.getDtPedido())
-                .valorLote(loteRequisitionDTO.getValorLote())
-                .loteProdutos(toLoteProdutosList(loteRequisitionDTO.getLoteProdutos(), new Lote()))
-                .build();
 
-//        Lote lote = new Lote(null,
-//                loteRequisitionDTO.getDtEntrega(),
-//                loteRequisitionDTO.getDtVencimento(),
-//                (loteRequisitionDTO.getDtPedido() != null ? loteRequisitionDTO.getDtPedido() : null), // valida se foi preenchida, caso contrário preenche null
-//                loteRequisitionDTO.getValorLote(),
-//                loteRequisitionDTO.getObservacao(),
-//                null);
+        Lote lote = new Lote(null,
+                new Fornecedor(null, loteRequisitionDTO.getNomeFornecedor()),
+                loteRequisitionDTO.getDtEntrega(),
+                loteRequisitionDTO.getDtVencimento(),
+                (loteRequisitionDTO.getDtPedido() != null ? loteRequisitionDTO.getDtPedido() : null), // valida se foi preenchida, caso contrário preenche null
+                loteRequisitionDTO.getValorLote(),
+                null,
+                null,
+                null);
 
-//        lote.setLoteProdutos(toLoteProdutosList(loteRequisitionDTO.getLoteProdutos(), lote));
-//        return lote;
+        lote.setLoteProdutos(toLoteProdutosList(loteRequisitionDTO.getLoteProdutos(), lote));
+        return lote;
     }
 
     public static LoteResponseDTO toResponseDto(Lote lote) {
@@ -78,9 +74,6 @@ public class LoteMapper {
 
     public static Lote toRequisitionUpdateStatusDTO(LoteStatusRequisitionDTO loteStatusRequisitionDTO) {
         if (loteStatusRequisitionDTO == null) return null;
-        return Lote.builder()
-                .status(LoteStatusEnum.valueOf(loteStatusRequisitionDTO.getStatus()))
-                .observacao(loteStatusRequisitionDTO.getObservacao())
-                .build();
+        return new Lote(null, null, null, null, null, null, LoteStatusEnum.valueOf(loteStatusRequisitionDTO.getStatus()), loteStatusRequisitionDTO.getObservacao(), null);
     }
 }

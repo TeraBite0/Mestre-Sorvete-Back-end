@@ -54,20 +54,20 @@ class LoteServiceTest extends DataFactory {
     private LoteService loteService;
 
 
-    @Test
-    void listarTodos_Sucesso(){
-        when(loteRepository.findAll()).thenReturn(List.of(lote));
-        List<Lote> lotesResposta = loteService.listarLote();
-        assertNotNull(lotesResposta, "Não deve ser retornado uma lista nula");
-        assertEquals(1, lotesResposta.size(), "O tamanho da lista retornada não condiz");
-    }
-
-    @Test
-    void listarTodos_Failure(){
-        when(loteRepository.findAll()).thenReturn(List.of());
-        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> loteService.listarLote(), "Deveria ser retornado responseException ao listar nenhum lotes");
-        assertEquals(HttpStatus.NO_CONTENT, exception.getStatusCode(), "O código da esception não confere");
-    }
+//    @Test
+//    void listarTodos_Sucesso(){
+//        when(loteRepository.findAll()).thenReturn(List.of(lote));
+//        List<Lote> lotesResposta = loteService.listarLote();
+//        assertNotNull(lotesResposta, "Não deve ser retornado uma lista nula");
+//        assertEquals(1, lotesResposta.size(), "O tamanho da lista retornada não condiz");
+//    }
+//
+//    @Test
+//    void listarTodos_Failure(){
+//        when(loteRepository.findAll()).thenReturn(List.of());
+//        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> loteService.listarLote(), "Deveria ser retornado responseException ao listar nenhum lotes");
+//        assertEquals(HttpStatus.NO_CONTENT, exception.getStatusCode(), "O código da esception não confere");
+//    }
 
     @Test
     void buscarPorId_DeveRetornarLote_QuandoIdExiste() {

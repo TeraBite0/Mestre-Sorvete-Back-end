@@ -3,6 +3,7 @@ package grupo.terabite.terabite.service;
 import grupo.terabite.terabite.entity.Marca;
 import grupo.terabite.terabite.entity.Produto;
 import grupo.terabite.terabite.entity.Subtipo;
+import grupo.terabite.terabite.entity.enums.OperacaoEstoque;
 import grupo.terabite.terabite.factory.DataFactory;
 import grupo.terabite.terabite.repository.ProdutoRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -218,6 +219,14 @@ class ProdutoServiceTest extends DataFactory {
 
         ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> produtoService.atualizarProduto(1, null, "", ""), "Não deve ser possivel atualizar um produto passando um id inválido como argumento");
         assertEquals(HttpStatusCode.valueOf(404), exception.getStatusCode(), "O código de erro HTTP está incorreto");
+
+        Mockito.when(produtoRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(new Produto()));
+
+        ResponseStatusException exception1 = assertThrows(ResponseStatusException.class, () -> produtoService.atualizarProduto(1, new Produto(), null, null), "Não devia ser possivel atualizar um produto com marca e subtipo null");
+        assertEquals(HttpStatusCode.valueOf(404), exception1.getStatusCode(), "O código de erro HTTP está incorreto");
+
+        ResponseStatusException exception2 = assertThrows(ResponseStatusException.class, () -> produtoService.atualizarProduto(1, null, null, null), "Não devia ser possivel atualizar passando null como produto");
+        assertEquals(HttpStatusCode.valueOf(400), exception2.getStatusCode(), "O código de erro HTTP está incorreto");
     }
 
     @Test
@@ -330,6 +339,53 @@ class ProdutoServiceTest extends DataFactory {
         }
     }
 
+    @Test
+    @DisplayName("atualiza Qtd de Caixa Estoque")
+    public void testaAtualizarQtdCaixaEstoque(){
+        Produto produto = produtos.get(0);
+        Mockito.when(produtoRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(produto));
+        Mockito.when(produtoRepository.save(Mockito.any())).thenReturn(produto);
+
+        Produto produtoAtualizado = produtoService.atualizarQtdCaixaEstoque(1, 5, OperacaoEstoque.RETIRAR);
+
+        assertNotNull(produtoAtualizado, "O produto não pode ser retornado nulo");
+        assertEquals(5, produtoAtualizado.getQtdCaixasEstoque(), "A quantidade de produtos retirados não confere");
+
+        produtoAtualizado = produtoService.atualizarQtdCaixaEstoque(1, 10, OperacaoEstoque.INSERIR);
+
+        assertNotNull(produtoAtualizado, "O produto não pode ser retornado nulo");
+        assertEquals(15, produtoAtualizado.getQtdCaixasEstoque(), "A quantidade de produtos retirados não confere");
+
+        ResponseStatusException exception1 = assertThrows(ResponseStatusException.class, () -> produtoService.atualizarQtdCaixaEstoque(1, 1000, OperacaoEstoque.RETIRAR), "Não deve ser possivel retirar mais do que há em estoque");
+        assertEquals(HttpStatusCode.valueOf(400), exception1.getStatusCode(), "O código de erro HTTP está incorreto");
+
+        ResponseStatusException exception2 = assertThrows(ResponseStatusException.class, () -> produtoService.atualizarQtdCaixaEstoque(1, 1, null), "Deve apresentar erro com OperacaoEstoque nula");
+        assertEquals(HttpStatusCode.valueOf(400), exception2.getStatusCode(), "O código de erro HTTP está incorreto");
+    }
+
+    @Test
+    @DisplayName("Testa método de ativar/desativar produto")
+    public void testaAtivarProduto(){
+        Produto produto = produtos.get(0);
+        Mockito.when(produtoRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(produto));
+        Mockito.when(produtoRepository.save(Mockito.any())).thenReturn(produto);
+
+        Produto produtoAtualizado = produtoService.atualizarProdutoAtivo(1, false);
+        assertNotNull(produtoAtualizado, "Não deve ser retornado um produto nulo");
+        assertEquals(false, produtoAtualizado.getIsAtivo(), "O produto deveria ter sido desativado");
+    }
+
+    @Test
+    @DisplayName("Testa método de ativar/desativar produto")
+    public void testaAtualizarProdutoDisponivel(){
+        Produto produto = produtos.get(0);
+        Mockito.when(produtoRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(produto));
+        Mockito.when(produtoRepository.save(Mockito.any())).thenReturn(produto);
+
+        Produto produtoAtualizado = produtoService.atualizarProdutoDisponivel(1, false);
+        assertNotNull(produtoAtualizado, "Não deve ser retornado um produto nulo");
+        assertEquals(false, produtoAtualizado.getDisponivel(), "O produto deveria estar indisponivel");
+    }
 
     //
     //    @Test

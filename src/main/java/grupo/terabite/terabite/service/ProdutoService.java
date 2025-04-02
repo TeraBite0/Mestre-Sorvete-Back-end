@@ -63,6 +63,8 @@ public class ProdutoService {
         Produto produtoAntigo = produtoRepository.findById(id).orElse(null);
         if (produtoAntigo == null) {
             throw new ResponseStatusException(HttpStatusCode.valueOf(404));
+        } else if(produtoAtualizado == null){
+            throw new ResponseStatusException(HttpStatusCode.valueOf(400));
         }
         produtoAtualizado.setId(id);
         manterDadosAntigos(produtoAntigo, produtoAtualizado);
@@ -106,6 +108,8 @@ public class ProdutoService {
             if(qtdCaixaAtual < 0){
                 throw new ResponseStatusException(HttpStatusCode.valueOf(400), "Quantidade de caixas em estoque insuficiente");
             }
+        } else{
+            throw new ResponseStatusException(HttpStatusCode.valueOf(400), "OperacaoEstoque está inválida");
         }
 
         produto.setQtdCaixasEstoque(qtdCaixaAtual);

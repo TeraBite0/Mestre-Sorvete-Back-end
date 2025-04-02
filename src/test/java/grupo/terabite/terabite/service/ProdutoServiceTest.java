@@ -51,11 +51,6 @@ class ProdutoServiceTest extends DataFactory {
         }
 
         assertEquals(produtos.size(), produtosResposta.size(), "A quantidade de produtos retornado é diferente do esperado");
-
-        // Não faz sentido adicionar exception a este método seguindo nossa regra de negócio
-        // Mockito.when(produtoRepository.findAll()).thenReturn(new ArrayList<>());
-        // ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> produtoService.listarProduto());
-        // assertEquals(HttpStatusCode.valueOf(204), exception.getStatusCode(), "O status da resposta não é o correto");
     }
 
     @Test
@@ -131,50 +126,6 @@ class ProdutoServiceTest extends DataFactory {
         assertTrue(produtoResposta.getIsAtivo(), "IsAtivo deve ser verdadeiro na criação");
         // assertFalse(produtoResposta.getEmEstoque(), "emEstoque deve ser false na criação");
     }
-
-//
-//    @Test
-//    @DisplayName("Atualiza corretamente (interno)")
-//    void atualizarProdutoProtected() {
-//        Produto produto = produtos.get(1);
-//        Marca marca = marcas.get(0);
-//        Subtipo subtipo = subtipos.get(0);
-//        produto.setNome("Neve geladinha atualizada");
-//        produto.setMarca(marca);
-//        produto.setSubtipo(subtipo);
-//        produto.setPreco(13.33);
-//        produto.setIsAtivo(false);
-//        Produto produtoResposta = produto;
-//        produtoResposta.setDisponivel(null);
-//
-//        Mockito.when(produtoRepository.save(Mockito.any())).thenReturn(produto);
-//        Mockito.when(produtoRepository.findById(Mockito.anyInt()))
-//                .thenAnswer(invocation -> {
-//                    Integer id = invocation.getArgument(0);
-//                    return produtos.stream()
-//                            .filter(vendaProduto -> vendaProduto.getId().equals(id))
-//                            .findFirst();
-//                });
-//
-//        try {
-//            produtoResposta = produtoService.atualizarProduto(2, produtoResposta, marca.getNome(), subtipo.getNome());
-//        } catch (Exception e) {
-//            fail("Erro ao atualizar Produto: " + (e.getMessage() != null ? e.getMessage() : e.getCause()));
-//        }
-//
-//        assertNotNull(produtoResposta, "O produto atualizado não pode ser nulo");
-//        assertEquals(produto.getNome(), produtoResposta.getNome(), "O nome do produto não foi atualizado corretamente");
-//        assertEquals(marca, produtoResposta.getMarca(), "A marca do produto não foi atualizada corretamente");
-//        assertEquals(subtipo, produtoResposta.getSubtipo(), "O subtipo do produto não foi atualizado corretamente");
-//        assertEquals(produto.getPreco(), produtoResposta.getPreco(), "O preço do produto não foi atualizado corretamente");
-//        assertFalse(produtoResposta.getIsAtivo(), "O status de ativo do produto não foi atualizado corretamente");
-//        assertEquals(produto.getDisponivel(), produtoResposta.getDisponivel(), "O estoque não deveria ser atualizado");
-//
-//        Mockito.when(produtoRepository.findById(Mockito.anyInt())).thenReturn(Optional.empty());
-//
-//        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> produtoService.atualizarProduto(1, null, null, null), "Não deve ser possivel atualizar um produto passando um id inválido como argumento");
-//        assertEquals(HttpStatusCode.valueOf(404), exception.getStatusCode(), "O código de erro HTTP está incorreto");
-//    }
 
     @Test
     @DisplayName("Atualiza corretamente (externo)")
@@ -386,50 +337,4 @@ class ProdutoServiceTest extends DataFactory {
         assertNotNull(produtoAtualizado, "Não deve ser retornado um produto nulo");
         assertEquals(false, produtoAtualizado.getDisponivel(), "O produto deveria estar indisponivel");
     }
-
-    //
-    //    @Test
-    //    @DisplayName("Lista no máximo 5 produtos mais populares quando existirem 5 ou mais produtos registrados")
-    //    void listaPopularesQuandoExistiremCincoOuMaisProdutos() {
-    //        Mockito.when(vendaProdutoRepository.qtdVendidosPorMesEAno(Mockito.any(), Mockito.any())).thenReturn(
-    //                List.of( new ProdutoQuantidadeDTO(produtos.get(0),  10L),
-    //                        new ProdutoQuantidadeDTO(produtos.get(5), 9L),
-    //                        new ProdutoQuantidadeDTO(produtos.get(1), 6L),
-    //                        new ProdutoQuantidadeDTO(produtos.get(6), 5L),
-    //                        new ProdutoQuantidadeDTO(produtos.get(7), 5L)));
-    //
-    //        List<Produto> populares = null;
-    //
-    //        try {
-    //            populares = produtoService.popular();
-    //
-    //        } catch (Exception e) {
-    //            fail("Erro ao buscar Produtos Populares: " + (e.getMessage() != null ? e.getMessage() : e.getCause()));
-    //        }
-    //
-    //        assertNotNull(populares, "Os produtos encontrados não podem ser nulo");
-    //        assertTrue(populares.size() <= 5, "Deve retornar no máximo 5 produtos.");
-    //        assertTrue(populares.stream().allMatch(Produto::getIsAtivo), "Todos os produtos devem estar ativos.");
-    //    }
-    //
-    //    @Test
-    //    @DisplayName("Lista menos de 5 produtos mais populares quando existirem menos de 5 produtos registrados")
-    //    void listaPopularesQuandoExistiremMenosDeCincoProdutos() {
-    //        Mockito.when(vendaProdutoRepository.qtdVendidosPorMesEAno(Mockito.any(), Mockito.any())).thenReturn(
-    //                List.of( new ProdutoQuantidadeDTO(produtos.get(0),  10L),
-    //                        new ProdutoQuantidadeDTO(produtos.get(1), 9L)));
-    //
-    //        List<Produto> populares = null;
-    //
-    //        try {
-    //            populares = produtoService.popular();
-    //
-    //        } catch (Exception e) {
-    //            fail("Erro ao buscar Produtos Populares: " + (e.getMessage() != null ? e.getMessage() : e.getCause()));
-    //        }
-    //
-    //        assertNotNull(populares, "Os produtos encontrados não podem ser nulo");
-    //        assertTrue(populares.size() < 5, "Deve retornar menos que 5 produtos.");
-    //        assertTrue(populares.stream().allMatch(Produto::getIsAtivo), "Todos os produtos devem estar ativos.");
-    //    }
 }

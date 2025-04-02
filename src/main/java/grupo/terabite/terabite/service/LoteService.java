@@ -28,7 +28,7 @@ public class LoteService {
     private final ProdutoService produtoService;
     private final FornecedorService fornecedorService;
 
-    private List<Lote> listarLote() {
+    public List<Lote> listarLote() {
         List<Lote> lotes = loteRepository.findAll();
         if (lotes.isEmpty()) {
             throw new ResponseStatusException(HttpStatusCode.valueOf(204));

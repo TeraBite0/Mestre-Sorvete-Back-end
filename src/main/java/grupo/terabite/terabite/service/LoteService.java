@@ -28,13 +28,13 @@ public class LoteService {
     private final ProdutoService produtoService;
     private final FornecedorService fornecedorService;
 
-    public List<Lote> listarLote() {
-        List<Lote> lotes = loteRepository.findAll();
-        if (lotes.isEmpty()) {
-            throw new ResponseStatusException(HttpStatusCode.valueOf(204));
-        }
-        return lotes;
-    }
+//    public List<Lote> listarLote() {
+//        List<Lote> lotes = loteRepository.findAll();
+//        if (lotes.isEmpty()) {
+//            throw new ResponseStatusException(HttpStatusCode.valueOf(204));
+//        }
+//        return lotes;
+//    }
 
     public Lote buscarPorId(Integer id) {
         return loteRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatusCode.valueOf(404)));

@@ -128,4 +128,9 @@ public class ProdutoService {
 
         return produtoRepository.save(produto);
     }
+
+    //método usado para atualizar o estoque de cada produto
+    protected List<Produto> salvarProdutos(List<Produto> produtos){
+        return produtoRepository.saveAll(produtos);
+    }
 }

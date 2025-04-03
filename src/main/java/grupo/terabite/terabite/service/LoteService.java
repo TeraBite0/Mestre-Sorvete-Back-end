@@ -103,11 +103,13 @@ public class LoteService {
             List<LoteProduto> loteProdutos = loteProdutoRepository.findByProdutoId(p.getId());
             List<SaidaEstoque> saidaEstoques = saidaEstoqueRepository.findByProdutoId(p.getId());
 
-//            Integer qtdCaixasEntrada = loteProdutos.stream().mapToInt(LoteProduto::getQtdCaixasCompradas).sum();
+            Integer qtdCaixasEntrada = loteProdutos.stream().mapToInt(LoteProduto::getQtdCaixasCompradas).sum();
             Integer qtdCaixasSaida = saidaEstoques.stream().mapToInt(SaidaEstoque::getQtdCaixasSaida).sum();
 
-            produtoService.atualizarQtdCaixaEstoque(p.getId(), qtdCaixasSaida, OperacaoEstoque.RETIRAR);
+            p.setQtdCaixasEstoque(qtdCaixasEntrada - qtdCaixasSaida);
         });
+
+        produtoService.salvarProdutos(produtos);
     }
 
     // metodo responsável por atualizar os produtos de loteProduto e apontar conflito

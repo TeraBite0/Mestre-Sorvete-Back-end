@@ -52,12 +52,12 @@ public class SaidaEstoqueService {
         return saidaEstoqueAtualizada;
     }
 
-    public void deletarSaidas(List<Integer> idSaida){
-        Set<Integer> ids = new HashSet<>(idSaida);
+    public void deletarSaidas(List<SaidaEstoque> saidaEstoques){
+        Set<Integer> ids = saidaEstoques.stream().map(SaidaEstoque::getId).collect(Collectors.toSet());
 
         if(saidaEstoqueRepository.findAllById(ids).size() != ids.size()) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 
-//        loteService.atualizarEstoqueProduto(saidaEstoques.stream().map(SaidaEstoque::getProduto).toList());
+        loteService.atualizarEstoqueProduto(saidaEstoques.stream().map(SaidaEstoque::getProduto).toList());
         saidaEstoqueRepository.deleteAllById(ids);
     }
 }

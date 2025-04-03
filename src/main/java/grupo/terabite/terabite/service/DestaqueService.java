@@ -56,7 +56,7 @@ public class DestaqueService {
     }
 
     private Produto gerarDestaque(List<Destaque> destaques) {
-        List<Produto> produtos = produtoService.listarProduto().stream().filter(Produto::getIsAtivo).collect(Collectors.toList());
+        List<Produto> produtos = produtoService.listarProduto().stream().filter(Produto::getIsAtivo).filter(Produto::getDisponivel).collect(Collectors.toList());
 
         if (destaques.isEmpty() || produtos.size() <= destaques.size()) return produtoAleatorio(produtos);
         else {

@@ -22,7 +22,7 @@ public class DestaqueService {
         LocalDate hoje = LocalDate.now();
         Destaque destaque = destaqueRepository.findByDtRecomendacao(hoje);
 
-        if (destaque == null) { // valida se o detaque atual não foi gerado ainda
+        if (destaque == null) { // valida se o destaque atual não foi gerado ainda
             destaque = new Destaque();
             destaque.setDtRecomendacao(hoje);
         }
@@ -38,8 +38,8 @@ public class DestaqueService {
         Destaque destaque = destaqueRepository.findByDtRecomendacao(hoje);
 
         if (destaque == null) {
-            List<Destaque> recomendacoes = destaqueRepository.findAll();
-            Produto produtoDoDia = gerarDestaque(recomendacoes);
+            List<Destaque> destaques = destaqueRepository.findAll();
+            Produto produtoDoDia = gerarDestaque(destaques);
             String txt = """
                     Este sorvete é uma combinação irresistível de cremosidade e sabor, 
                     trazendo uma experiência única. 
@@ -55,10 +55,10 @@ public class DestaqueService {
         return destaque;
     }
 
-    private Produto gerarDestaque(List<Destaque> recomendacoes) {
+    private Produto gerarDestaque(List<Destaque> destaques) {
         List<Produto> produtos = produtoService.listarProduto().stream().filter(Produto::getIsAtivo).collect(Collectors.toList());
 
-        if (recomendacoes.isEmpty() || produtos.size() <= recomendacoes.size()) return produtoAleatorio(produtos);
+        if (destaques.isEmpty() || produtos.size() <= destaques.size()) return produtoAleatorio(produtos);
         else {
             boolean produtoNovo;
             Produto produtoGerado;
@@ -67,7 +67,7 @@ public class DestaqueService {
                 produtoNovo = true;
                 produtoGerado = produtoAleatorio(produtos);
 
-                for (Destaque r : recomendacoes) {
+                for (Destaque r : destaques) {
                     if (r.getProduto().getId().equals(produtoGerado.getId())) {
                         produtoNovo = false;
                         break;
@@ -87,8 +87,8 @@ public class DestaqueService {
 
     private void excluirDadosAntigos() {
         LocalDate dtLimite = LocalDate.now().minusDays(7); // <- qtd de dias que definem uma recomendação antiga
-        List<Destaque> recomendacoes = destaqueRepository.findByDtRecomendacaoBefore(dtLimite);
+        List<Destaque> destaques = destaqueRepository.findByDtRecomendacaoBefore(dtLimite);
 
-        destaqueRepository.deleteAll(recomendacoes);
+        destaqueRepository.deleteAll(destaques);
     }
 }

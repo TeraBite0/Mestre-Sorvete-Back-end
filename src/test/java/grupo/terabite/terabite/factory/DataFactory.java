@@ -27,6 +27,8 @@ public class DataFactory {
 
     protected Lote lote;
 
+    protected SaidaEstoque saidaEstoque;
+
     @BeforeEach
     protected void setup() {
         tipos = List.of(
@@ -96,5 +98,7 @@ public class DataFactory {
         for (LoteProduto lp : loteProdutos) {
             lp.setLote(lote);
         }
+
+        saidaEstoque = new SaidaEstoque(1, produtos.get(0), LocalDate.now(), 5);
     }
 }

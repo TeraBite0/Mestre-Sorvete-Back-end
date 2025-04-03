@@ -337,4 +337,14 @@ class ProdutoServiceTest extends DataFactory {
         assertNotNull(produtoAtualizado, "Não deve ser retornado um produto nulo");
         assertEquals(false, produtoAtualizado.getDisponivel(), "O produto deveria estar indisponivel");
     }
+
+    @Test
+    public void testaSalvarProdutos(){
+        Produto produto = produtos.get(0);
+        Mockito.when(produtoRepository.saveAll(Mockito.any())).thenReturn(List.of(produto));
+        List<Produto> produtosAtualizados = produtoService.salvarProdutos(List.of(produto));
+
+        assertNotNull(produtosAtualizados, "Não deve ser retornado uma lista nula");
+        assertNotNull(produtosAtualizados.get(0), "O produto retornado não pode ser nulo");
+    }
 }

@@ -12,10 +12,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -43,7 +41,7 @@ public class SaidaEstoqueController {
             @ApiResponse(responseCode = "400", description = "Parâmetros inválidos")
     })
     @PostMapping
-    public ResponseEntity<List<SaidaEstoqueResponseGroupDTO>> criarMarca(@RequestBody @Valid SaidaEstoqueRequisitionGroupDTO saidaEstoqueRequisitionGroupDTO) {
+    public ResponseEntity<List<SaidaEstoqueResponseGroupDTO>> criarSaidaEstoque(@RequestBody @Valid SaidaEstoqueRequisitionGroupDTO saidaEstoqueRequisitionGroupDTO) {
         return ResponseEntity.created(null).body(SaidaEstoqueMapper.toSaidaEstoqueResponseGroupDTO(saidaEstoqueService.registrarSaida(SaidaEstoqueMapper.toEntityList(saidaEstoqueRequisitionGroupDTO))));
     }
 

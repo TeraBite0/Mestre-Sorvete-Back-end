@@ -67,8 +67,8 @@ public class DestaqueService {
                 produtoNovo = true;
                 produtoGerado = produtoAleatorio(produtos);
 
-                for (Destaque r : destaques) {
-                    if (r.getProduto().getId().equals(produtoGerado.getId())) {
+                for (Destaque d : destaques) {
+                    if (d.getProduto().getId().equals(produtoGerado.getId())) {
                         produtoNovo = false;
                         break;
                     }

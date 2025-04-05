@@ -107,7 +107,7 @@ class ProdutoServiceTest extends DataFactory {
     @Test
     @DisplayName("Cria corretamente")
     void criarProduto() {
-        Produto produto = new Produto(100, "Gelo esquecido", subtipos.get(0), marcas.get(0), 5.0, true, null, null, null, false, false);
+        Produto produto = new Produto(100, "Gelo esquecido", subtipos.get(0), marcas.get(0), 5.0, true, null, null, null, false, false, null);
         Mockito.when(produtoRepository.save(Mockito.any())).thenReturn(produto);
         Mockito.when(marcaService.buscarPorNomeMarca(Mockito.any())).thenReturn(marcas.get(0));
         Mockito.when(subtipoService.buscarPorNomeSubtipo(Mockito.any())).thenReturn(subtipos.get(0));

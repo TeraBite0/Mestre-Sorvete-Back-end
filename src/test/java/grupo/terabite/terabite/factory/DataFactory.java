@@ -48,14 +48,14 @@ public class DataFactory {
         );
 
         produtos = List.of(
-                new Produto(1, "Gelo gelado", subtipos.get(0), marcas.get(1), 9.0, true, 10, 10, true, false, false),
-                new Produto(2, "Gelo geladinho", subtipos.get(0), marcas.get(0), 6.0, true, 10, 10, true, false, false),
-                new Produto(3, "Gelo quente", subtipos.get(2), marcas.get(1), 8.0, true, 10, 10, false, false, false),
-                new Produto(4, "Gelo quentinho", subtipos.get(2), marcas.get(0), 10.0, true, 10, 10, false, false, false),
-                new Produto(5, "Neve gelada", subtipos.get(1), marcas.get(1), 12.0, true, 10, 10, true, false, false),
-                new Produto(6, "Neve geladinha", subtipos.get(1), marcas.get(0), 10.0, true, 10, 10, true, false, false),
-                new Produto(7, "Neve quente", subtipos.get(2), marcas.get(1), 10.5, true, 10, 10, true, false, false),
-                new Produto(8, "Neve quentinha", subtipos.get(2), marcas.get(0), 6.5, true, 10, 10, true, false, false)
+                new Produto(1, "Gelo gelado", subtipos.get(0), marcas.get(1), 9.0, true, 10, 10, true, false, false, null),
+                new Produto(2, "Gelo geladinho", subtipos.get(0), marcas.get(0), 6.0, true, 10, 10, true, false, false, null),
+                new Produto(3, "Gelo quente", subtipos.get(2), marcas.get(1), 8.0, true, 10, 10, false, false, false, null),
+                new Produto(4, "Gelo quentinho", subtipos.get(2), marcas.get(0), 10.0, true, 10, 10, false, false, false, null),
+                new Produto(5, "Neve gelada", subtipos.get(1), marcas.get(1), 12.0, true, 10, 10, true, false, false, null),
+                new Produto(6, "Neve geladinha", subtipos.get(1), marcas.get(0), 10.0, true, 10, 10, true, false, false, null),
+                new Produto(7, "Neve quente", subtipos.get(2), marcas.get(1), 10.5, true, 10, 10, true, false, false, null),
+                new Produto(8, "Neve quentinha", subtipos.get(2), marcas.get(0), 6.5, true, 10, 10, true, false, false, null)
         );
 
         this.notificacoes = List.of(

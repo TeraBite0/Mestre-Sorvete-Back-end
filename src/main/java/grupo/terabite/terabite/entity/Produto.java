@@ -48,4 +48,7 @@ public class Produto {
 
     @Column(name = "TEM_GLUTEN_PROD")
     private Boolean temGluten = false;
+
+    @Column(name = "TIPO_IMAGEM")
+    private String tipoImagem;
 }

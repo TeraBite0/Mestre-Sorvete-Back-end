@@ -1,6 +1,8 @@
 package grupo.terabite.terabite.controller;
 
+import com.amazonaws.HttpMethod;
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectResult;
@@ -16,6 +18,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
+import java.util.Calendar;
+import java.util.Date;
 
 @Controller
 @RequestMapping("/images")
@@ -39,9 +43,24 @@ public class ImagemController {
 
         try {
             PutObjectResult putObjectResult = client.putObject(new PutObjectRequest(bucketName, fileName, file.getInputStream(), metaData));
-            return ResponseEntity.ok("Imagem " + originalFileName + " recebida para o produto " + idProduto);
         } catch (IOException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Erro ao realizar upload da imagem no S3");
         }
+
+            return ResponseEntity.ok("URL:" +gerarUrlImagem(fileName) + "\nImagem " + originalFileName + " recebida para o produto " + idProduto);
+    }
+
+    private String gerarUrlImagem(String fileName){
+
+        // define a expiração da Url para 1 hora
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.HOUR_OF_DAY, 1);
+        Date expirationDate = calendar.getTime();
+
+        GeneratePresignedUrlRequest generatePresignedUrlRequest = new GeneratePresignedUrlRequest(bucketName, fileName)
+                .withMethod(HttpMethod.GET)
+                        .withExpiration(expirationDate);
+
+        return client.generatePresignedUrl(generatePresignedUrlRequest).toString();
     }
 }

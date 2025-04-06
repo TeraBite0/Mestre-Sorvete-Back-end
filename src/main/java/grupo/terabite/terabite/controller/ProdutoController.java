@@ -117,7 +117,7 @@ public class ProdutoController {
     @PostMapping
     public ResponseEntity<ProdutoResponseDTO> criar(@RequestBody @Valid ProdutoRequisitionDTO produtoRequisitionDTO) {
         return ResponseEntity.created(null).body(
-                ProdutoMapper.toResponseDto(
+                produtoMapper.toResponseDto(
                         produtoService.criarProduto(
                                 produtoMapper.toCreateProduto(produtoRequisitionDTO),
                                 produtoRequisitionDTO.getNomeMarca(),

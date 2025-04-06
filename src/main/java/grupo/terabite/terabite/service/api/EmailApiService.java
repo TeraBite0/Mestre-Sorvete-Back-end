@@ -1,6 +1,7 @@
 package grupo.terabite.terabite.service.api;
 
 import grupo.terabite.terabite.entity.Notificacao;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.mail.*;
@@ -20,8 +21,14 @@ import java.util.Scanner;
 
 @Service
 public class EmailApiService {
-    final String username = System.getenv("EMAIL_BENEFICIARIO");
-    final String password = System.getenv("SENHA_APP_EMAIL");
+
+    @Value("${EMAIL_BENEFICIARIO}")
+    private String username;
+
+    @Value("${SENHA_APP_EMAIL}")
+    private String password;
+
+
     final Properties props;
 
     final Session session;

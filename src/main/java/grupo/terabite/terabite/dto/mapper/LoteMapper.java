@@ -10,12 +10,19 @@ import grupo.terabite.terabite.entity.Lote;
 import grupo.terabite.terabite.entity.LoteProduto;
 import grupo.terabite.terabite.entity.Produto;
 import grupo.terabite.terabite.entity.enums.LoteStatusEnum;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
+@RequiredArgsConstructor
 public class LoteMapper {
+
+    private final ProdutoMapper produtoMapper;
+
     public static Lote toEntity(LoteRequisitionDTO loteRequisitionDTO) {
         if (loteRequisitionDTO == null) return null;
 
@@ -33,7 +40,7 @@ public class LoteMapper {
         return lote;
     }
 
-    public static LoteResponseDTO toResponseDto(Lote lote) {
+    public LoteResponseDTO toResponseDto(Lote lote) {
         if (lote == null) return null;
 
         return LoteResponseDTO.builder()
@@ -49,13 +56,13 @@ public class LoteMapper {
                 .build();
     }
 
-    private static List<LoteProdutoResponseDTO> loteProdutoResponseDTOSList(List<LoteProduto> loteProdutos) {
+    private List<LoteProdutoResponseDTO> loteProdutoResponseDTOSList(List<LoteProduto> loteProdutos) {
         if (loteProdutos == null) return null;
 
         List<LoteProdutoResponseDTO> loteProdutosResponseDTOS = new ArrayList<>();
         loteProdutos.forEach(lp ->
                 loteProdutosResponseDTOS.add(LoteProdutoResponseDTO.builder()
-                        .produto(ProdutoMapper.toResponseDto(lp.getProduto()))
+                        .produto(produtoMapper.toResponseDto(lp.getProduto()))
                         .qtdCaixasCompradas(lp.getQtdCaixasCompradas())
                         .build())
         );

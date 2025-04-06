@@ -21,6 +21,8 @@ public class DestaqueController {
     private final ProdutoService produtoService;
     private final DestaqueService destaqueService;
 
+    private final DestaqueMapper destaqueMapper;
+
     @Operation(summary = "Busca o destaque atual", description = "Retorna o produto aleatório que representa o destaque")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Retorna o produto que é o destaque"),
@@ -28,7 +30,7 @@ public class DestaqueController {
     })
     @GetMapping()
     public ResponseEntity<DestaqueResponseDTO> destaque() {
-        return ResponseEntity.ok(DestaqueMapper.toDestaqueResponseDTO(destaqueService.destaque()));
+        return ResponseEntity.ok(destaqueMapper.toDestaqueResponseDTO(destaqueService.destaque()));
     }
 
     @Operation(summary = "Atualiza o produto do destaque atual", description = "Retorna o produto que representa o destaque atualizado")
@@ -39,6 +41,6 @@ public class DestaqueController {
     })
     @PutMapping()
     public ResponseEntity<DestaqueResponseDTO> alterarDestaque(@RequestBody @Valid DestaqueRequisitionDTO recomendacaoDTO) {
-        return ResponseEntity.ok(DestaqueMapper.toDestaqueResponseDTO(destaqueService.alterarDestaque(DestaqueMapper.toDestaque(recomendacaoDTO, produtoService))));
+        return ResponseEntity.ok(destaqueMapper.toDestaqueResponseDTO(destaqueService.alterarDestaque(DestaqueMapper.toDestaque(recomendacaoDTO, produtoService))));
     }
 }

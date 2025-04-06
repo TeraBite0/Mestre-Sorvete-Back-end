@@ -19,6 +19,8 @@ import java.util.List;
 @RequestMapping("/produtos/recomendacao")
 public class RecomendacaoController {
 
+    private final RecomendacaoMapper recomendacaoMapper;
+
     private final RecomendacaoService recomendacaoService;
 
     @Operation(summary = "Lista as recomendações", description = "Retorna a lista de produtos recomendados")
@@ -28,7 +30,7 @@ public class RecomendacaoController {
     })
     @GetMapping
     public ResponseEntity<List<RecomendacaoResponseDTO>> recomendacao() {
-        return ResponseEntity.ok(recomendacaoService.listarRecomendacoes().stream().map(RecomendacaoMapper::toRecomendacaoResponseDto).toList());
+        return ResponseEntity.ok(recomendacaoService.listarRecomendacoes().stream().map(recomendacaoMapper::toRecomendacaoResponseDto).toList());
     }
 
 //    @Operation(summary = "Cria recomendação", description = "Retorna o produto recomendado")
@@ -50,6 +52,6 @@ public class RecomendacaoController {
     })
     @PutMapping("/{id}")
     public ResponseEntity<RecomendacaoResponseDTO> alterarRecomendacao(@PathVariable Integer id, @RequestBody @Valid RecomendacaoRequisitionDTO recomendacaoDTO) {
-        return ResponseEntity.ok(RecomendacaoMapper.toRecomendacaoResponseDto(recomendacaoService.atualizarRecomendacao(id, recomendacaoDTO.getProdutoId())));
+        return ResponseEntity.ok(recomendacaoMapper.toRecomendacaoResponseDto(recomendacaoService.atualizarRecomendacao(id, recomendacaoDTO.getProdutoId())));
     }
 }

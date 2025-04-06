@@ -25,6 +25,8 @@ public class NotificacaoController {
 
     private final NotificacaoService service;
 
+    private final NotificacaoMapper notificacaoMapper;
+
     @Operation(summary = "Lista todos alertas de notificação pendentes", description = "Retorna a lista de alertas")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Operação bem-sucedida, Alertas de produtos listados"),
@@ -34,7 +36,7 @@ public class NotificacaoController {
     @GetMapping
     public ResponseEntity<List<NotificacaoResponseDTO>> listarNotificacoes() {
         List<Notificacao> notificacoes = service.listarNotificacoes();
-        return ResponseEntity.ok(notificacoes.stream().map(NotificacaoMapper::toResponseNotificacaoDto).toList());
+        return ResponseEntity.ok(notificacoes.stream().map(notificacaoMapper::toResponseNotificacaoDto).toList());
     }
 
     @Operation(summary = "Cria um alerta de notificacao", description = "Retorna o alerta de notificação criado")
@@ -44,6 +46,6 @@ public class NotificacaoController {
     })
     @PostMapping
     public ResponseEntity<List<NotificacaoResponseDTO>> criarNotificacao(@RequestBody @Valid NotificacaoRequisitionDTO novaNotificacao) {
-        return ResponseEntity.created(null).body(service.criarNotificacao(novaNotificacao.getEmail(), novaNotificacao.getIdProdutos()).stream().map(NotificacaoMapper::toResponseNotificacaoDto).toList());
+        return ResponseEntity.created(null).body(service.criarNotificacao(novaNotificacao.getEmail(), novaNotificacao.getIdProdutos()).stream().map(notificacaoMapper::toResponseNotificacaoDto).toList());
     }
 }

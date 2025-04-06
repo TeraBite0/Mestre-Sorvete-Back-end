@@ -4,15 +4,21 @@ import grupo.terabite.terabite.dto.response.DestaqueResponseDTO;
 import grupo.terabite.terabite.dto.requisition.DestaqueRequisitionDTO;
 import grupo.terabite.terabite.entity.Destaque;
 import grupo.terabite.terabite.service.ProdutoService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
+@Component
+@RequiredArgsConstructor
 public class DestaqueMapper {
 
-    public static DestaqueResponseDTO toDestaqueResponseDTO(Destaque entity){
+    private final ProdutoMapper produtoMapper;
+
+    public DestaqueResponseDTO toDestaqueResponseDTO(Destaque entity){
         if (entity == null) return null;
 
         return DestaqueResponseDTO.builder()
                 .texto(entity.getTexto())
-                .produto(ProdutoMapper.toResponseDto(entity.getProduto()))
+                .produto(produtoMapper.toResponseDto(entity.getProduto()))
                 .build();
     }
 

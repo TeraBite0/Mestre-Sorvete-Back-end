@@ -19,6 +19,8 @@ public class LoteController {
 
     private final LoteService loteService;
 
+    private final LoteMapper loteMapper;
+
     @Operation(summary = "Busca um lote pelo ID", description = "Retorna um lote com base no seu ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Operação bem sucedida, Lote retornado"),
@@ -27,7 +29,7 @@ public class LoteController {
     })
     @GetMapping("/{id}")
     public ResponseEntity<LoteResponseDTO> buscarPorId(@PathVariable Integer id) {
-        return ResponseEntity.ok(LoteMapper.toResponseDto(loteService.buscarPorId(id)));
+        return ResponseEntity.ok(loteMapper.toResponseDto(loteService.buscarPorId(id)));
     }
 
     @Operation(summary = "Registra um lote", description = "Retorna o lote registrado")
@@ -38,7 +40,7 @@ public class LoteController {
     })
     @PostMapping
     public ResponseEntity<LoteResponseDTO> adicionarLote(@RequestBody LoteRequisitionDTO novoLote) {
-        return ResponseEntity.created(null).body(LoteMapper.toResponseDto(loteService.criarLote(LoteMapper.toEntity(novoLote), novoLote.getNomeFornecedor())));
+        return ResponseEntity.created(null).body(loteMapper.toResponseDto(loteService.criarLote(LoteMapper.toEntity(novoLote), novoLote.getNomeFornecedor())));
     }
 
     @Operation(summary = "Atualiza um lote apartir de um id", description = "Retorna o lote atualizado com base no seu ID")
@@ -50,7 +52,7 @@ public class LoteController {
     })
     @PutMapping("/{id}")
     public ResponseEntity<LoteResponseDTO> atualizarLote(@PathVariable Integer id, @RequestBody LoteRequisitionDTO loteAtualizado) {
-        return ResponseEntity.ok(LoteMapper.toResponseDto(loteService.atualizarLote(id, LoteMapper.toEntity(loteAtualizado))));
+        return ResponseEntity.ok(loteMapper.toResponseDto(loteService.atualizarLote(id, LoteMapper.toEntity(loteAtualizado))));
     }
 
     @Operation(summary = "Deleta um lote pelo ID", description = "Deleta lote e retorna o sucesso da exclusão")
@@ -73,6 +75,6 @@ public class LoteController {
     })
     @PatchMapping("/{id}")
     public ResponseEntity<LoteResponseDTO> atualizarStatusLote(@PathVariable Integer id, @RequestBody LoteStatusRequisitionDTO loteUpdateStatus) {
-        return ResponseEntity.ok(LoteMapper.toResponseDto(loteService.atualizarStatusLote(id, LoteMapper.toRequisitionUpdateStatusDTO(loteUpdateStatus))));
+        return ResponseEntity.ok(loteMapper.toResponseDto(loteService.atualizarStatusLote(id, LoteMapper.toRequisitionUpdateStatusDTO(loteUpdateStatus))));
     }
 }

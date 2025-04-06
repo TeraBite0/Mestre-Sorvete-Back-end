@@ -6,6 +6,8 @@ import grupo.terabite.terabite.dto.response.SaidaEstoqueResponseDTO;
 import grupo.terabite.terabite.dto.response.SaidaEstoqueResponseGroupDTO;
 import grupo.terabite.terabite.entity.Produto;
 import grupo.terabite.terabite.entity.SaidaEstoque;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -13,7 +15,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Component
+@RequiredArgsConstructor
 public class SaidaEstoqueMapper {
+
+    private final ProdutoMapper produtoMapper;
+
     public static List<SaidaEstoque> toEntityList(SaidaEstoqueRequisitionGroupDTO saidaEstoqueRequisitionGroupDTO) {
         if (saidaEstoqueRequisitionGroupDTO == null) return null;
 
@@ -31,7 +38,7 @@ public class SaidaEstoqueMapper {
         return saidaEstoques;
     }
 
-    public static List<SaidaEstoqueResponseGroupDTO> toSaidaEstoqueResponseGroupDTO(List<SaidaEstoque> saidaEstoques) {
+    public List<SaidaEstoqueResponseGroupDTO> toSaidaEstoqueResponseGroupDTO(List<SaidaEstoque> saidaEstoques) {
         if (saidaEstoques == null) return null;
         List<SaidaEstoqueResponseGroupDTO> responseGroupDTOList = new ArrayList<>();
         Map<LocalDate, List<SaidaEstoque>> saidaEstoqueMap = saidaEstoques.stream().collect(Collectors.groupingBy(SaidaEstoque::getDtSaida));
@@ -45,10 +52,10 @@ public class SaidaEstoqueMapper {
         return responseGroupDTOList;
     }
 
-    public static SaidaEstoqueResponseDTO toSaidaEstoqueResponseDTO(SaidaEstoque saidaEstoque){
+    public SaidaEstoqueResponseDTO toSaidaEstoqueResponseDTO(SaidaEstoque saidaEstoque){
         if (saidaEstoque == null) return null;
 
-        return new SaidaEstoqueResponseDTO(ProdutoMapper.toResponseDto(saidaEstoque.getProduto()), saidaEstoque.getQtdCaixasSaida());
+        return new SaidaEstoqueResponseDTO(produtoMapper.toResponseDto(saidaEstoque.getProduto()), saidaEstoque.getQtdCaixasSaida());
     }
 
     public static SaidaEstoque toSaidaEstoque(SaidaEstoqueRequisitionDTO saidaEstoqueRequisitionDTO) {
@@ -60,14 +67,14 @@ public class SaidaEstoqueMapper {
                 saidaEstoqueRequisitionDTO.getQtdCaixasSaida());
     }
 
-    private static List<SaidaEstoqueResponseDTO> toSaidaEstoqueResponseDTOS(List<SaidaEstoque> saidaEstoques) {
+    private List<SaidaEstoqueResponseDTO> toSaidaEstoqueResponseDTOS(List<SaidaEstoque> saidaEstoques) {
         if (saidaEstoques == null) return null;
 
         List<SaidaEstoqueResponseDTO> saidaEstoqueResponseDTOS = new ArrayList<>();
 
         saidaEstoques.forEach(
                 se -> saidaEstoqueResponseDTOS.add(
-                        new SaidaEstoqueResponseDTO(ProdutoMapper.toResponseDto(se.getProduto()), se.getQtdCaixasSaida())
+                        new SaidaEstoqueResponseDTO(produtoMapper.toResponseDto(se.getProduto()), se.getQtdCaixasSaida())
                 )
         );
 

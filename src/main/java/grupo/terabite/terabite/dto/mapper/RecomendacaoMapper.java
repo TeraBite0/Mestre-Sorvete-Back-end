@@ -4,15 +4,20 @@ import grupo.terabite.terabite.dto.requisition.RecomendacaoRequisitionDTO;
 import grupo.terabite.terabite.dto.response.RecomendacaoResponseDTO;
 import grupo.terabite.terabite.entity.Recomendacao;
 import grupo.terabite.terabite.service.ProdutoService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
+@Component
+@RequiredArgsConstructor
 public class RecomendacaoMapper {
+    private final ProdutoMapper produtoMapper;
 
-    public static RecomendacaoResponseDTO toRecomendacaoResponseDto(Recomendacao entity){
+    public RecomendacaoResponseDTO toRecomendacaoResponseDto(Recomendacao entity){
         if (entity == null) return null;
 
         return RecomendacaoResponseDTO.builder()
                 .id(entity.getId())
-                .produto(ProdutoMapper.toResponseDto(entity.getProduto()))
+                .produto(produtoMapper.toResponseDto(entity.getProduto()))
                 .build();
     }
 

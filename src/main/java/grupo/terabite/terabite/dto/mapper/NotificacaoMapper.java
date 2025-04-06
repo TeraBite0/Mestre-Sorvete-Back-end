@@ -1,13 +1,17 @@
 package grupo.terabite.terabite.dto.mapper;
 
-import grupo.terabite.terabite.dto.requisition.NotificacaoRequisitionDTO;
 import grupo.terabite.terabite.dto.response.*;
 import grupo.terabite.terabite.entity.*;
-import grupo.terabite.terabite.service.ProdutoService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
+@Component
+@RequiredArgsConstructor
 public class NotificacaoMapper {
 
-    public static NotificacaoResponseDTO toResponseNotificacaoDto(Notificacao notificacao) {
+    private final ProdutoMapper produtoMapper;
+
+    public NotificacaoResponseDTO toResponseNotificacaoDto(Notificacao notificacao) {
         if (notificacao == null) return null;
 
         Produto produto = notificacao.getProduto();
@@ -15,7 +19,7 @@ public class NotificacaoMapper {
         return NotificacaoResponseDTO.builder()
                 .id(notificacao.getId())
                 .email(notificacao.getEmail())
-                .produtoResponseDTO(ProdutoMapper.toResponseDto(produto))
+                .produtoResponseDTO(produtoMapper.toResponseDto(produto))
                 .build();
     }
 }

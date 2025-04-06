@@ -25,9 +25,7 @@ public class ProdutoController {
 
     private final ProdutoService produtoService;
 
-    private final AwsBucketService awsBucketService;
-
-    private final ProdutoMapper produtoMapper = new ProdutoMapper(awsBucketService);
+    private final ProdutoMapper produtoMapper;
 
     @Operation(summary = "Lista todos produtos", description = "Retorna uma lista com todos os produtos")
     @ApiResponses(value = {

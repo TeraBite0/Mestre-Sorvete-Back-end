@@ -1,5 +1,6 @@
 package grupo.terabite.terabite.controller;
 
+import grupo.terabite.terabite.dto.mapper.ProdutoMapper;
 import grupo.terabite.terabite.dto.mapper.SaidaEstoqueMapper;
 import grupo.terabite.terabite.dto.requisition.SaidaEstoqueRequisitionDTO;
 import grupo.terabite.terabite.dto.requisition.SaidaEstoqueRequisitionGroupDTO;
@@ -22,6 +23,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SaidaEstoqueController {
     private final SaidaEstoqueService saidaEstoqueService;
+    private final SaidaEstoqueMapper saidaEstoqueMapper;
 
     @Operation(summary = "Lista todas saidas de estoque", description = "Retorna a saidas de estoque")
     @ApiResponses(value = {
@@ -32,7 +34,7 @@ public class SaidaEstoqueController {
     @GetMapping
     public ResponseEntity<List<SaidaEstoqueResponseGroupDTO>> listarSaidas(){
         List<SaidaEstoque> saidaEstoques = saidaEstoqueService.listar();
-        return ResponseEntity.ok(SaidaEstoqueMapper.toSaidaEstoqueResponseGroupDTO(saidaEstoques));
+        return ResponseEntity.ok(saidaEstoqueMapper.toSaidaEstoqueResponseGroupDTO(saidaEstoques));
     }
 
     @Operation(summary = "Registra varias saidas de estoque", description = "Retorna a o grupo de saidas estoques criados")
@@ -42,7 +44,7 @@ public class SaidaEstoqueController {
     })
     @PostMapping
     public ResponseEntity<List<SaidaEstoqueResponseGroupDTO>> criarSaidaEstoque(@RequestBody @Valid SaidaEstoqueRequisitionGroupDTO saidaEstoqueRequisitionGroupDTO) {
-        return ResponseEntity.created(null).body(SaidaEstoqueMapper.toSaidaEstoqueResponseGroupDTO(saidaEstoqueService.registrarSaida(SaidaEstoqueMapper.toEntityList(saidaEstoqueRequisitionGroupDTO))));
+        return ResponseEntity.created(null).body(saidaEstoqueMapper.toSaidaEstoqueResponseGroupDTO(saidaEstoqueService.registrarSaida(SaidaEstoqueMapper.toEntityList(saidaEstoqueRequisitionGroupDTO))));
     }
 
     @Operation(summary = "Atualiza uma saida de estoque", description = "Retorna a saida de estoque atualizada caso sucesso")
@@ -55,7 +57,7 @@ public class SaidaEstoqueController {
     })
     @PutMapping("/{id}")
     public ResponseEntity<SaidaEstoqueResponseDTO> atualizarSaidaEstoque(@PathVariable Integer id, @RequestBody @Valid SaidaEstoqueRequisitionDTO saidaEstoqueRequisitionDTO) {
-        return ResponseEntity.ok(SaidaEstoqueMapper.toSaidaEstoqueResponseDTO(saidaEstoqueService.editarSaida(id, SaidaEstoqueMapper.toSaidaEstoque(saidaEstoqueRequisitionDTO))));
+        return ResponseEntity.ok(saidaEstoqueMapper.toSaidaEstoqueResponseDTO(saidaEstoqueService.editarSaida(id, SaidaEstoqueMapper.toSaidaEstoque(saidaEstoqueRequisitionDTO))));
     }
 
     @Operation(summary = "Deleta um conjunto de saidas Estoque por seus IDs", description = "Deleta as saidas estoques e retorna o sucesso da exclusão")

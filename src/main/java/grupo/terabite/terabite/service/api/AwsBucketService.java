@@ -5,12 +5,12 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.amazonaws.services.s3.model.PutObjectResult;
 import grupo.terabite.terabite.entity.Produto;
 import grupo.terabite.terabite.repository.ProdutoRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -19,13 +19,13 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Set;
 
+@Service
+@RequiredArgsConstructor
 public class AwsBucketService {
 
-    @Autowired
-    private AmazonS3 client;
+    final private AmazonS3 client;
 
-    @Autowired
-    private ProdutoRepository produtoRepository;
+    final private ProdutoRepository produtoRepository;
 
     @Value("${app.s3.bucket}")
     private String bucketName;
@@ -76,7 +76,7 @@ public class AwsBucketService {
         return client.generatePresignedUrl(generatePresignedUrlRequest).toString();
     }
 
-    protected String imagemProduto(Integer idProduto, String tipoArquivo){
-        return gerarUrlImagem("PRODUTO_" + String.format("%06", idProduto) + tipoArquivo);
+    public String imagemProduto(Integer idProduto, String tipoArquivo){
+        return tipoArquivo == null? null : gerarUrlImagem("PRODUTO_" + String.format("%06", idProduto) + tipoArquivo);
     }
 }

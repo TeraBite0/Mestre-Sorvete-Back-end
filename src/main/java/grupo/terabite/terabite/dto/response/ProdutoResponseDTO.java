@@ -31,4 +31,5 @@ public class ProdutoResponseDTO {
 
     private String marca;
 
+    private String imagemUrl;
 }

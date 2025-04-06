@@ -6,10 +6,18 @@ import grupo.terabite.terabite.entity.Marca;
 import grupo.terabite.terabite.entity.Produto;
 import grupo.terabite.terabite.entity.Subtipo;
 import grupo.terabite.terabite.entity.Tipo;
+import grupo.terabite.terabite.service.api.AwsBucketService;
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
+@Component
+@AllArgsConstructor
 public class ProdutoMapper {
 
-    public static ProdutoResponseDTO toResponseDto(Produto produto) {
+    private final AwsBucketService awsBucketService;
+
+    public ProdutoResponseDTO toResponseDto(Produto produto) {
         if (produto == null) return null;
 
         Marca marca = produto.getMarca();
@@ -29,10 +37,11 @@ public class ProdutoMapper {
                 .marca(marca.getNome())
                 .subtipo(subtipo.getNome())
                 .tipo(tipo.getNome())
+                .imagemUrl(awsBucketService.imagemProduto(produto.getId(), produto.getTipoImagem()))
                 .build();
     }
 
-    public static Produto toCreateProduto(ProdutoRequisitionDTO entity) {
+    public Produto toCreateProduto(ProdutoRequisitionDTO entity) {
         if (entity == null) return null;
 
         return Produto.builder()

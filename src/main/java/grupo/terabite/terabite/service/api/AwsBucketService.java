@@ -23,12 +23,12 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class AwsBucketService {
 
-    final private AmazonS3 client;
+    // final private AmazonS3 client;
 
     final private ProdutoRepository produtoRepository;
 
-    @Value("${app.s3.bucket}")
-    private String bucketName;
+//    @Value("${app.s3.bucket}")
+//    final private String bucketName;
 
     public String salvarImagem(Integer idProduto, MultipartFile arquivo){
         Produto produto = produtoRepository.findById(idProduto).orElse(null);
@@ -51,11 +51,11 @@ public class AwsBucketService {
         ObjectMetadata metaData = new ObjectMetadata();
         metaData.setContentLength(arquivo.getSize());
 
-        try {
-            client.putObject(new PutObjectRequest(bucketName, nomeArquivo, arquivo.getInputStream(), metaData));
-        } catch (IOException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Erro ao realizar upload da imagem no S3");
-        }
+//        try {
+//            client.putObject(new PutObjectRequest(bucketName, nomeArquivo, arquivo.getInputStream(), metaData));
+//        } catch (IOException e) {
+//            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Erro ao realizar upload da imagem no S3");
+//        }
 
         produto.setTipoImagem(tipoArquivo);
         produtoRepository.save(produto);
@@ -69,11 +69,12 @@ public class AwsBucketService {
         calendar.add(Calendar.HOUR_OF_DAY, 1);
         Date expirationDate = calendar.getTime();
 
-        GeneratePresignedUrlRequest generatePresignedUrlRequest = new GeneratePresignedUrlRequest(bucketName, fileName)
-                .withMethod(HttpMethod.GET)
-                .withExpiration(expirationDate);
+//        GeneratePresignedUrlRequest generatePresignedUrlRequest = new GeneratePresignedUrlRequest(bucketName, fileName)
+//                .withMethod(HttpMethod.GET)
+//                .withExpiration(expirationDate);
 
-        return client.generatePresignedUrl(generatePresignedUrlRequest).toString();
+        //return client.generatePresignedUrl(generatePresignedUrlRequest).toString();
+        return null;
     }
 
     public String imagemProduto(Integer idProduto, String tipoArquivo){

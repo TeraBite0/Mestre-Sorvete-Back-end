@@ -6,6 +6,8 @@ import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectResult;
+import grupo.terabite.terabite.entity.Produto;
+import grupo.terabite.terabite.repository.ProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -22,12 +24,20 @@ public class AwsBucketService {
     @Autowired
     private AmazonS3 client;
 
+    @Autowired
+    private ProdutoRepository produtoRepository;
+
     @Value("${app.s3.bucket}")
     private String bucketName;
 
     public String salvarImagem(Integer idProduto, MultipartFile arquivo){
+        Produto produto = produtoRepository.findById(idProduto).orElse(null);
+
+        if(produto == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Produto não encontrado");
+
         String nomeOriginalArquivo = arquivo.getOriginalFilename();
-        String nomeArquivo = "produto" + idProduto + nomeOriginalArquivo.substring(nomeOriginalArquivo.indexOf("."));
+        String tipoArquivo = nomeOriginalArquivo.substring(nomeOriginalArquivo.indexOf("."));
+        String nomeArquivo = "PRODUTO_" + String.format("%06", idProduto) + tipoArquivo;
         Set<String> tiposArquivosPermitidos = Set.of(
                 ".png",
                 ".jpg",
@@ -35,17 +45,20 @@ public class AwsBucketService {
         );
 
         if(!tiposArquivosPermitidos.contains(nomeOriginalArquivo.substring(nomeOriginalArquivo.indexOf(".")))){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "O tipo de arquivo passado não é permitido");
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "O tipo de arquivo passado não é permitido");
         }
 
         ObjectMetadata metaData = new ObjectMetadata();
         metaData.setContentLength(arquivo.getSize());
 
         try {
-            PutObjectResult putObjectResult = client.putObject(new PutObjectRequest(bucketName, nomeArquivo, arquivo.getInputStream(), metaData));
+            client.putObject(new PutObjectRequest(bucketName, nomeArquivo, arquivo.getInputStream(), metaData));
         } catch (IOException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Erro ao realizar upload da imagem no S3");
         }
+
+        produto.setTipoImagem(tipoArquivo);
+        produtoRepository.save(produto);
 
         return gerarUrlImagem(nomeArquivo);
     }
@@ -61,5 +74,9 @@ public class AwsBucketService {
                 .withExpiration(expirationDate);
 
         return client.generatePresignedUrl(generatePresignedUrlRequest).toString();
+    }
+
+    protected String imagemProduto(Integer idProduto, String tipoArquivo){
+        return gerarUrlImagem("PRODUTO_" + String.format("%06", idProduto) + tipoArquivo);
     }
 }

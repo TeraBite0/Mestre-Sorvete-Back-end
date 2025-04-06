@@ -24,7 +24,9 @@ public class ImagemController {
     AwsBucketService awsBucketService;
 
     @PostMapping("/produto/upload")
-    public ResponseEntity<String> upload(@RequestParam Integer idProduto, @RequestParam("file") MultipartFile imagem){
-        return ResponseEntity.ok(awsBucketService.salvarImagem(idProduto, imagem));
+    public ResponseEntity<String> upload(@RequestParam Integer idProduto, @RequestParam("file") MultipartFile arquivo){
+        if(arquivo == null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Uma imagem é necessária para o upload");
+
+        return ResponseEntity.ok(awsBucketService.salvarImagem(idProduto, arquivo));
     }
 }

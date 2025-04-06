@@ -1,19 +1,30 @@
 package grupo.terabite.terabite.controller;
 
+import grupo.terabite.terabite.service.api.AwsBucketService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/images")
 public class ImagemController {
 
-    @PostMapping("/upload")
-    public ResponseEntity<String> upload(@RequestParam Integer idProduto, @RequestParam("file") MultipartFile file){
-        return ResponseEntity.ok("Imagem " + file.getOriginalFilename() + " recebida para o produto " + idProduto);
+    @Autowired
+    AwsBucketService awsBucketService;
+
+    @PostMapping("/produto/upload")
+    public ResponseEntity<String> upload(@RequestParam Integer idProduto, @RequestParam("file") MultipartFile imagem){
+        return ResponseEntity.ok(awsBucketService.salvarImagem(idProduto, imagem));
     }
 }

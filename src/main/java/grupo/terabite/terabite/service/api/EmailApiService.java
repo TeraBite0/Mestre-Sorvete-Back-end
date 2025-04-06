@@ -22,10 +22,10 @@ import java.util.Scanner;
 @Service
 public class EmailApiService {
 
-    @Value("${EMAIL_BENEFICIARIO}")
+    @Value("${javax.email}")
     private String username;
 
-    @Value("${SENHA_APP_EMAIL}")
+    @Value("${javax.senha-app}")
     private String password;
 
 

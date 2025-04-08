@@ -16,21 +16,15 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
 @RequiredArgsConstructor
 public class Escritor {
     private final LoteRepository loteRepository;
-    private final LoteProdutoRepository loteProdutoRepository;
     private final ProdutoRepository produtoRepository;
     private final SaidaEstoqueRepository saidaEstoqueRepository;
-    private final NotificacaoRepository notificacaoRepository;
-    private List<LoteRepository> loteRepositoryList;
-    private List<LoteProdutoRepository> loteProdutoRepositoryList;
-    private List<Produto> produtoList;
-    private List<SaidaEstoque> saidaEstoqueList;
-    private List<NotificacaoRepository> notificacaoRepositoryList;
 
     // gera um relatório com base nos registros do mês passado (lotes, saidaEstoq)
     public void gerarRelatorio() {
@@ -46,6 +40,7 @@ public class Escritor {
 
         escreverProdutos(workbook);
         escreverLotes(workbook);
+        escreverLoteProduto(workbook);
 
         try (FileOutputStream out = new FileOutputStream("relatorio.xlsx")) {
             workbook.write(out);
@@ -93,8 +88,7 @@ public class Escritor {
 
     private void escreverLotes(Workbook workbook) {
         Sheet sheet = workbook.getSheet("Lotes");
-        //List<Lote> lotes = lisarLotes();
-        List<Lote> lotes = loteRepository.findAll(); // para teste
+        List<Lote> lotes = lisarLotes();
         int rowIndex = 2;
 
         CreationHelper createHelper = workbook.getCreationHelper();
@@ -121,6 +115,23 @@ public class Escritor {
         }
     }
 
+    private void escreverLoteProduto(Workbook workbook) {
+        Sheet sheet = workbook.getSheet("Produtos por Lote");
+        List<LoteProduto> loteProdutos = listarLoteProdutos();
+        int rowIndex = 2;
+
+        for (LoteProduto lp : loteProdutos) {
+            Row row = sheet.createRow(rowIndex++);
+            row.createCell(0).setCellValue(lp.getId());
+            row.createCell(1).setCellValue(lp.getLote().getId());
+            row.createCell(2).setCellValue(lp.getProduto().getNome());
+            row.createCell(3).setCellValue(lp.getProduto().getMarca().getNome());
+            row.createCell(4).setCellValue(lp.getProduto().getSubtipo().getTipo().getNome());
+            row.createCell(5).setCellValue(lp.getProduto().getSubtipo().getNome());
+            row.createCell(6).setCellValue(lp.getQtdCaixasCompradas());
+        }
+    }
+
     private List<Produto> listarProdutos() {
         return produtoRepository.findAll();
     }
@@ -128,7 +139,17 @@ public class Escritor {
     private List<Lote> lisarLotes() {
         //retorna lotes com dtPedido do mês anterior
         LocalDate dataLotes = LocalDate.now().minusDays(LocalDate.now().getDayOfMonth());
-        return loteRepository.findByDtPedidoBefore(dataLotes);
+        //return loteRepository.findByDtPedidoBefore(dataLotes);
+        return loteRepository.findAll(); // para teste
+    }
+
+    private List<LoteProduto> listarLoteProdutos() {
+        List<List<LoteProduto>> loteProdutosListList = lisarLotes().stream().map(Lote::getLoteProdutos).toList();
+        List<LoteProduto> loteProdutos = new ArrayList<>();
+        for (List<LoteProduto> l : loteProdutosListList) {
+            loteProdutos.addAll(l);
+        }
+        return loteProdutos;
     }
 
     private void erro(String mensagem) {

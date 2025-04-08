@@ -61,7 +61,7 @@ public class SecurityConfiguracao {
             new AntPathRequestMatcher("/produtos/recomendacao"),
             new AntPathRequestMatcher("/produtos/ativos"),
             new AntPathRequestMatcher("/notificacoes"),
-            new AntPathRequestMatcher("/images/**"),
+            new AntPathRequestMatcher("/**"),
     };
 
     @Bean

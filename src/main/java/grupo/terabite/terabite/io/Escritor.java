@@ -41,6 +41,7 @@ public class Escritor {
         escreverProdutos(workbook);
         escreverLotes(workbook);
         escreverLoteProduto(workbook);
+        escreverSaidaEstoque(workbook);
 
         try (FileOutputStream out = new FileOutputStream("relatorio.xlsx")) {
             workbook.write(out);
@@ -91,9 +92,7 @@ public class Escritor {
         List<Lote> lotes = lisarLotes();
         int rowIndex = 2;
 
-        CreationHelper createHelper = workbook.getCreationHelper();
-        CellStyle dateCellStyle = workbook.createCellStyle();
-        dateCellStyle.setDataFormat(createHelper.createDataFormat().getFormat("dd/MM/yyyy"));
+        CellStyle dateCellStyle = estiloDataCelula(workbook);
 
         for (Lote l : lotes) {
             Row row = sheet.createRow(rowIndex++);
@@ -132,6 +131,27 @@ public class Escritor {
         }
     }
 
+    private void escreverSaidaEstoque(Workbook workbook){
+        Sheet sheet = workbook.getSheet("Baixas de Estoque");
+        List<SaidaEstoque> saidaEstoques = listarSaidaEstoques();
+        int rowIndex = 2;
+
+        CreationHelper createHelper = workbook.getCreationHelper();
+        CellStyle dateCellStyle = estiloDataCelula(workbook);
+
+        for(SaidaEstoque se: saidaEstoques){
+            Row row = sheet.createRow(rowIndex++);
+            row.createCell(0).setCellValue(se.getId());
+            row.createCell(1).setCellValue(se.getProduto().getNome());
+            row.createCell(2).setCellValue(se.getProduto().getMarca().getNome());
+            row.createCell(3).setCellValue(se.getProduto().getSubtipo().getTipo().getNome());
+            row.createCell(4).setCellValue(se.getProduto().getSubtipo().getNome());
+            row.createCell(5).setCellStyle(dateCellStyle);
+            row.createCell(5).setCellValue(se.getDtSaida());
+            row.createCell(6).setCellValue(se.getQtdCaixasSaida());
+        }
+    }
+
     private List<Produto> listarProdutos() {
         return produtoRepository.findAll();
     }
@@ -150,6 +170,19 @@ public class Escritor {
             loteProdutos.addAll(l);
         }
         return loteProdutos;
+    }
+
+    private List<SaidaEstoque> listarSaidaEstoques(){
+        LocalDate dataSaidaEstoque = LocalDate.now().minusDays(LocalDate.now().getDayOfMonth());
+        // return saidaEstoqueRepository.findByDtSaidaBefore(dataSaidaEstoque);
+        return saidaEstoqueRepository.findAll();
+    }
+
+    private CellStyle estiloDataCelula(Workbook workbook){
+        CreationHelper createHelper = workbook.getCreationHelper();
+        CellStyle dateCellStyle = workbook.createCellStyle();
+        dateCellStyle.setDataFormat(createHelper.createDataFormat().getFormat("dd/MM/yyyy"));
+        return dateCellStyle;
     }
 
     private void erro(String mensagem) {

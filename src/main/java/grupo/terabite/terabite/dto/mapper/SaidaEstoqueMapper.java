@@ -28,7 +28,7 @@ public class SaidaEstoqueMapper {
         saidaEstoqueRequisitionGroupDTO.getSaidaEstoques().forEach(se ->
                 saidaEstoques.add(
                         new SaidaEstoque(se.getId(),
-                                Produto.builder().id(se.getId()).build(),
+                                Produto.builder().id(se.getProdutoId()).build(),
                                 saidaEstoqueRequisitionGroupDTO.getDtSaida(),
                                 se.getQtdCaixasSaida()
                         )

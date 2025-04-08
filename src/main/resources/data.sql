@@ -158,30 +158,6 @@ INSERT INTO USUARIO
         (EMAIL_USUARIO, SENHA_USUARIO)
 VALUES ('josue@gmail.com', '$2a$10$0/TKTGxdREbWaWjWYhwf6e9P1fPOAMMNqEnZgOG95jnSkHSfkkIrC');
 
-
---    INSERT INTO VENDAS
---            (DATA_COMPRA_VEND)
---    VALUES  ('2024-10-13T15:45:20'),
---            ('2024-12-06T15:45:20'),
---            ('2024-12-06T15:50:20'),
---            ('2025-02-08'),
---            ('2025-02-09'),
---            ('2025-02-10'),
---            ('2025-02-02'),
---            ('2025-02-01');
---
---    INSERT INTO VENDAS_PRODUTO
---            (FK_ID_VEND_VENP, FK_ID_PROD_VENP, QTD_PRODUTOS_VENDIDO)
---    VALUES  (1, 2, 30),
---            (1, 3, 20),
---            (2, 6, 40),
---            (2, 20, 10),
---            (3, 9, 34),
---            (6, 62, 10),
---            (5, 78, 5),
---            (5, 90, 10),
---            (7, 3, 20);
-
 INSERT INTO NOTIFICACAO
        (EMAIL_NOTI, FK_ID_PROD_NOTI)
 VALUES ('bruno@gmail.com', 20),

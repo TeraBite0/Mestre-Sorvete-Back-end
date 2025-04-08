@@ -7,6 +7,7 @@ import lombok.*;
 import java.time.LocalDate;
 import java.util.List;
 
+@NoArgsConstructor
 @Entity
 @Table(name = "LOTE")
 public class Lote {
@@ -38,8 +39,7 @@ public class Lote {
     @Column(name = "VALOR_LOTE")
     private Double valorLote;
 
-    @Getter
-    private LoteStatusEnum status = LoteStatusEnum.AGUARDANDO_ENTREGA;
+    private LoteStatusEnum statusEnum = LoteStatusEnum.AGUARDANDO_ENTREGA;
 
     @Getter @Setter
     @Column(name = "OBSERVACAO_LOTE")
@@ -52,7 +52,7 @@ public class Lote {
     //Não criar getter, setter ou colocar no construtor, use o status (ENUM)
     @ManyToOne
     @JoinColumn(name = "FK_ID_STATUS_LOTE", referencedColumnName = "ID_LOTE_STATUS")
-    private LoteStatus statusObj;
+    private LoteStatus status;
 
     public Lote(Integer id, Fornecedor fornecedor, LocalDate dtEntrega, LocalDate dtVencimento, LocalDate dtPedido, Double valorLote, LoteStatusEnum status, String observacao, List<LoteProduto>loteProdutos) {
         this.id = id;
@@ -61,13 +61,18 @@ public class Lote {
         this.dtVencimento = dtVencimento;
         this.dtPedido = dtPedido;
         this.valorLote = valorLote;
-        this.status = status;
+        setStatus(status);
         this.observacao = observacao;
         this.loteProdutos = loteProdutos;
     }
 
-    public void setStatus(LoteStatusEnum status) {
-        this.statusObj = new LoteStatus(status.getId(), status.getStatus());
-        this.status = status;
+    public void setStatus(LoteStatusEnum statusEnum) {
+        if(statusEnum == null) return;
+        this.status = new LoteStatus(statusEnum.getId(), statusEnum.getStatus());
+        this.statusEnum = statusEnum;
+    }
+
+    public LoteStatusEnum getStatus() {
+        return statusEnum;
     }
 }

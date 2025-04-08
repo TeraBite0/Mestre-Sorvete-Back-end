@@ -9,7 +9,6 @@ import grupo.terabite.terabite.factory.DataFactory;
 import grupo.terabite.terabite.repository.LoteProdutoRepository;
 import grupo.terabite.terabite.repository.LoteRepository;
 import grupo.terabite.terabite.repository.SaidaEstoqueRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,8 +16,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;

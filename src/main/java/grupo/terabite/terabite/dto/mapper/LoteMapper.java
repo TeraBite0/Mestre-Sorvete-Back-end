@@ -13,7 +13,6 @@ import grupo.terabite.terabite.entity.enums.LoteStatusEnum;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 

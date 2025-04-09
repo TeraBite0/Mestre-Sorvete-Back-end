@@ -15,11 +15,9 @@ import org.springframework.web.server.ResponseStatusException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
-import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,6 +40,7 @@ public class Escritor {
             erro("Não foi possivel processar o modelo excel");
         }
 
+        escreverDashboard(workbook);
         escreverProdutos(workbook);
         escreverLotes(workbook);
         escreverLoteProduto(workbook);
@@ -57,6 +56,14 @@ public class Escritor {
             erro("Erro ao salvar relatório");
         }
         return nomeArquivo;
+    }
+
+    private void escreverDashboard(Workbook workbook){
+        Sheet sheet = workbook.getSheet("Dashboard");
+        CellStyle dateCellStyle = estiloDataCelula(workbook);
+        Row row = sheet.createRow(1);
+        row.createCell(0).setCellStyle(dateCellStyle);
+        row.createCell(0).setCellValue(LocalDate.now());
     }
 
     private void escreverProdutos(Workbook workbook) {
@@ -144,7 +151,6 @@ public class Escritor {
         List<SaidaEstoque> saidaEstoques = listarSaidaEstoques();
         int rowIndex = 2;
 
-        CreationHelper createHelper = workbook.getCreationHelper();
         CellStyle dateCellStyle = estiloDataCelula(workbook);
 
         for(SaidaEstoque se: saidaEstoques){

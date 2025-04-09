@@ -15,7 +15,11 @@ import org.springframework.web.server.ResponseStatusException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +31,7 @@ public class Escritor {
     private final SaidaEstoqueRepository saidaEstoqueRepository;
 
     // gera um relatório com base nos registros do mês passado (lotes, saidaEstoq)
-    public void gerarRelatorio() {
+    public String novoRelatorio() {
         InputStream file = getClass().getClassLoader().getResourceAsStream("excel/model.xlsx");
         if (file == null) erro("Modelo excel não encontrado");
 
@@ -43,12 +47,16 @@ public class Escritor {
         escreverLoteProduto(workbook);
         escreverSaidaEstoque(workbook);
 
-        try (FileOutputStream out = new FileOutputStream("relatorio.xlsx")) {
+        String diretorio = "relatorios";
+        String nomeArquivo = "novoRelatorio.xlsx";
+        Path caminhoDestino = Paths.get(diretorio, nomeArquivo);
+        try (FileOutputStream out = new FileOutputStream(caminhoDestino.toFile())) {
             workbook.write(out);
             workbook.close();
         } catch (IOException e) {
             erro("Erro ao salvar relatório");
         }
+        return nomeArquivo;
     }
 
     private void escreverProdutos(Workbook workbook) {

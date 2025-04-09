@@ -1,6 +1,9 @@
 package grupo.terabite.terabite.controller;
 
 import grupo.terabite.terabite.service.RelatorioService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
@@ -19,6 +22,10 @@ import java.time.YearMonth;
 public class RelatorioController {
     private final RelatorioService relatorioService;
 
+    @Operation(summary = "Retorna um relatorio em xlsx", description = "Retorna um relatorio com produtos atuais e lotes e saidas do mês anterior")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Relatório gerado com sucesso")
+    })
     @GetMapping
     public ResponseEntity<Resource> gerarRelatorio() {
         ByteArrayResource resource = relatorioService.gerarRelatorio();

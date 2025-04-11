@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 @AllArgsConstructor
 public class ProdutoMapper {
 
-    //private final AwsBucketService awsBucketService;
+    private final AwsBucketService awsBucketService;
 
     public ProdutoResponseDTO toResponseDto(Produto produto) {
         if (produto == null) return null;
@@ -37,7 +37,7 @@ public class ProdutoMapper {
                 .marca(marca.getNome())
                 .subtipo(subtipo.getNome())
                 .tipo(tipo.getNome())
-                //.imagemUrl(awsBucketService.imagemProduto(produto.getId(), produto.getTipoImagem()))
+                .imagemUrl(awsBucketService.imagemProduto(produto.getId(), produto.getTipoImagem()))
                 .build();
     }
 

@@ -45,4 +45,14 @@ public class MarcaController {
     public ResponseEntity<MarcaResponseDTO> criarMarca(@RequestBody @Valid MarcaRequisitionDTO marcaRequisitionDTO) {
         return ResponseEntity.created(null).body(MarcaMapper.toResponseDto(marcaService.criarMarca(MarcaMapper.toCreateMarca(marcaRequisitionDTO))));
     }
+
+//    @Operation(summary = "Registra uma marca", description = "Retorna a marca registrada")
+//    @ApiResponses(value = {
+//            @ApiResponse(responseCode = "201", description = "Marca criada com sucesso"),
+//            @ApiResponse(responseCode = "400", description = "Parâmetros inválidos")
+//    })
+//    @DeleteMapping
+//    public ResponseEntity<Void> deletarMarca(@PathVariable Integer id) {
+//        return ResponseEntity.created(null).body(MarcaMapper.toResponseDto(marcaService.criarMarca(MarcaMapper.toCreateMarca(marcaRequisitionDTO))));
+//    }
 }

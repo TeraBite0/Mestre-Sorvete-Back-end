@@ -8,8 +8,10 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import grupo.terabite.terabite.entity.Produto;
 import grupo.terabite.terabite.repository.ProdutoRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
@@ -20,15 +22,16 @@ import java.util.Date;
 import java.util.Set;
 
 @Service
-@RequiredArgsConstructor
 public class AwsBucketService {
 
-     final private AmazonS3 client;
+    @Autowired
+    private AmazonS3 client;
 
-    final private ProdutoRepository produtoRepository;
+    @Autowired
+    private ProdutoRepository produtoRepository;
 
     @Value("${app.s3.bucket}")
-    final private String bucketName;
+    private String bucketName;
 
     public String salvarImagem(Integer idProduto, MultipartFile arquivo){
         Produto produto = produtoRepository.findById(idProduto).orElse(null);
@@ -37,7 +40,7 @@ public class AwsBucketService {
 
         String nomeOriginalArquivo = arquivo.getOriginalFilename();
         String tipoArquivo = nomeOriginalArquivo.substring(nomeOriginalArquivo.indexOf("."));
-        String nomeArquivo = "PRODUTO_" + String.format("%06", idProduto) + tipoArquivo;
+        String nomeArquivo = "PRODUTO_" + String.format("%06d", idProduto) + tipoArquivo;
         Set<String> tiposArquivosPermitidos = Set.of(
                 ".png",
                 ".jpg",
@@ -77,6 +80,6 @@ public class AwsBucketService {
     }
 
     public String imagemProduto(Integer idProduto, String tipoArquivo){
-        return tipoArquivo == null? null : gerarUrlImagem("PRODUTO_" + String.format("%06", idProduto) + tipoArquivo);
+        return tipoArquivo == null? null : gerarUrlImagem("PRODUTO_" + String.format("%06d", idProduto) + tipoArquivo);
     }
 }

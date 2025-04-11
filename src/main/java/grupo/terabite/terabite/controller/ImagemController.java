@@ -20,13 +20,12 @@ import java.util.stream.Collectors;
 @RequestMapping("/images")
 public class ImagemController {
 
-    //@Autowired
-    //AwsBucketService awsBucketService;
+    @Autowired
+    AwsBucketService awsBucketService;
 
     @PostMapping("/produto/upload")
     public ResponseEntity<String> upload(@RequestParam Integer idProduto, @RequestParam("file") MultipartFile arquivo){
         if(arquivo == null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Uma imagem é necessária para o upload");
-        return null;
-        //return ResponseEntity.ok(awsBucketService.salvarImagem(idProduto, arquivo));
+        return ResponseEntity.ok(awsBucketService.salvarImagem(idProduto, arquivo));
     }
 }

@@ -3,6 +3,7 @@ package grupo.terabite.terabite.service;
 import grupo.terabite.terabite.entity.Marca;
 import grupo.terabite.terabite.factory.DataFactory;
 import grupo.terabite.terabite.repository.MarcaRepository;
+import grupo.terabite.terabite.repository.ProdutoRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,6 +29,9 @@ class MarcaServiceTest extends DataFactory {
 
     @Mock
     private MarcaRepository marcaRepository;
+
+    @Mock
+    private ProdutoRepository produtoRepository;
 
     @InjectMocks
     private MarcaService marcaService;
@@ -166,6 +170,7 @@ class MarcaServiceTest extends DataFactory {
     void deveDeletarMarcaSeExistente() {
         Integer id = 1;
         when(marcaRepository.existsById(id)).thenReturn(true);
+        when(produtoRepository.findByMarcaId(id)).thenReturn(List.of());
 
         try{
             marcaService.deletarMarca(id);

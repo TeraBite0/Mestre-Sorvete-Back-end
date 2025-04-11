@@ -4,6 +4,7 @@ import grupo.terabite.terabite.dto.requisition.MarcaRequisitionDTO;
 import grupo.terabite.terabite.dto.mapper.MarcaMapper;
 import grupo.terabite.terabite.dto.response.MarcaResponseDTO;
 import grupo.terabite.terabite.entity.Marca;
+import grupo.terabite.terabite.repository.ProdutoRepository;
 import grupo.terabite.terabite.service.MarcaService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -39,10 +40,24 @@ public class MarcaController {
     @Operation(summary = "Registra uma marca", description = "Retorna a marca registrada")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Marca criada com sucesso"),
-            @ApiResponse(responseCode = "400", description = "Parâmetros inválidos")
+            @ApiResponse(responseCode = "400", description = "Parâmetros inválidos"),
+            @ApiResponse(responseCode = "401", description = "Erro de requisição, Não autorizado")
     })
     @PostMapping
     public ResponseEntity<MarcaResponseDTO> criarMarca(@RequestBody @Valid MarcaRequisitionDTO marcaRequisitionDTO) {
         return ResponseEntity.created(null).body(MarcaMapper.toResponseDto(marcaService.criarMarca(MarcaMapper.toCreateMarca(marcaRequisitionDTO))));
+    }
+
+    @Operation(summary = "Deleta uma marca", description = "Deleta a marca registrada")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Marca deletada com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Parâmetros inválidos"),
+            @ApiResponse(responseCode = "401", description = "Erro de requisição, Não autorizado"),
+            @ApiResponse(responseCode = "409", description = "Marca associada a um ou mais produtos")
+    })
+    @DeleteMapping
+    public ResponseEntity<Void> deletarMarca(@RequestBody @Valid Integer id) {
+        marcaService.deletarMarca(id);
+        return ResponseEntity.noContent().build();
     }
 }

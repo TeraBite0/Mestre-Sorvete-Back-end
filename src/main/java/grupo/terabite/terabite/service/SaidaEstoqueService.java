@@ -45,7 +45,7 @@ public class SaidaEstoqueService {
             saidaEstoqueAtualizada.setProduto(saidaEstoque.getProduto());
         }
         saidaEstoqueAtualizada.setDtSaida(saidaEstoque.getDtSaida());
-        
+
         saidaEstoqueAtualizada = saidaEstoqueRepository.save(saidaEstoqueAtualizada);
         loteService.atualizarEstoqueProduto(List.of(saidaEstoqueAtualizada.getProduto()));
         return saidaEstoqueAtualizada;
@@ -56,6 +56,7 @@ public class SaidaEstoqueService {
 
         if(saidaEstoqueRepository.findAllById(ids).size() != ids.size()) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 
+        saidaEstoques.forEach(se -> se.setProduto(produtoService.buscarPorId(se.getProduto().getId())));
         loteService.atualizarEstoqueProduto(saidaEstoques.stream().map(SaidaEstoque::getProduto).toList());
         saidaEstoqueRepository.deleteAllById(ids);
     }

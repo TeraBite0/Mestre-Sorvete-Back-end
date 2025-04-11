@@ -4,7 +4,6 @@ import grupo.terabite.terabite.entity.Marca;
 import grupo.terabite.terabite.factory.DataFactory;
 import grupo.terabite.terabite.repository.MarcaRepository;
 import grupo.terabite.terabite.repository.ProdutoRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -52,7 +51,7 @@ class MarcaServiceTest extends DataFactory {
 
         List<Marca> marcasRetornadas;
 
-        try{
+        try {
             marcasRetornadas = marcaService.listarMarca();
         } catch (Exception e) {
             fail("Erro ao buscar marca: " + (e.getMessage() != null ? e.getMessage() : e.getCause()));
@@ -76,7 +75,7 @@ class MarcaServiceTest extends DataFactory {
         when(marcaRepository.findById(1)).thenReturn(Optional.of(marca));
 
         Marca resultado;
-        try{
+        try {
             resultado = marcaService.buscarPorId(1);
         } catch (Exception e) {
             fail("Erro ao buscar marca com ID existente: " + (e.getMessage() != null ? e.getMessage() : e.getCause()));
@@ -90,7 +89,7 @@ class MarcaServiceTest extends DataFactory {
 
     @Test
     @DisplayName("Quando buscar por marca isBlanck, deve lançar exceção 400 (BAD_REQUEST)")
-    void deveLancarExcecaoQuandoPassarNomeisBlanck(){
+    void deveLancarExcecaoQuandoPassarNomeisBlanck() {
         ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> marcaService.buscarPorNomeMarca(" "));
         assertEquals(HttpStatus.BAD_REQUEST, exception.getStatusCode(), "O status HTTP esperado é 400 (BAD_REQUEST)");
     }
@@ -137,16 +136,16 @@ class MarcaServiceTest extends DataFactory {
 
     @Test
     @DisplayName("Quando passar um Id que não existe no banco de dados para atualizar a marca, deve lançar exceção 404 (NOT_FOUND)")
-    void deveLancarExcecaoQuandoNaoExistirMarcaPorIdPassadoMetodoAtualizarMarca(){
+    void deveLancarExcecaoQuandoNaoExistirMarcaPorIdPassadoMetodoAtualizarMarca() {
         Marca marca = new Marca();
-        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> marcaService.atualizarMarca(50,marca));
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> marcaService.atualizarMarca(50, marca));
         assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode(), "O status HTTP esperado é 404 (NOT FOUND)");
     }
 
     @Test
     @DisplayName("Quando passar uma marca que existe no banco de dados, deve atualizar marca")
     void deveAtualizarMarcaSeIdExistir() {
-        Marca marcaExistente = new Marca(1,"Marca Original");
+        Marca marcaExistente = new Marca(1, "Marca Original");
         Marca marcaAtualizada = new Marca(null, "Marca Atualizada");
 
         when(marcaRepository.existsById(marcaExistente.getId())).thenReturn(true);
@@ -160,7 +159,7 @@ class MarcaServiceTest extends DataFactory {
 
     @Test
     @DisplayName("Quando passar um Id que não existe no banco de dados para deletar a marca, deve lançar exceção 404 (NOT_FOUND)")
-    void deveLancarExcecaoQuandoNaoExistirMarcaPorIdPassadoNoMetodoDeletar(){
+    void deveLancarExcecaoQuandoNaoExistirMarcaPorIdPassadoNoMetodoDeletar() {
         ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> marcaService.deletarMarca(50));
         assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode(), "O status HTTP esperado é 404 (NOT FOUND)");
     }
@@ -172,20 +171,22 @@ class MarcaServiceTest extends DataFactory {
         when(marcaRepository.existsById(id)).thenReturn(true);
         when(produtoRepository.findByMarcaId(id)).thenReturn(List.of());
 
-        try{
-            marcaService.deletarMarca(id);
-        } catch (Exception e) {
-            fail("Erro ao buscar marca com nome não existente: " + (e.getMessage() != null ? e.getMessage() : e.getCause()));
-            return;
-        }
+        marcaService.deletarMarca(id);
 
         verify(marcaRepository).existsById(id);
         verify(marcaRepository).deleteById(id);
+
+        marcaService.deletarMarca(id);
+
+        when(produtoRepository.findByMarcaId(id)).thenReturn(List.of(produtos.get(0)));
+
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> marcaService.deletarMarca(id));
+        assertEquals(HttpStatus.CONFLICT, exception.getStatusCode(), "O status HTTP esperado é 409 (CONFLICT)");
     }
 
     @Test
     @DisplayName("Quando passar um nome de marca que já existe no banco de dados, deve lançar exceção 409 (CONFLICT)")
-    void deveLancarExecaoQuandoPassarUmaMarcaQueJaExiste(){
+    void deveLancarExecaoQuandoPassarUmaMarcaQueJaExiste() {
         Marca marca = marcas.get(0);
         when(marcaService.buscarPorNomeMarca(marca.getNome())).thenReturn(marca);
 

@@ -30,6 +30,7 @@ public class SaidaEstoqueService {
     public List<SaidaEstoque> registrarSaida(List<SaidaEstoque> saidaEstoques){
         saidaEstoques.forEach(se -> se.setProduto(produtoService.buscarPorId(se.getProduto().getId()))); // atualiza os seus produtos com seus respectivos ids
         List<SaidaEstoque> saidaEstoquesNova = saidaEstoqueRepository.saveAll(saidaEstoques);
+
         loteService.atualizarEstoqueProduto(saidaEstoques.stream().map(SaidaEstoque::getProduto).toList());
         return saidaEstoquesNova;
     }
@@ -55,6 +56,7 @@ public class SaidaEstoqueService {
         Set<Integer> ids = saidaEstoques.stream().map(SaidaEstoque::getId).collect(Collectors.toSet());
 
         if(saidaEstoqueRepository.findAllById(ids).size() != ids.size()) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        saidaEstoques.forEach(se -> se.setProduto(produtoService.buscarPorId(se.getProduto().getId())));
 
         saidaEstoques.forEach(se -> se.setProduto(produtoService.buscarPorId(se.getProduto().getId())));
         loteService.atualizarEstoqueProduto(saidaEstoques.stream().map(SaidaEstoque::getProduto).toList());

@@ -2,6 +2,7 @@ package grupo.terabite.terabite.service;
 
 import grupo.terabite.terabite.entity.Tipo;
 import grupo.terabite.terabite.factory.DataFactory;
+import grupo.terabite.terabite.repository.ProdutoRepository;
 import grupo.terabite.terabite.repository.TipoRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -29,6 +30,9 @@ class TipoServiceTest extends DataFactory {
 
     @Mock
     private TipoRepository tipoRepository;
+
+    @Mock
+    private ProdutoRepository produtoRepository;
 
     @InjectMocks
     private TipoService tipoService;
@@ -147,5 +151,32 @@ class TipoServiceTest extends DataFactory {
         assertEquals(tipoSalvo.getNome(), resultado.getNome(), "O nome do tipo salva não está correto");
 
         verify(tipoRepository).save(ArgumentMatchers.argThat(tipo -> tipo.getId() == null && "Novo Tipo".equals(tipo.getNome())));
+    }
+
+    @Test
+    @DisplayName("Quando passar um Id que não existe no banco de dados para deletar o tipo, deve lançar exceção 404 (NOT_FOUND)")
+    void deveLancarExcecaoQuandoNaoExistirTipoPorIdPassadoNoMetodoDeletar() {
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> tipoService.deletarTipo(50));
+        assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode(), "O status HTTP esperado é 404 (NOT FOUND)");
+    }
+
+    @Test
+    @DisplayName("Quando passar um Id que existe no banco de dados, deve deletar o tipo por id")
+    void deveDeletarTipoSeExistente() {
+        Integer id = 1;
+        when(tipoRepository.existsById(id)).thenReturn(true);
+        when(produtoRepository.findBySubtipoTipoId(id)).thenReturn(List.of());
+
+        tipoService.deletarTipo(id);
+
+        verify(tipoRepository).existsById(id);
+        verify(tipoRepository).deleteById(id);
+
+        tipoService.deletarTipo(id);
+
+        when(produtoRepository.findBySubtipoTipoId(id)).thenReturn(List.of(produtos.get(0)));
+
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> tipoService.deletarTipo(id));
+        assertEquals(HttpStatus.CONFLICT, exception.getStatusCode(), "O status HTTP esperado é 409 (CONFLICT)");
     }
 }

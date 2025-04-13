@@ -28,6 +28,11 @@ public class Escritor {
     private final ProdutoRepository produtoRepository;
     private final SaidaEstoqueRepository saidaEstoqueRepository;
 
+    private List<Produto> produtos;
+    private List<Lote> lotes;
+    private List<SaidaEstoque> saidaEstoques;
+    private List<LoteProduto> loteProdutos;
+
     // gera um relatório com base nos registros do mês passado (lotes, saidaEstoq)
     public String novoRelatorio() {
         InputStream file = getClass().getClassLoader().getResourceAsStream("excel/model.xlsx");
@@ -40,6 +45,7 @@ public class Escritor {
             erro("Não foi possivel processar o modelo excel");
         }
 
+        listarDados();
         escreverDashboard(workbook);
         escreverProdutos(workbook);
         escreverLotes(workbook);
@@ -62,16 +68,15 @@ public class Escritor {
         Sheet sheet = workbook.getSheet("Dashboard");
         CellStyle dateCellStyle = estiloDataCelula(workbook);
         Row row = sheet.createRow(1);
-        row.createCell(0).setCellStyle(dateCellStyle);
-        row.createCell(0).setCellValue(LocalDate.now());
+        row.createCell(1).setCellStyle(dateCellStyle);
+        row.createCell(1).setCellValue(LocalDate.now());
     }
 
     private void escreverProdutos(Workbook workbook) {
         Sheet sheet = workbook.getSheet("Produtos");
-        List<Produto> produtos = listarProdutos();
         int rowIndex = 2;
 
-        for (Produto p : produtos) {
+        for (Produto p : this.produtos) {
             Row row = sheet.createRow(rowIndex++);
             row.createCell(0).setCellValue(p.getId());
             row.createCell(1).setCellValue(p.getNome());
@@ -104,12 +109,11 @@ public class Escritor {
 
     private void escreverLotes(Workbook workbook) {
         Sheet sheet = workbook.getSheet("Lotes");
-        List<Lote> lotes = lisarLotes();
         int rowIndex = 2;
 
         CellStyle dateCellStyle = estiloDataCelula(workbook);
 
-        for (Lote l : lotes) {
+        for (Lote l : this.lotes) {
             Row row = sheet.createRow(rowIndex++);
             row.createCell(0).setCellValue(l.getId());
             row.createCell(1).setCellStyle(dateCellStyle);
@@ -131,10 +135,9 @@ public class Escritor {
 
     private void escreverLoteProduto(Workbook workbook) {
         Sheet sheet = workbook.getSheet("Produtos por Lote");
-        List<LoteProduto> loteProdutos = listarLoteProdutos();
         int rowIndex = 2;
 
-        for (LoteProduto lp : loteProdutos) {
+        for (LoteProduto lp : this.loteProdutos) {
             Row row = sheet.createRow(rowIndex++);
             row.createCell(0).setCellValue(lp.getId());
             row.createCell(1).setCellValue(lp.getLote().getId());
@@ -148,12 +151,11 @@ public class Escritor {
 
     private void escreverSaidaEstoque(Workbook workbook){
         Sheet sheet = workbook.getSheet("Baixas de Estoque");
-        List<SaidaEstoque> saidaEstoques = listarSaidaEstoques();
         int rowIndex = 2;
 
         CellStyle dateCellStyle = estiloDataCelula(workbook);
 
-        for(SaidaEstoque se: saidaEstoques){
+        for(SaidaEstoque se: this.saidaEstoques){
             Row row = sheet.createRow(rowIndex++);
             row.createCell(0).setCellValue(se.getId());
             row.createCell(1).setCellValue(se.getProduto().getNome());
@@ -164,6 +166,13 @@ public class Escritor {
             row.createCell(5).setCellValue(se.getDtSaida());
             row.createCell(6).setCellValue(se.getQtdCaixasSaida());
         }
+    }
+
+    private void listarDados(){
+        this.produtos = listarProdutos();
+        this.lotes = lisarLotes();
+        this.loteProdutos = listarLoteProdutos();
+        this.saidaEstoques = listarSaidaEstoques();
     }
 
     private List<Produto> listarProdutos() {
@@ -178,7 +187,7 @@ public class Escritor {
     }
 
     private List<LoteProduto> listarLoteProdutos() {
-        List<List<LoteProduto>> loteProdutosListList = lisarLotes().stream().map(Lote::getLoteProdutos).toList();
+        List<List<LoteProduto>> loteProdutosListList = this.lotes.stream().map(Lote::getLoteProdutos).toList();
         List<LoteProduto> loteProdutos = new ArrayList<>();
         for (List<LoteProduto> l : loteProdutosListList) {
             loteProdutos.addAll(l);

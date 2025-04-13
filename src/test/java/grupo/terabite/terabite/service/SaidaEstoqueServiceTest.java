@@ -85,6 +85,8 @@ class SaidaEstoqueServiceTest extends DataFactory {
     void deletarSaidas_DeveDeletar_QuandoTodasExistem() {
         when(saidaEstoqueRepository.findAllById(anySet())).thenReturn(List.of(saidaEstoque));
         doNothing().when(saidaEstoqueRepository).deleteAllById(anySet());
+        when(produtoService.buscarPorId(Mockito.anyInt())).thenReturn(produtos.get(0));
+        doNothing().when(loteService).atualizarEstoqueProduto(Mockito.anyList());
 
         assertDoesNotThrow(() -> saidaEstoqueService.deletarSaidas(List.of(saidaEstoque)));
         verify(loteService, times(1)).atualizarEstoqueProduto(anyList());

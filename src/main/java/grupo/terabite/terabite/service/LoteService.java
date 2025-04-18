@@ -45,7 +45,6 @@ public class LoteService {
         Fornecedor fornedor = fornecedorService.buscarPorNomeFornecedor(nomeFornecedor);
         novoLote.setFornecedor(fornedor);
         novoLote.setId(null);
-        novoLote.getFornecedor().setId(1);
         novoLote.setStatus(LoteStatusEnum.AGUARDANDO_ENTREGA);
         novoLote.setDtPedido(LocalDate.now());
 
@@ -151,5 +150,10 @@ public class LoteService {
 
         loteRepository.deleteAll(lotesAntigos);
         loteProdutoRepository.deleteAll(loteProdutosAntigos);
+    }
+
+    public List<Lote> listarPorIdProduto(Integer id) {
+        produtoService.buscarPorId(id);
+        return loteRepository.findByLoteProdutosProdutoId(id);
     }
 }

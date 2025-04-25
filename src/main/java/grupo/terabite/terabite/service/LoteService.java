@@ -60,7 +60,7 @@ public class LoteService {
         loteProdutos.forEach(loteProduto -> loteProduto.setLote(finalNovoLote));
         loteProdutoRepository.saveAll(loteProdutos);
 
-        atualizarEstoqueProduto(loteProdutos.stream().map(LoteProduto::getProduto).toList());
+        //atualizarEstoqueProduto(loteProdutos.stream().map(LoteProduto::getProduto).toList());
 
         deletarLotesAntigos();
 
@@ -99,7 +99,7 @@ public class LoteService {
     // este método atualiza o estoque do produto com base na quantidade de entrada e saida
     protected void atualizarEstoqueProduto(List<Produto> produtos){
         produtos.forEach((p) -> { // refatorar sql
-            List<LoteProduto> loteProdutos = loteProdutoRepository.findByProdutoId(p.getId());
+            List<LoteProduto> loteProdutos = loteProdutoRepository.findByProdutoIdAndLoteStatusId(p.getId(), LoteStatusEnum.ENTREGUE.getId());
             List<SaidaEstoque> saidaEstoques = saidaEstoqueRepository.findByProdutoId(p.getId());
 
             Integer qtdCaixasEntrada = loteProdutos.stream().mapToInt(LoteProduto::getQtdCaixasCompradas).sum();

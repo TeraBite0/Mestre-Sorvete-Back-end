@@ -103,6 +103,8 @@ class LoteServiceTest extends DataFactory {
         when(loteRepository.existsById(1)).thenReturn(true);
         when(loteRepository.save(any(Lote.class))).thenReturn(lote);
         when(produtoService.buscarPorId(Mockito.anyInt())).thenReturn(produtos.get(0));
+        when(loteRepository.findById(Mockito.anyInt())).thenReturn(Optional.ofNullable(lote));
+        doNothing().when(loteProdutoRepository).deleteAll(Mockito.anyList());
         lote.setStatus(LoteStatusEnum.ENTREGUE);
 
         Lote resultado = loteService.atualizarLote(1, lote);

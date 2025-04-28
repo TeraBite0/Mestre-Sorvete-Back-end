@@ -75,6 +75,7 @@ public class LoteService {
         lote.setId(id);
 
         validarLoteProdutos(lote.getLoteProdutos());
+        loteProdutoRepository.deleteAll(loteRepository.findById(id).get().getLoteProdutos());
         loteProdutoRepository.saveAll(lote.getLoteProdutos());
         lote.getLoteProdutos().forEach((lp) -> lp.setLote(lote));
         atualizarEstoqueProduto(lote.getLoteProdutos().stream().map(LoteProduto::getProduto).toList());

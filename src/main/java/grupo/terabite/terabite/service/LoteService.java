@@ -45,7 +45,6 @@ public class LoteService {
         Fornecedor fornedor = fornecedorService.buscarPorNomeFornecedor(nomeFornecedor);
         novoLote.setFornecedor(fornedor);
         novoLote.setId(null);
-        novoLote.getFornecedor().setId(1);
         novoLote.setStatus(LoteStatusEnum.AGUARDANDO_ENTREGA);
         novoLote.setDtPedido(LocalDate.now());
 
@@ -61,7 +60,7 @@ public class LoteService {
         loteProdutos.forEach(loteProduto -> loteProduto.setLote(finalNovoLote));
         loteProdutoRepository.saveAll(loteProdutos);
 
-        atualizarEstoqueProduto(loteProdutos.stream().map(LoteProduto::getProduto).toList());
+        //atualizarEstoqueProduto(loteProdutos.stream().map(LoteProduto::getProduto).toList());
 
         deletarLotesAntigos();
 
@@ -76,6 +75,7 @@ public class LoteService {
         lote.setId(id);
 
         validarLoteProdutos(lote.getLoteProdutos());
+        loteProdutoRepository.deleteAll(loteRepository.findById(id).get().getLoteProdutos());
         loteProdutoRepository.saveAll(lote.getLoteProdutos());
         lote.getLoteProdutos().forEach((lp) -> lp.setLote(lote));
         atualizarEstoqueProduto(lote.getLoteProdutos().stream().map(LoteProduto::getProduto).toList());
@@ -100,7 +100,7 @@ public class LoteService {
     // este método atualiza o estoque do produto com base na quantidade de entrada e saida
     protected void atualizarEstoqueProduto(List<Produto> produtos){
         produtos.forEach((p) -> { // refatorar sql
-            List<LoteProduto> loteProdutos = loteProdutoRepository.findByProdutoId(p.getId());
+            List<LoteProduto> loteProdutos = loteProdutoRepository.findByProdutoIdAndLoteStatusId(p.getId(), LoteStatusEnum.ENTREGUE.getId());
             List<SaidaEstoque> saidaEstoques = saidaEstoqueRepository.findByProdutoId(p.getId());
 
             Integer qtdCaixasEntrada = loteProdutos.stream().mapToInt(LoteProduto::getQtdCaixasCompradas).sum();
@@ -151,5 +151,10 @@ public class LoteService {
 
         loteRepository.deleteAll(lotesAntigos);
         loteProdutoRepository.deleteAll(loteProdutosAntigos);
+    }
+
+    public List<Lote> listarPorIdProduto(Integer id) {
+        produtoService.buscarPorId(id);
+        return loteRepository.findByLoteProdutosProdutoId(id);
     }
 }

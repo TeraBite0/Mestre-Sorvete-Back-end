@@ -45,4 +45,17 @@ public class TipoController {
     public ResponseEntity<TipoResponseDTO> criarTipo(@RequestBody @Valid TipoRequisitionDTO tipoCreateDTO) {
         return ResponseEntity.created(null).body(TipoMapper.toResponseDto(tipoService.criarTipo(TipoMapper.toCreateDto(tipoCreateDTO))));
     }
+
+    @Operation(summary = "Deleta um tipo", description = "Deleta a tipo registrada")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Marca deletada com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Parâmetros inválidos"),
+            @ApiResponse(responseCode = "401", description = "Erro de requisição, Não autorizado"),
+            @ApiResponse(responseCode = "409", description = "Tipo associado a um ou mais produtos")
+    })
+    @DeleteMapping
+    public ResponseEntity<Void> deletarTipo(@RequestBody @Valid Integer id) {
+        tipoService.deletarTipo(id);
+        return ResponseEntity.noContent().build();
+    }
 }

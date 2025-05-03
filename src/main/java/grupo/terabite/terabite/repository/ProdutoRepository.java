@@ -18,4 +18,10 @@ public interface ProdutoRepository extends JpaRepository<Produto, Integer> {
     List<Produto> findByNomeContainingIgnoreCaseOrMarca_NomeContainingIgnoreCaseOrderByNome(String termo, String termoMarca);
 
     List<Produto> findByNomeIgnoreCaseContainingOrSubtipo_Tipo_NomeIgnoreCaseContainingOrderByNome(String termo, String termoTipo);
+
+    List<Produto> findByMarcaId(Integer marcaId);
+
+    List<Produto> findBySubtipoId(Integer subtipoId);
+
+    List<Produto> findBySubtipoTipoId(Integer tipoId);
 }

@@ -4,13 +4,18 @@ import grupo.terabite.terabite.dto.mapper.LoteMapper;
 import grupo.terabite.terabite.dto.requisition.LoteRequisitionDTO;
 import grupo.terabite.terabite.dto.requisition.LoteStatusRequisitionDTO;
 import grupo.terabite.terabite.dto.response.LoteResponseDTO;
+import grupo.terabite.terabite.entity.Lote;
 import grupo.terabite.terabite.service.LoteService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -30,6 +35,19 @@ public class LoteController {
     @GetMapping("/{id}")
     public ResponseEntity<LoteResponseDTO> buscarPorId(@PathVariable Integer id) {
         return ResponseEntity.ok(loteMapper.toResponseDto(loteService.buscarPorId(id)));
+    }
+
+    @Operation(summary = "Busca um lote pelo ID de um produto", description = "Retorna lotes com base no ID do produto")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Operação bem sucedida, Lotes retornados"),
+            @ApiResponse(responseCode = "401", description = "Erro de requisição, Não autorizado"),
+            @ApiResponse(responseCode = "404", description = "Nenhum lote não encontrado")
+    })
+    @GetMapping("produtos/{id}")
+    public ResponseEntity<List<LoteResponseDTO>> listarPorIdProduto(@PathVariable Integer id) {
+        List<Lote> lotes = loteService.listarPorIdProduto(id);
+        if(lotes.isEmpty()) throw new ResponseStatusException(HttpStatus.NO_CONTENT);
+        return ResponseEntity.ok(lotes.stream().map(loteMapper::toResponseDto).toList());
     }
 
     @Operation(summary = "Registra um lote", description = "Retorna o lote registrado")

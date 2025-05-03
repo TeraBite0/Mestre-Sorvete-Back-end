@@ -9,6 +9,7 @@ import java.util.List;
 @Data
 @Builder
 public class SaidaEstoqueResponseGroupDTO {
+
     private LocalDate dtSaida;
 
     private List<SaidaEstoqueResponseDTO> saidaEstoques;

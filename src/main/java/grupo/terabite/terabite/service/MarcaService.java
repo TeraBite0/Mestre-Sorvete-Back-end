@@ -1,7 +1,9 @@
 package grupo.terabite.terabite.service;
 
 import grupo.terabite.terabite.entity.Marca;
+import grupo.terabite.terabite.entity.Produto;
 import grupo.terabite.terabite.repository.MarcaRepository;
+import grupo.terabite.terabite.repository.ProdutoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -16,6 +18,7 @@ import java.util.Optional;
 public class MarcaService {
 
     private final MarcaRepository marcaRepository;
+    private final ProdutoRepository produtoRepository;
 
     public List<Marca> listarMarca() {
         List<Marca> marcas = marcaRepository.findAll();
@@ -49,6 +52,8 @@ public class MarcaService {
 
     public void deletarMarca(Integer id) {
         if (!marcaRepository.existsById(id)) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        List<Produto> produtosPorMarca = produtoRepository.findByMarcaId(id);
+        if(!produtosPorMarca.isEmpty()) throw new ResponseStatusException(HttpStatus.CONFLICT, "Um ou mais produtos estão associado a esta marca!");
         marcaRepository.deleteById(id);
     }
 

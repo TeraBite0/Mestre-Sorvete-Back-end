@@ -1,6 +1,7 @@
 package grupo.terabite.terabite.service;
 
 import grupo.terabite.terabite.entity.Tipo;
+import grupo.terabite.terabite.repository.ProdutoRepository;
 import grupo.terabite.terabite.repository.TipoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,7 @@ import java.util.List;
 public class TipoService {
 
     private final TipoRepository tipoRepository;
+    private final ProdutoRepository produtoRepository;
 
     public List<Tipo> listarTipo() {
         List<Tipo> tipos = tipoRepository.findAll();
@@ -43,5 +45,12 @@ public class TipoService {
         if(buscarPorNomeTipo(nomeTipo) != null){
             throw new ResponseStatusException(HttpStatus.CONFLICT);
         }
+    }
+
+    public void deletarTipo(Integer id) {
+        if(!tipoRepository.existsById(id)) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        if(!produtoRepository.findBySubtipoTipoId(id).isEmpty()) throw new ResponseStatusException(HttpStatus.CONFLICT, "Um ou mais produtos estão associados a este tipo");
+
+        tipoRepository.deleteById(id);
     }
 }

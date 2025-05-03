@@ -13,4 +13,6 @@ public interface LoteRepository extends JpaRepository<Lote, Integer> {
     List<Lote> findByDtEntregaBefore(LocalDate dtEntrega);
 
     List<Lote> findByDtPedidoBefore(LocalDate dtPedido);
+
+    List<Lote> findByLoteProdutosProdutoId(Integer produtoId);
 }

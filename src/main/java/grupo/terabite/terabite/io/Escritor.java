@@ -180,10 +180,8 @@ public class Escritor {
     }
 
     private List<Lote> lisarLotes() {
-        //retorna lotes com dtPedido do mês anterior
         LocalDate dataLotes = LocalDate.now().minusDays(LocalDate.now().getDayOfMonth());
-        //return loteRepository.findByDtPedidoBefore(dataLotes);
-        return loteRepository.findAll(); // para teste
+        return loteRepository.findByDtPedidoBefore(dataLotes);
     }
 
     private List<LoteProduto> listarLoteProdutos() {
@@ -197,8 +195,7 @@ public class Escritor {
 
     private List<SaidaEstoque> listarSaidaEstoques(){
         LocalDate dataSaidaEstoque = LocalDate.now().minusDays(LocalDate.now().getDayOfMonth());
-        // return saidaEstoqueRepository.findByDtSaidaBefore(dataSaidaEstoque);
-        return saidaEstoqueRepository.findAll();
+        return saidaEstoqueRepository.findByDtSaidaBefore(dataSaidaEstoque);
     }
 
     private CellStyle estiloDataCelula(Workbook workbook){

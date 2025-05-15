@@ -69,7 +69,7 @@ public class Escritor {
         CellStyle dateCellStyle = estiloDataCelula(workbook);
         Row row = sheet.createRow(1);
         row.createCell(1).setCellStyle(dateCellStyle);
-        row.createCell(1).setCellValue(LocalDate.now());
+        row.createCell(2).setCellValue(LocalDate.now());
     }
 
     private void escreverProdutos(Workbook workbook) {

@@ -48,7 +48,6 @@ public class MarcaController {
         return ResponseEntity.created(null).body(MarcaMapper.toResponseDto(marcaService.criarMarca(MarcaMapper.toCreateMarca(marcaRequisitionDTO))));
     }
 
-
     @Operation(summary = "Deleta uma marca", description = "Deleta a marca registrada")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Marca deletada com sucesso"),
@@ -61,5 +60,4 @@ public class MarcaController {
         marcaService.deletarMarca(id);
         return ResponseEntity.noContent().build();
     }
-
 }

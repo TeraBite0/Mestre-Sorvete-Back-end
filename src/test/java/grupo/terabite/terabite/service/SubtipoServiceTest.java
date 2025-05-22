@@ -3,6 +3,7 @@ package grupo.terabite.terabite.service;
 import grupo.terabite.terabite.entity.Subtipo;
 import grupo.terabite.terabite.entity.Tipo;
 import grupo.terabite.terabite.factory.DataFactory;
+import grupo.terabite.terabite.repository.ProdutoRepository;
 import grupo.terabite.terabite.repository.SubtipoRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -31,11 +32,14 @@ class SubtipoServiceTest extends DataFactory {
     @Mock
     private SubtipoRepository subtipoRepository;
 
-    @InjectMocks
-    private SubtipoService subtipoService;
+    @Mock
+    private ProdutoRepository produtoRepository;
 
     @Mock
     private TipoService tipoService;
+
+    @InjectMocks
+    private SubtipoService subtipoService;
 
     @Test
     @DisplayName("Quando o banco de dados não possui subtipos, o serviço deve lançar ResponseStatusException com status 204 (NO_CONTENT)")
@@ -154,5 +158,32 @@ class SubtipoServiceTest extends DataFactory {
         assertEquals(novoSubtipo.getTipo(), resultado.getTipo(), "O tipo do subtipo salvo não está correto");
 
         verify(subtipoRepository).save(ArgumentMatchers.argThat(subtipo -> subtipo.getId() == 2 && "Semi-congelado".equals(subtipo.getNome())));
+    }
+
+    @Test
+    @DisplayName("Quando passar um Id que não existe no banco de dados para deletar o subtipo, deve lançar exceção 404 (NOT_FOUND)")
+    void deveLancarExcecaoQuandoNaoExistirSubtipoPorIdPassadoNoMetodoDeletar() {
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> subtipoService.deletarSubtipo(50));
+        assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode(), "O status HTTP esperado é 404 (NOT FOUND)");
+    }
+
+    @Test
+    @DisplayName("Quando passar um Id que existe no banco de dados, deve deletar o subtipo por id")
+    void deveDeletarSubtipoSeExistente() {
+        Integer id = 1;
+        when(subtipoRepository.existsById(id)).thenReturn(true);
+        when(produtoRepository.findBySubtipoId(id)).thenReturn(List.of());
+
+        subtipoService.deletarSubtipo(id);
+
+        verify(subtipoRepository).existsById(id);
+        verify(subtipoRepository).deleteById(id);
+
+        subtipoService.deletarSubtipo(id);
+
+        when(produtoRepository.findBySubtipoId(id)).thenReturn(List.of(produtos.get(0)));
+
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> subtipoService.deletarSubtipo(id));
+        assertEquals(HttpStatus.CONFLICT, exception.getStatusCode(), "O status HTTP esperado é 409 (CONFLICT)");
     }
 }

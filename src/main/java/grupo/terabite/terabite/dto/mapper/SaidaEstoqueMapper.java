@@ -55,7 +55,7 @@ public class SaidaEstoqueMapper {
     public SaidaEstoqueResponseDTO toSaidaEstoqueResponseDTO(SaidaEstoque saidaEstoque){
         if (saidaEstoque == null) return null;
 
-        return new SaidaEstoqueResponseDTO(produtoMapper.toResponseDto(saidaEstoque.getProduto()), saidaEstoque.getQtdCaixasSaida());
+        return new SaidaEstoqueResponseDTO(saidaEstoque.getId(), produtoMapper.toResponseDto(saidaEstoque.getProduto()), saidaEstoque.getQtdCaixasSaida());
     }
 
     public static SaidaEstoque toSaidaEstoque(SaidaEstoqueRequisitionDTO saidaEstoqueRequisitionDTO) {
@@ -74,7 +74,7 @@ public class SaidaEstoqueMapper {
 
         saidaEstoques.forEach(
                 se -> saidaEstoqueResponseDTOS.add(
-                        new SaidaEstoqueResponseDTO(produtoMapper.toResponseDto(se.getProduto()), se.getQtdCaixasSaida())
+                        new SaidaEstoqueResponseDTO(se.getId() ,produtoMapper.toResponseDto(se.getProduto()), se.getQtdCaixasSaida())
                 )
         );
 

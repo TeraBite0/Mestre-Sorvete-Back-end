@@ -45,4 +45,17 @@ public class SubtipoController {
     public ResponseEntity<SubtipoResponseDTO> criarSubtipo(@RequestBody @Valid SubtipoRequisitionDTO subtipoRequisitionDTO) {
         return ResponseEntity.created(null).body(SubtipoMapper.toResponseDto(subtipoService.criarSubtipo(SubtipoMapper.toCreateDto(subtipoRequisitionDTO), subtipoRequisitionDTO.getNomeTipo())));
     }
+
+    @Operation(summary = "Deleta um subtipo", description = "Deleta a subtipo registrada")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Marca deletada com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Parâmetros inválidos"),
+            @ApiResponse(responseCode = "401", description = "Erro de requisição, Não autorizado"),
+            @ApiResponse(responseCode = "409", description = "Subtipo associado a um ou mais produtos")
+    })
+    @DeleteMapping
+    public ResponseEntity<Void> deletarSubtipo(@RequestBody @Valid Integer id) {
+        subtipoService.deletarSubtipo(id);
+        return ResponseEntity.noContent().build();
+    }
 }

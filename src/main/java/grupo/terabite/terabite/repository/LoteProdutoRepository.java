@@ -10,5 +10,5 @@ import java.util.List;
 public interface LoteProdutoRepository extends JpaRepository<LoteProduto, Integer> {
     List<LoteProduto> findByLoteId(Integer loteId);
 
-    List<LoteProduto> findByProdutoId(Integer produtoId);
+    List<LoteProduto> findByProdutoIdAndLoteStatusId(Integer produtoId, Integer statusId);
 }

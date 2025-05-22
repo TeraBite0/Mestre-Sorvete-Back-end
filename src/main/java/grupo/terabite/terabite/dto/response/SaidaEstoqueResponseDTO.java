@@ -7,6 +7,8 @@ import lombok.Data;
 @AllArgsConstructor
 public class SaidaEstoqueResponseDTO {
 
+    private Integer id;
+
     private ProdutoResponseDTO produto;
 
     private Integer qtdCaixasSaida;

@@ -52,7 +52,7 @@ public class Escritor {
         escreverLoteProduto(workbook);
         escreverSaidaEstoque(workbook);
 
-        String diretorio = "relatorios";
+        String diretorio = "";
         String nomeArquivo = "novoRelatorio.xlsx";
         Path caminhoDestino = Paths.get(diretorio, nomeArquivo);
         try (FileOutputStream out = new FileOutputStream(caminhoDestino.toFile())) {

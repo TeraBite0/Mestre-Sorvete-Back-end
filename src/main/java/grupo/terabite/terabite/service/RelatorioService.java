@@ -20,7 +20,7 @@ public class RelatorioService {
 
     public ByteArrayResource gerarRelatorio() {
         String nomeArquivo = escritor.novoRelatorio();
-        Path filePath = Paths.get("relatorios").resolve(nomeArquivo).normalize();
+        Path filePath = Paths.get("").resolve(nomeArquivo).normalize();
 
         try {
             Resource resource = new UrlResource(filePath.toUri());

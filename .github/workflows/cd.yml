@@ -1,0 +1,43 @@
+name: Continuos Delivery
+
+on:
+  pull_request:
+    types:
+      - closed
+    branches:
+      - 'aws'
+
+jobs:
+  merge_job:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validação resultado do PR
+        id: check_merge
+        run: | #essa run impede o deploy caso o workflow acabe ativando mesmo com o PR negado
+          if [[ "${{ github.event.pull_request.merged }}" != "true" ]]; then
+            echo "Pull request was not merged. Exiting."
+            exit 1
+          fi
+
+      - name: Login Docker Hub
+        if: steps.check_merge.outcome == 'success'
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+      - name: Set up JDK 17
+        if: steps.check_merge.outcome == 'success'
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Build with Maven
+        if: steps.check_merge.outcome == 'success'
+        run: mvn clean package -DfinalName=terabite
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v4
+        if: steps.check_merge.outcome == 'success'
+        with:
+          push: true
+          tags: integracaosistema/mestresorvete-backend-api:latest

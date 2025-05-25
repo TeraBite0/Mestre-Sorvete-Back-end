@@ -37,6 +37,7 @@ jobs:
           mvn clean package
           ls -l target/
           mv target/*.jar target/terabite.jar
+          ls -l target/
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v4

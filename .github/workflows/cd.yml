@@ -48,9 +48,7 @@ jobs:
     runs-on: back-01
     steps:
       - name: Environment tests
-        run: |
-          java -version
-          sudo docker --version
+        run: sudo docker --version
 
       - name: Update and restart application
         run: |

@@ -45,12 +45,11 @@ jobs:
           docker push integracaosistema/mestresorvete-backend-api:latest
 
   continuos_deployment:
+    needs: continuos_delivery
     runs-on: back-01
     steps:
       - name: Environment tests
-        run: |
-          java -version
-          sudo docker --version
+        run: sudo docker --version
 
       - name: Update and restart application
         run: |

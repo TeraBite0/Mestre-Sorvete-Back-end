@@ -23,6 +23,7 @@ jobs:
         run: mvn -B package -DskipTests
 
   validate:
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

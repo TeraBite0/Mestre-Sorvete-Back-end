@@ -35,6 +35,7 @@ jobs:
         if: steps.check_merge.outcome == 'success'
         run: |
           mvn clean package
+          ls -l target/
           mv target/*.jar target/terabite.jar
           ls -l target/
 

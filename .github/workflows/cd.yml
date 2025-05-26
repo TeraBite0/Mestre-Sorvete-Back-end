@@ -37,10 +37,9 @@ jobs:
           mvn clean package
           ls -l target/
           mv target/*.jar target/terabite.jar
+          ls -l target/
 
       - name: Build and push Docker image
-        uses: docker/build-push-action@v4
-        if: steps.check_merge.outcome == 'success'
-        with:
-          push: true
-          tags: integracaosistema/mestresorvete-backend-api:latest
+        run: |
+          docker build -t integracaosistema/mestresorvete-backend-api:latest .
+          docker push integracaosistema/mestresorvete-backend-api:latest

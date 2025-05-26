@@ -1,4 +1,4 @@
-name: Continuos Delivery
+name: Continuos Deployment
 
 on:
   pull_request:
@@ -8,7 +8,7 @@ on:
       - 'aws'
 
 jobs:
-  merge_job:
+  continuos_delivery:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -43,3 +43,21 @@ jobs:
         run: |
           docker build -t integracaosistema/mestresorvete-backend-api:latest .
           docker push integracaosistema/mestresorvete-backend-api:latest
+
+  continuos_deployment:
+    runs-on: back-01
+    steps:
+      - name: Environment tests
+        run: |
+          java -version
+          sudo docker --version
+
+      - name: Update and restart application
+        run: |
+          sudo docker pull integracaosistema/mestresorvete-backend-api:latest
+          sudo docker stop terabite-backend-api || true
+          sudo docker rm terabite-backend-api || true
+          sudo docker run -d --name terabite-backend-api --env-file .env -p 8080:8080 integracaosistema/mestresorvete-backend-api:latest
+
+      - name: Final check
+        run: sudo docker ps -a

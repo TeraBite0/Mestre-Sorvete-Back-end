@@ -52,7 +52,7 @@ public class Escritor {
         escreverLoteProduto(workbook);
         escreverSaidaEstoque(workbook);
 
-        String diretorio = "relatorios";
+        String diretorio = "";
         String nomeArquivo = "novoRelatorio.xlsx";
         Path caminhoDestino = Paths.get(diretorio, nomeArquivo);
         try (FileOutputStream out = new FileOutputStream(caminhoDestino.toFile())) {
@@ -67,9 +67,28 @@ public class Escritor {
     private void escreverDashboard(Workbook workbook){
         Sheet sheet = workbook.getSheet("Dashboard");
         CellStyle dateCellStyle = estiloDataCelula(workbook);
-        Row row = sheet.createRow(1);
-        row.createCell(1).setCellStyle(dateCellStyle);
-        row.createCell(1).setCellValue(LocalDate.now());
+        Row row1 = sheet.createRow(0);
+        row1.createCell(1).setCellStyle(dateCellStyle);
+        row1.createCell(1).setCellValue(LocalDate.now());
+
+        Double faturamentoMensal = 0.0;
+        Double qtdGastaEmLotes = 0.0;
+        List<Produto> produtosSemSaida = new ArrayList<>();
+        produtosSemSaida.addAll(produtos);
+        for(SaidaEstoque se : saidaEstoques){
+            faturamentoMensal += se.getQtdCaixasSaida() * (se.getProduto().getPreco() * se.getProduto().getQtdPorCaixas());
+            produtosSemSaida.remove(se.getProduto());
+        }
+        for(Lote l: lotes){
+            qtdGastaEmLotes += l.getValorLote();
+        }
+        faturamentoMensal -= qtdGastaEmLotes;
+        Row row2 = sheet.createRow(1);
+        row2.createCell(1).setCellValue(faturamentoMensal);
+        Row row3 = sheet.createRow(2);
+        row3.createCell(1).setCellValue(qtdGastaEmLotes);
+        Row row4 = sheet.createRow(3);
+        row4.createCell(1).setCellValue(produtosSemSaida.size());
     }
 
     private void escreverProdutos(Workbook workbook) {
@@ -180,10 +199,8 @@ public class Escritor {
     }
 
     private List<Lote> lisarLotes() {
-        //retorna lotes com dtPedido do mês anterior
         LocalDate dataLotes = LocalDate.now().minusDays(LocalDate.now().getDayOfMonth());
-        //return loteRepository.findByDtPedidoBefore(dataLotes);
-        return loteRepository.findAll(); // para teste
+        return loteRepository.findByDtPedidoBefore(dataLotes);
     }
 
     private List<LoteProduto> listarLoteProdutos() {
@@ -197,8 +214,7 @@ public class Escritor {
 
     private List<SaidaEstoque> listarSaidaEstoques(){
         LocalDate dataSaidaEstoque = LocalDate.now().minusDays(LocalDate.now().getDayOfMonth());
-        // return saidaEstoqueRepository.findByDtSaidaBefore(dataSaidaEstoque);
-        return saidaEstoqueRepository.findAll();
+        return saidaEstoqueRepository.findByDtSaidaBefore(dataSaidaEstoque);
     }
 
     private CellStyle estiloDataCelula(Workbook workbook){

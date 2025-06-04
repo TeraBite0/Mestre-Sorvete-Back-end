@@ -28,7 +28,7 @@ public class AwsBucketService {
     final private ProdutoRepository produtoRepository;
 
     @Value("${app.s3.bucket}")
-    final private String bucketName;
+    private String bucketName;
 
     public String salvarImagem(Integer idProduto, MultipartFile arquivo){
         Produto produto = produtoRepository.findById(idProduto).orElse(null);

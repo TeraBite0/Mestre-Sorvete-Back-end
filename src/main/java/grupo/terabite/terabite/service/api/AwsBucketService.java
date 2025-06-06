@@ -77,6 +77,6 @@ public class AwsBucketService {
     }
 
     public String imagemProduto(Integer idProduto, String tipoArquivo){
-        return tipoArquivo == null? null : gerarUrlImagem("PRODUTO_" + String.format("%06", idProduto) + tipoArquivo);
+        return tipoArquivo == null? null : gerarUrlImagem("PRODUTO_" + String.format("%06d", idProduto) + tipoArquivo);
     }
 }

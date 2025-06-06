@@ -55,8 +55,8 @@ public class MarcaController {
             @ApiResponse(responseCode = "401", description = "Erro de requisição, Não autorizado"),
             @ApiResponse(responseCode = "409", description = "Marca associada a um ou mais produtos")
     })
-    @DeleteMapping
-    public ResponseEntity<Void> deletarMarca(@RequestBody @Valid Integer id) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletarMarca(@PathVariable Integer id) {
         marcaService.deletarMarca(id);
         return ResponseEntity.noContent().build();
     }

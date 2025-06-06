@@ -37,7 +37,7 @@ public class AwsBucketService {
 
         String nomeOriginalArquivo = arquivo.getOriginalFilename();
         String tipoArquivo = nomeOriginalArquivo.substring(nomeOriginalArquivo.indexOf("."));
-        String nomeArquivo = "PRODUTO_" + String.format("%06", idProduto) + tipoArquivo;
+        String nomeArquivo = "PRODUTO_" + String.format("%06d", idProduto) + tipoArquivo;
         Set<String> tiposArquivosPermitidos = Set.of(
                 ".png",
                 ".jpg",

@@ -9,6 +9,8 @@ Esta é a API responsável por alimentar a [página web](https://github.com/Tera
 - **Spring Boot** — Framework para desenvolvimento rápido de aplicações Java
 - **Maven** — Gerenciador de dependências e build
 - **JPA/Hibernate** — Persistência de dados com ORM
-- **Banco de Dados Relacional**
+- **Banco de Dados Relacional** - MySQL
 - **Azure** (Implementação descontinuada)
-- **Aws Cloud** (Implementação atual)
+- **Aws Cloud** (Implementação atual + armazenamento de imagens)
+- **Docker** - Conteinerialização
+- **Github Actions & Runner** - CI/CD (Continuos Integration / Continuos Deployment)

@@ -37,6 +37,7 @@ public class ProdutoMapper {
                 .marca(marca.getNome())
                 .subtipo(subtipo.getNome())
                 .tipo(tipo.getNome())
+                .tipoImagem(produto.getTipoImagem())
                 .imagemUrl(awsBucketService.imagemProduto(produto.getId(), produto.getTipoImagem()))
                 .build();
     }

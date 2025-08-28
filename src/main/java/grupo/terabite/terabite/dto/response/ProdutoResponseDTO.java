@@ -32,4 +32,6 @@ public class ProdutoResponseDTO {
     private String marca;
 
     private String imagemUrl;
+
+    private String tipoImagem;
 }

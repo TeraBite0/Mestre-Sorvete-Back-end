@@ -67,6 +67,7 @@ public class ProdutoService {
             throw new ResponseStatusException(HttpStatusCode.valueOf(400));
         }
         produtoAtualizado.setId(id);
+        produtoAtualizado.setTipoImagem(produtoAntigo.getTipoImagem());
         manterDadosAntigos(produtoAntigo, produtoAtualizado);
         validarMarcaESubtipoExistentes(nomeMarca, nomeSubtipo, produtoAtualizado);
         return produtoRepository.save(produtoAtualizado);

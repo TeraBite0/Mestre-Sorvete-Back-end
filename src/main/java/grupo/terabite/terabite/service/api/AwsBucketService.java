@@ -32,34 +32,30 @@ public class AwsBucketService {
 
     public String salvarImagem(Integer idProduto, MultipartFile arquivo){
         Produto produto = produtoRepository.findById(idProduto).orElse(null);
-
+    
         if(produto == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Produto não encontrado");
-
+    
         String nomeOriginalArquivo = arquivo.getOriginalFilename();
         String tipoArquivo = nomeOriginalArquivo.substring(nomeOriginalArquivo.indexOf("."));
         String nomeArquivo = "PRODUTO_" + String.format("%06d", idProduto) + tipoArquivo;
-        Set<String> tiposArquivosPermitidos = Set.of(
-                ".png",
-                ".jpg",
-                ".jpeg"
-        );
-
-        if(!tiposArquivosPermitidos.contains(nomeOriginalArquivo.substring(nomeOriginalArquivo.indexOf(".")))){
+        
+        String contentType = arquivo.getContentType();
+        if (contentType == null || !contentType.startsWith("image/")) {
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "O tipo de arquivo passado não é permitido");
         }
-
+    
         ObjectMetadata metaData = new ObjectMetadata();
         metaData.setContentLength(arquivo.getSize());
-
-       try {
-           client.putObject(new PutObjectRequest(bucketName, nomeArquivo, arquivo.getInputStream(), metaData));
-       } catch (IOException e) {
-           throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Erro ao realizar upload da imagem no S3");
-       }
-
+    
+        try {
+            client.putObject(new PutObjectRequest(bucketName, nomeArquivo, arquivo.getInputStream(), metaData));
+        } catch (IOException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Erro ao realizar upload da imagem no S3");
+        }
+    
         produto.setTipoImagem(tipoArquivo);
         produtoRepository.save(produto);
-
+    
         return gerarUrlImagem(nomeArquivo);
     }
 
